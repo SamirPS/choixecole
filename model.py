@@ -12,7 +12,7 @@ curseur = connexion.cursor()
 
 def specialité(table):
     """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
-    curseur.execute("SELECT Nom FROM Specialité")
+    curseur.execute("SELECT Nom FROM Specialite")
     specialite = curseur.fetchall()
     for specialite in specialite:
         table.append(specialite) #cherche les specialité dans la table spe
