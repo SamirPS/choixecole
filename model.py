@@ -20,4 +20,4 @@ def specialité(table):
 
 
 def filtre(table,specialitéid):
-    return 0
+    """renvoie la liste des ecoles en fonction de la specialite """
