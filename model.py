@@ -19,12 +19,14 @@ def specialité(table):
         table.append(specialite) #apprend les specialité dans la table spe
     return table
 
+
 def filtre(table,specialiteid):
-    curseur.execute("SELECT IdEcole FROM EcoleSpe")
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
         table.append(ecole) #appends les ecoles en fonction de la  specialité 
     return table
+
 
 Spe=specialité(Spe)
 print(Spe)
@@ -36,3 +38,4 @@ while specialiteid>len(Spe):
 
 Ecole=filtre(Ecole,specialiteid)
 print(Ecole)
+connexion.close() #on se deconnecte de la bdd
