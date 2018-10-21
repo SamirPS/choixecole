@@ -16,7 +16,7 @@ def specialité(table):
     curseur.execute("SELECT Nom FROM Specialite")
     specialite = curseur.fetchall() #resultats de la commande
     for specialite in specialite:
-        table.append(specialite) #apprend les specialité dans la table spe
+        table.append(specialite[0]) #apprend les specialité dans la table spe
     return table
 
 
@@ -24,7 +24,7 @@ def filtre(table,specialiteid):
     curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
-        table.append(ecole) #appends les ecoles en fonction de la  specialité 
+        table.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
     return table
 
 
@@ -32,7 +32,7 @@ Spe=specialité(Spe)
 print(Spe)
 
 specialiteid=int(input("donne le numero de la spécialite \n"))
-while specialiteid>len(Spe) or specialiteid<1:
+while specialiteid>len(Spe):
     print("bien jouer le bug ")
     specialiteid=int(input("donne le numero de la spécialite  \n"))
 
