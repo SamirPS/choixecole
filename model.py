@@ -10,8 +10,10 @@ Spe=[]#liste des spécialité
 connexion = sqlite3.connect('choixecole.db')#O ouvre la base de donnée
 curseur = connexion.cursor() 
 
-def specialité(table):
+def specialite(table):
+    
     """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
+    
     curseur.execute("SELECT Nom FROM Specialite")
     specialite = curseur.fetchall()
     for specialite in specialite:
