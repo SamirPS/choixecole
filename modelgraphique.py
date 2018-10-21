@@ -31,6 +31,9 @@ def choix(Ecole):
     if str(var_choix.get())=="BTP":
         Ecole=filtre(Ecole,3)
         return Ecole
+    else:
+        return Ecole
+    
 def filtre(table,specialiteid):
     curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
@@ -59,7 +62,11 @@ print(Ecole)
 
 
 fenetre2 = Tk()
-for i in range(len(Ecole)) :
-    champ_label = Label(fenetre2, text=str(Ecole[i]))
+if len(Ecole)==0:
+    champ_label = Label(fenetre2, text="pas d'ecole trouve")
     champ_label.pack()
+else :
+    for i in range(len(Ecole)) :
+        champ_label = Label(fenetre2, text=str(Ecole[i]))
+        champ_label.pack()
 fenetre.mainloop()
