@@ -32,7 +32,7 @@ Spe=specialité(Spe)
 print(Spe)
 
 specialiteid=int(input("donne le numero de la spécialite \n"))
-while specialiteid>len(Spe):
+while specialiteid>len(Spe) or specialiteid<1:
     print("bien jouer le bug ")
     specialiteid=int(input("donne le numero de la spécialite  \n"))
 
