@@ -43,16 +43,23 @@ Spe=specialité(Spe)
 fenetre = Tk()
 
 var_choix = StringVar()
-choix_1 = Radiobutton(fenetre, text=str(Spe[0]), variable=var_choix, value=Spe[0])
-choix_2= Radiobutton(fenetre, text=str(Spe[1]), variable=var_choix, value=Spe[1])
-choix_3 = Radiobutton(fenetre, text=str(Spe[2]), variable=var_choix, value=Spe[2])
+for i in range(len(Spe)):
+    choix_1 = Radiobutton(fenetre, text=str(Spe[i]), variable=var_choix, value=Spe[i])
+    choix_1.pack()
 
-choix_1.pack()
-choix_2.pack()
-choix_3.pack()
 
-bouton_quitter = Button(fenetre, text="Clic", command=choix(Ecole))
+bouton_choix= Button(fenetre, text="Clic ici", command=choix(Ecole))
+bouton_choix.pack()
+bouton_quitter = Button(fenetre, text="puis ici ", command=fenetre.quit)
 bouton_quitter.pack()
 fenetre.mainloop()
+
 Ecole=choix(Ecole)
 print(Ecole)
+
+
+fenetre2 = Tk()
+for i in range(len(Ecole)) :
+    champ_label = Label(fenetre2, text=str(Ecole[i]))
+    champ_label.pack()
+fenetre.mainloop()
