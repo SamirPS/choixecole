@@ -28,7 +28,7 @@ def choix(Ecole):
     elif str(var_choix.get())=="Aeronautique":
         Ecole=filtre(Ecole,2)
         return Ecole
-    if str(var_choix.get())=="BTP":
+    elif str(var_choix.get())=="BTP":
         Ecole=filtre(Ecole,3)
         return Ecole
     else:
