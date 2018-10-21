@@ -58,8 +58,6 @@ bouton_quitter.pack()
 fenetre.mainloop()
 
 Ecole=choix(Ecole)
-print(Ecole)
-
 
 fenetre2 = Tk()
 if len(Ecole)==0:
