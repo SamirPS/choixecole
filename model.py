@@ -20,11 +20,10 @@ def specialité(table):
     return table
 
 def filtre(table,specialiteid):
-    """Nous revoie toutes les ecoles disponible en fonction de la specialité choisi sous forme d'une liste de tuples"""
-    curseur.execute("SELECT Nom FROM EcoleS")
+    curseur.execute("SELECT IdEcole FROM EcoleSpe")
     ecole = curseur.fetchall()
     for ecole in ecole:
-        table.append(ecole) #cherche les specialité dans la table spe
+        table.append(ecole) #cherche les ecoles en fonction de la  specialité 
     return table
 
 Spe=specialité(Spe)
