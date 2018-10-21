@@ -20,9 +20,12 @@ def specialité(table):
     return table
 
 def filtre(table,specialiteid):
-     """Nous revoie toutes les ecoles disponible en fonction de la specialité choisi sous forme d'une liste de tuples"""
-     return table
-
+    """Nous revoie toutes les ecoles disponible en fonction de la specialité choisi sous forme d'une liste de tuples"""
+    curseur.execute("SELECT Nom FROM EcoleS")
+    ecole = curseur.fetchall()
+    for ecole in ecole:
+        table.append(ecole) #cherche les specialité dans la table spe
+    return table
 
 Spe=specialité(Spe)
 print(Spe)
@@ -33,3 +36,4 @@ while specialiteid>len(Spe):
     specialiteid=int(input("donne le numero de la spécialite le premier terme de la liste est 0 \n"))
 
 Ecole=filtre(Ecole,specialiteid)
+print(Ecole)
