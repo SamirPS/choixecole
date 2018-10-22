@@ -46,8 +46,6 @@ class ChoixEcole:
             choix_1.pack()
         bouton_quitter = Button(self.root, text="clique ici", command=self.root.quit)
         bouton_quitter.pack()
-        label = Label(self.root, text=str(self.var_choix.get()))
-        label.pack()
         self.root.mainloop()
         
         
