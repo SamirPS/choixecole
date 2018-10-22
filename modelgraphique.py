@@ -23,6 +23,7 @@ def specialité(table):
 
 
 def choix(Ecole):
+    """Renvoie les écoles en fonction de la case coché par l'utilisateur """
     for i in range(len(Spe)):
         if str(var_choix.get())==str(Spe[i]):
             Ecole=filtre(Ecole,i+1)
@@ -39,7 +40,7 @@ def filtre(table,specialiteid):
 
 Spe=specialité(Spe)
 
-fenetre = Tk()
+fenetre = Tk() #Créer la fenetre avec les boutons 
 
 var_choix = StringVar()
 for i in range(len(Spe)):
@@ -53,13 +54,14 @@ fenetre.mainloop()
 
 Ecole=choix(Ecole)
 
-fenetre2 = Tk()
+fenetre2 = Tk() # Créer la fenetre avec l'affichage des écoles en fonction du choix 
 
 if len(Ecole)==0:
-    champ_label = Label(fenetre2, text="pas d'ecole trouve")
+    champ_label = Label(fenetre2, text="pas d'ecole trouvée")
     champ_label.pack()
 else :
     for i in range(len(Ecole)) :
         champ_label = Label(fenetre2, text=str(Ecole[i]))
         champ_label.pack()
+    
 fenetre2.mainloop()
