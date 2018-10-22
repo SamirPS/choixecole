@@ -11,7 +11,7 @@ Ecole=[]#Liste des ecoles
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
-def specialité(table):
+def specialite(table):
     """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
     curseur.execute("SELECT Nom FROM Specialite")
     specialite = curseur.fetchall() #resultats de la commande
@@ -28,14 +28,20 @@ def filtre(table,specialiteid):
     return table
 
 
-Spe=specialité(Spe)
-print(Spe)
-
+Spe=specialite(Spe)
+for i in range(len(Spe)) : #on affiche les spécialite avec un numero pour faciliter l'usage du programme
+    print(i+1,Spe[i])
+    
 specialiteid=int(input("donne le numero de la spécialite \n"))
-while specialiteid>len(Spe):
+
+
+while specialiteid>len(Spe): #Eviter un bug
     print("bien jouer le bug ")
     specialiteid=int(input("donne le numero de la spécialite  \n"))
 
 Ecole=filtre(Ecole,specialiteid)
-print(Ecole)
+
+for i in range(len(Ecole)): #affiche les écoles 
+    print(Ecole[i])
+
 connexion.close() #on se deconnecte de la bdd
