@@ -5,7 +5,7 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
-from tkinter import Tk, StringVar, Label, Radiobutton,Canvas
+from tkinter import Tk, StringVar, Label, Radiobutton
 from functools import partial
 
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
@@ -17,7 +17,7 @@ class ChoixEcole:
         Ecole=[]#Liste des ecoles
         self.root = Tk()
         self.var_choix = StringVar(self.root,)
-        label_color = Label(self.root, text='Ecole :' + self.var_choix.get())
+        label_ecole = Label(self.root, text='Ecole :' + self.var_choix.get())
         def specialite():
             """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
             curseur.execute("SELECT Nom FROM Specialite")
@@ -36,26 +36,24 @@ class ChoixEcole:
                 Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
             return Ecole
         
-        def update_label(label):
-            Ecole=[]
+        def update_label(label,Ecole):
             s=""
             testvar = self.var_choix.get()
             for i in range(len(Spe)):
                 if str(testvar)==str(Spe[i]):
                     Ecole=filtre(i+1)
             for k in range(len(Ecole)):
-                s=s+str(Ecole[k])+" \n "
+                s=s+"\n"+str(Ecole[k])
                 
             label.config(text='Ecole :' + s)
             
             
         for i in range(len(Spe)):
-            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_color))
+            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_ecole,Ecole))
             choix_1.grid(row=i+1, column=1)
-        label_color.grid(row=0, column=0)
+        label_ecole.grid(row=0, column=0)
        
         self.root.mainloop()
-        print(Ecole)
        
         
     
