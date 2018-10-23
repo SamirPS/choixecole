@@ -1,3 +1,4 @@
 # choixecole
 Projet informatique TSI2
-21 octobre : fichier model fini en ligne de commande et partie graphique il reste un bug a éliminer
+
+Interface graphique disponible pour augmenter le nombre d'école et de specialitr il fzut modifié la base. de donne avec sqlite broswer par exemple .
