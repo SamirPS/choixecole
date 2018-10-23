@@ -36,14 +36,6 @@ class ChoixEcole:
                 Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
             return Ecole
         
-        
-        def choix(Ecole): #Permet de trier les écoles
-            testvar = self.var_choix.get()
-            for i in range(len(Spe)):
-                if str(testvar)==str(Spe[i]):
-                    Ecole=filtre(i+1)
-            return Ecole
-        
         def update_label(label):
             Ecole=[]
             s=""
