@@ -5,7 +5,7 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
-from tkinter import Tk, StringVar, Label, Radiobutton
+from tkinter import Tk, StringVar, Label, Radiobutton,Canvas
 from functools import partial
 
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
@@ -52,7 +52,7 @@ class ChoixEcole:
                 if str(testvar)==str(Spe[i]):
                     Ecole=filtre(i+1)
             for k in range(len(Ecole)):
-                s=s+str(Ecole[k])+" "
+                s=s+str(Ecole[k])+" \n "
                 
             label.config(text='Spécialité :' + s)
             
@@ -60,7 +60,7 @@ class ChoixEcole:
         for i in range(len(Spe)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_color))
             choix_1.grid(row=i+1, column=1)
-            label_color.grid(row=i+1, column=i)
+        label_color.grid(row=0, column=0)
        
         self.root.mainloop()
         print(Ecole)
