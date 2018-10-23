@@ -51,7 +51,7 @@ class ChoixEcole:
         for i in range(len(Spe)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_ecole,Ecole))
             choix_1.grid(row=i+1, column=1)
-        label_ecole.grid(row=2, column=3)
+        label_ecole.grid(row=2, column=3,padx =40, pady =7)
        
         self.root.mainloop()
        
