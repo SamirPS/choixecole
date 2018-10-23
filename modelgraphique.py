@@ -29,7 +29,7 @@ class ChoixEcole:
         
         Spe=specialite()
         def filtre(specialiteid):
-    
+            Ecole=[]
             curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
             ecole = curseur.fetchall() #resultat de la commande
             for ecole in ecole:
@@ -46,19 +46,24 @@ class ChoixEcole:
         
         def update_label(label):
             Ecole=[]
+            s=""
             testvar = self.var_choix.get()
             for i in range(len(Spe)):
                 if str(testvar)==str(Spe[i]):
                     Ecole=filtre(i+1)
-            label.config(text='Spécialité :' + Ecole[0])
+            for k in range(len(Ecole)):
+                s=s+str(Ecole[k])+" "
+                
+            label.config(text='Spécialité :' + s)
             
             
         for i in range(len(Spe)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_color))
             choix_1.grid(row=i+1, column=1)
-        label_color.grid(row=0, column=0)
+            label_color.grid(row=i+1, column=i)
        
         self.root.mainloop()
+        print(Ecole)
        
         
     
