@@ -17,7 +17,7 @@ class ChoixEcole:
         Ecole=[]#Liste des ecoles
         self.root = Tk()
         self.var_choix = StringVar(self.root,)
-        label_color = Label(self.root, text='Specialité :' + self.var_choix.get())
+        label_color = Label(self.root, text='Ecole :' + self.var_choix.get())
         def specialite():
             """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
             curseur.execute("SELECT Nom FROM Specialite")
@@ -37,7 +37,12 @@ class ChoixEcole:
             return Ecole
         
         
-      
+        def choix(Ecole): #Permet de trier les écoles
+            testvar = self.var_choix.get()
+            for i in range(len(Spe)):
+                if str(testvar)==str(Spe[i]):
+                    Ecole=filtre(i+1)
+            return Ecole
         
         def update_label(label):
             Ecole=[]
@@ -49,7 +54,7 @@ class ChoixEcole:
             for k in range(len(Ecole)):
                 s=s+str(Ecole[k])+" \n "
                 
-            label.config(text='Spécialité :' + s)
+            label.config(text='Ecole :' + s)
             
             
         for i in range(len(Spe)):
