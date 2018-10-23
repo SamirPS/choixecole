@@ -5,7 +5,8 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
-from tkinter import *
+from tkinter import Tk, StringVar, Label, Radiobutton
+from functools import partial
 
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
@@ -15,7 +16,8 @@ class ChoixEcole:
         Spe=[]#liste des spécialité
         Ecole=[]#Liste des ecoles
         self.root = Tk()
-        self.var_choix = StringVar()
+        self.var_choix = StringVar(self.root,)
+        label_color = Label(self.root, text='Specialité :' + self.var_choix.get())
         def specialite():
             """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
             curseur.execute("SELECT Nom FROM Specialite")
@@ -27,6 +29,7 @@ class ChoixEcole:
         
         Spe=specialite()
         def filtre(specialiteid):
+    
             curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
             ecole = curseur.fetchall() #resultat de la commande
             for ecole in ecole:
@@ -35,32 +38,27 @@ class ChoixEcole:
         
         
         def choix(Ecole): #Permet de trier les écoles
+            testvar = self.var_choix.get()
             for i in range(len(Spe)):
-                if str(self.var_choix.get())==str(Spe[i]):
+                if str(testvar)==str(Spe[i]):
                     Ecole=filtre(i+1)
             return Ecole
         
-        
-        for i in range(len(Spe)): #affiche les case a cocher
-            choix_1 = Radiobutton(self.root,text=str(Spe[i]), variable=self.var_choix, value=Spe[i])
-            choix_1.pack()
-        bouton_quitter = Button(self.root, text="clique ici", command=self.root.quit)
-        bouton_quitter.pack()
+        def update_label(label):
+            Ecole=[]
+            testvar = self.var_choix.get()
+            for i in range(len(Spe)):
+                if str(testvar)==str(Spe[i]):
+                    Ecole=filtre(i+1)
+            label.config(text='Spécialité :' + Ecole[0])
+            
+            
+        for i in range(len(Spe)):
+            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_color))
+            choix_1.grid(row=i+1, column=1)
+        label_color.grid(row=0, column=0)
+       
         self.root.mainloop()
-        
-        
-        Ecole=choix(Ecole) #filtre les écoles en fonction de la case coché
-        
-        
-        fenetre2 = Tk() #Sert a afficher les écoles
-        if len(Ecole)==0:
-            champ_label = Label(fenetre2, text="pas d'ecole trouve")
-            champ_label.pack()
-        else :
-            for i in range(len(Ecole)) :
-                champ_label = Label(fenetre2, text=str(Ecole[i]))
-                champ_label.pack()
-        fenetre2.mainloop()
        
         
     
