@@ -15,8 +15,10 @@ class ChoixEcole:
     def __init__(self):
         Spe=[]#liste des spécialité
         Ecole=[]#Liste des ecoles
+        Alternance=["Alternance : oui ","Alternance :non"]
         self.root = Tk()
         self.var_choix = StringVar(self.root,)
+        self.var_alternance=StringVar(self.root,)
         label_ecole = Label(self.root, text='Ecole :' + self.var_choix.get())
         def specialite():
             """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
@@ -28,9 +30,9 @@ class ChoixEcole:
         
         
         Spe=specialite()
-        def filtre(specialiteid):
+        def filtre(specialiteid,alternanceid):
             Ecole=[]
-            curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
+            curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid))
             ecole = curseur.fetchall() #resultat de la commande
             for ecole in ecole:
                 Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
@@ -38,20 +40,38 @@ class ChoixEcole:
         
         def update_label(label,Ecole):
             s=""
-            testvar = self.var_choix.get()
-            for i in range(len(Spe)):
-                if str(testvar)==str(Spe[i]):
-                    Ecole=filtre(i+1)
-            for k in range(len(Ecole)):
-                s=s+"\n"+str(Ecole[k])
+            d=""
+            choixspe = self.var_choix.get()
+            choixalt = self.var_alternance.get()
+            for i in range(len(Alternance)):
+                if str(choixalt)==str(Alternance[z]):
+                    d=str(Alternance[z])
+            if d=="Alternance :non":
+                for i in range(len(Spe)):
+                    
+                    if str(choixspe)==str(Spe[i]):
+                        Ecole=filtre(i+1,0)
+                for k in range(len(Ecole)):
+                    s=s+"\n"+str(Ecole[k])
+            else :
+                for i in range(len(Spe)):
+                    
+                    if str(choixspe)==str(Spe[i]):
+                        Ecole=filtre(i+1,1)
+                for k in range(len(Ecole)):
+                    s=s+"\n"+str(Ecole[k])
                 
             label.config(text='Ecole :' + s)
             
-            
+        for z in range(2):
+            choix_2=Radiobutton(self.root,variable=self.var_alternance,text=Alternance[z], value=Alternance[z],command=partial(update_label,label_ecole,Ecole))
+            choix_2.grid(row=z+1, column=2,padx=20)    
         for i in range(len(Spe)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_ecole,Ecole))
             choix_1.grid(row=i+1, column=1)
+       
         label_ecole.grid(row=2, column=3,padx =40, pady =7)
+        
        
         self.root.mainloop()
        

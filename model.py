@@ -7,6 +7,7 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 Spe=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
+Alternance=["oui","non"]
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
@@ -19,8 +20,8 @@ def specialite():
     return Spe
 
 
-def filtre(specialiteid):
-    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?",(specialiteid,))
+def filtre(specialiteid,alternanceid):
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
         Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
@@ -33,13 +34,20 @@ for i in range(len(Spe)) : #on affiche les spécialite avec un numero pour facil
     print(i+1,Spe[i])
     
 specialiteid=int(input("donne le numero de la spécialite \n"))
+for k in range(1):
+    print("\n")
+for j in range(len(Alternance)) :
+    print(j+1,Alternance[j])
+    
+    
+alternanceid=int(input("donne le numero en fonction du choix \n"))
 
 
-while specialiteid>len(Spe) or specialiteid<1 : #Eviter un bug
+while specialiteid>len(Spe) or specialiteid<1  or alternanceid>len(Alternance)  or alternanceid<1 : #Eviter un bug
     print("bien jouer le bug ")
     specialiteid=int(input("donne le numero de la spécialite  \n"))
 
-Ecole=filtre(specialiteid)
+Ecole=filtre(specialiteid,alternanceid)
 
 if len(Ecole)==0:# Si la liste a aucun élèment 
     print("Pas d'école trouvée en fonction des critéres")
