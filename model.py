@@ -10,7 +10,7 @@ curseur = connexion.cursor() #execute les commandes sql
 
 def renvoie_specialite():
     Specialite=[]
-    """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
+    """Nous revoie toutes les spécialité disponible sous forme d'une liste"""
     curseur.execute("SELECT Nom FROM Specialite")
     valeur_spe = curseur.fetchall() #resultats de la commande
     for valeur_spe in valeur_spe:
@@ -19,6 +19,7 @@ def renvoie_specialite():
 
 
 def filtre(specialiteid):
+    """Renvoie les Ecoles en fonction de la specialité choisie"""
     Ecole=[]
     curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? ",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
