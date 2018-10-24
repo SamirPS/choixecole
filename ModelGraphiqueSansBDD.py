@@ -7,6 +7,7 @@ Created on Sat Oct 20 19:41:49 2018
 from tkinter import Tk, StringVar, Label, Radiobutton
 from functools import partial
 class ChoixEcole:
+    
     def __init__(self):
         Spe=["Informatique","Sport","Maths"]#liste des spécialité
         Ecole=["SamSam","Besnier","MathsSchool"]#Liste des ecoles
