@@ -7,7 +7,7 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 Spe=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
-Alternance=["non","oui"]
+Alternance=["non","oui","n'importe"]
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
@@ -21,6 +21,16 @@ def specialite():
 
 
 def filtre(specialiteid,alternanceid):
+    if alternanceid==3:
+        curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,0))
+        ecole = curseur.fetchall() #resultat de la commande
+        for ecole in ecole:
+            Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
+        curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,1))
+        ecole = curseur.fetchall() #resultat de la commande
+        for ecole in ecole:
+            Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
+        return Ecole
     curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid-1))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
