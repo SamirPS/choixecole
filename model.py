@@ -7,7 +7,6 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 Specialite=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
-Alternance=["non","oui","n'importe"]
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
@@ -21,18 +20,9 @@ def renvoie_specialite():
     return Specialite
 
 
-def filtre(specialiteid,alternanceid):
-    if alternanceid==3:
-        curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,0))
-        ecole = curseur.fetchall() #resultat de la commande
-        for ecole in ecole:
-            Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
-        curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,1))
-        ecole = curseur.fetchall() #resultat de la commande
-        for ecole in ecole:
-            Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
-        return Ecole
-    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid-1))
+def filtre(specialiteid):
+    Ecole=[]
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? ",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
         Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
@@ -49,21 +39,9 @@ specialiteid=int(input("donne le numero de la spécialite \n"))
 while specialiteid>len(Specialite) or specialiteid<1 : #Eviter un bug
     specialiteid=int(input("donne le numero de la spécialite  compris entre 1 et 4 \n"))
 
-for k in range(1):
-    print("\n")
     
-print("Alternance:")
-for j in range(len(Alternance)) :
-    print(j+1,Alternance[j])
-    
-    
-alternanceid=int(input("donne le numero en fonction du choix \n"))
+Ecole=filtre(specialiteid)
 
-
-while  alternanceid>len(Alternance)  or alternanceid<1 : #Eviter un bug
-    specialiteid=int(input("Redonne un nombre entier entre 1 et 3  \n"))
-
-Ecole=filtre(specialiteid,alternanceid)
 
 if len(Ecole)==0:# Si la liste a aucun élèment 
     print("Pas d'école trouvée en fonction des critéres")
