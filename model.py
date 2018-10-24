@@ -36,6 +36,8 @@ for i in range(len(Spe)) : #on affiche les spécialite avec un numero pour facil
 specialiteid=int(input("donne le numero de la spécialite \n"))
 for k in range(1):
     print("\n")
+    
+print("Alternance:")
 for j in range(len(Alternance)) :
     print(j+1,Alternance[j])
     

@@ -15,7 +15,7 @@ class ChoixEcole:
     def __init__(self):
         Spe=[]#liste des spécialité
         Ecole=[]#Liste des ecoles
-        Alternance=["Alternance : oui ","Alternance :non"]
+        Alternance=["non ","oui"]
         self.root = Tk()
         self.var_choix = StringVar(self.root,)
         self.var_alternance=StringVar(self.root,)
@@ -40,13 +40,12 @@ class ChoixEcole:
         
         def update_label(label,Ecole):
             s=""
-            d=""
             choixspe = self.var_choix.get()
             choixalt = self.var_alternance.get()
             for i in range(len(Alternance)):
                 if str(choixalt)==str(Alternance[z]):
-                    d=str(Alternance[z])
-            if d=="Alternance :non":
+                    choixalt=str(choixalt)
+            if str(choixalt)==str(Alternance[0]):
                 for i in range(len(Spe)):
                     
                     if str(choixspe)==str(Spe[i]):
@@ -70,8 +69,12 @@ class ChoixEcole:
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Spe[i]), value=Spe[i],command=partial(update_label,label_ecole,Ecole))
             choix_1.grid(row=i+1, column=1)
        
-        label_ecole.grid(row=2, column=3,padx =40, pady =7)
-        
+        label_ecole.grid(row=1, column=3,padx =40)
+        label_spe = Label(self.root, text='Specialité :' )
+        label_alt = Label(self.root, text='Alternance :' )
+        label_spe.grid(row=0, column=1)
+        label_alt.grid(row=0, column=2)
+    
        
         self.root.mainloop()
        
