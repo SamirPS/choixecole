@@ -21,7 +21,7 @@ def specialite():
 
 
 def filtre(specialiteid,alternanceid):
-    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid))
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and IdAlternance=?",(specialiteid,alternanceid-1))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
         Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
