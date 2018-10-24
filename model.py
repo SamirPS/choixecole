@@ -9,8 +9,8 @@ connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
 def renvoie_specialite():
-    Specialite=[]
     """Nous revoie toutes les spécialité disponible sous forme d'une liste"""
+    Specialite=[]
     curseur.execute("SELECT Nom FROM Specialite")
     valeur_spe = curseur.fetchall() #resultats de la commande
     for valeur_spe in valeur_spe:
