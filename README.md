@@ -1,4 +1,7 @@
 # choixecole
 Projet informatique TSI2
+Ajout de spécialité : modifier la table Spécialite
+Alternance: modifier la table EcoleSpe
+Ajout d'école :modifier la table Ecole
 
-Interface graphique disponible pour augmenter le nombre d'école et de specialitr il faut modifiée la base de données avec sqlite browser par exemple .
+Avec SqliteBroswer par exemple
