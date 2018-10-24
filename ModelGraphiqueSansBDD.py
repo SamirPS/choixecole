@@ -10,7 +10,7 @@ class ChoixEcole:
     
     def __init__(self):
         Specialité=["Informatique","Sport","Maths"]#liste des spécialité
-        Ecole=["SamSam","Besnier","MathsSchool"]#Liste des ecoles
+        Ecole=[("TelecomSudParis","Informatique"),("TsP","Sport"),("Samsam","Sport"),("Samsam","Maths")]#Liste des ecoles
         self.root = Tk() # On créer une fenetre
         self.var_choix = StringVar(self.root,)
         label_ecole = Label(self.root, text='Ecole :' + self.var_choix.get())
@@ -18,12 +18,14 @@ class ChoixEcole:
         
         def update_label(label):
             """Met a jour le label en fonction de la case qui est cochée"""
+            Z=[]
             text=""
-            for i in range(len(Ecole)):
-                if str(self.var_choix.get())==str(Specialité[i]):
-                    text=text+"\n"+str(Ecole[i])
-            label.config(text='Ecole :' + text)
-              
+            for i in range (len(Ecole)):
+                Z=Ecole[i]
+                if str(self.var_choix.get())==str(Z[1]):
+                    text=text+"\n"+str(Z[0])
+            label.config(text="Ecole" + text)
+                    
         
         for i in range(len(Specialité)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=str(Specialité[i]), value=Specialité[i],command=partial(update_label,label_ecole))
@@ -35,7 +37,6 @@ class ChoixEcole:
     
        
         self.root.mainloop()
-       
         
     
     
