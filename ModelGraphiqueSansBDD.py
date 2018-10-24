@@ -11,18 +11,19 @@ class ChoixEcole:
     def __init__(self):
         Spe=["Informatique","Sport","Maths"]#liste des spécialité
         Ecole=["SamSam","Besnier","MathsSchool"]#Liste des ecoles
-        self.root = Tk()
+        self.root = Tk() # On créer une fenetre
         self.var_choix = StringVar(self.root,)
         label_ecole = Label(self.root, text='Ecole :' + self.var_choix.get())
         
         
         def update_label(label):
-            s=""
+            """Met a jour le label en fonction de la case qui est cochée"""
+            text=""
             choixspe = self.var_choix.get()
             for i in range(len(Ecole)):
                 if str(choixspe)==str(Spe[i]):
-                    s=s+"\n"+str(Ecole[i])
-            label.config(text='Ecole :' + s)
+                    text=text+"\n"+str(Ecole[i])
+            label.config(text='Ecole :' + text)
               
         
         for i in range(len(Spe)):
@@ -36,8 +37,3 @@ class ChoixEcole:
        
         self.root.mainloop()
        
-        
-    
-    
-if __name__ == '__main__':
-    ChoixEcole()
