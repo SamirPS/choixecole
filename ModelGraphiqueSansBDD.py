@@ -18,17 +18,19 @@ class ChoixEcole:
         self.root = Tk() 
         """Initialise les variables"""
         
-        self.var_choix = StringVar(self.root,)
+        self.var_choix = StringVar()
         self.Specialité=["Informatique","Sport","Maths"]#liste des spécialité
         self.Ecole=[("TelecomSudParis","Informatique"),("TsP","Sport"),("Samsam","Sport"),("Samsam","Maths")]#Liste des ecoles
-        self.label_ecole = Label(self.root, text='Ecole :' + self.var_choix.get())
+        self.label_ecole = Label(self.root, text='Ecole :')
         
         """On affiche les cases a cocher"""
         
         for i in range(len(self.Specialité)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=self.Specialité[i], value=self.Specialité[i],command=partial(self.update_label))
             choix_1.grid(row=i+1, column=1,sticky="w")
-       
+        
+        """On place les élèments """
+        
         self.label_ecole.grid(row=1, column=3,padx =40)
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_spe.grid(row=0, column=1)
