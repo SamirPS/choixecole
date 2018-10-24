@@ -35,7 +35,7 @@ for i in range(len(Spe)) : #on affiche les spécialite avec un numero pour facil
 specialiteid=int(input("donne le numero de la spécialite \n"))
 
 
-while specialiteid>len(Spe) or specialiteid<1 : #Eviter un bug
+while specialiteid>len(Spe): #Eviter un bug
     print("bien jouer le bug ")
     specialiteid=int(input("donne le numero de la spécialite  \n"))
 
