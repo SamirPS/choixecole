@@ -7,7 +7,7 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 Spe=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
-Alternance=["oui","non"]
+Alternance=["non","oui"]
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
