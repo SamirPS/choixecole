@@ -5,19 +5,20 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
-Spe=[]#liste des spécialité
+Specialite=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
 Alternance=["non","oui","n'importe"]
 connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
 curseur = connexion.cursor() #execute les commandes sql
 
-def specialite():
+def renvoie_specialite():
+    Specialite=[]
     """Nous revoie toutes les spécialité disponible sous forme d'une liste de tuples"""
     curseur.execute("SELECT Nom FROM Specialite")
-    specialite = curseur.fetchall() #resultats de la commande
-    for specialite in specialite:
-        Spe.append(specialite[0]) #apprend les specialité dans la table spe
-    return Spe
+    valeur_spe = curseur.fetchall() #resultats de la commande
+    for valeur_spe in valeur_spe:
+        Specialite.append(valeur_spe[0]) #apprend les specialité dans la table spe
+    return Specialite
 
 
 def filtre(specialiteid,alternanceid):
@@ -38,12 +39,16 @@ def filtre(specialiteid,alternanceid):
     return Ecole
 
 
-Spe=specialite()
+Specialite=renvoie_specialite()
 
-for i in range(len(Spe)) : #on affiche les spécialite avec un numero pour faciliter l'usage du programme
-    print(i+1,Spe[i])
+for i in range(len(Specialite)) : #on affiche les spécialite avec un numero pour faciliter l'usage du programme
+    print(i+1,Specialite[i])
     
 specialiteid=int(input("donne le numero de la spécialite \n"))
+
+while specialiteid>len(Specialite) or specialiteid<1 : #Eviter un bug
+    specialiteid=int(input("donne le numero de la spécialite  compris entre 1 et 4 \n"))
+
 for k in range(1):
     print("\n")
     
@@ -55,9 +60,8 @@ for j in range(len(Alternance)) :
 alternanceid=int(input("donne le numero en fonction du choix \n"))
 
 
-while specialiteid>len(Spe) or specialiteid<1  or alternanceid>len(Alternance)  or alternanceid<1 : #Eviter un bug
-    print("bien jouer le bug ")
-    specialiteid=int(input("donne le numero de la spécialite  \n"))
+while  alternanceid>len(Alternance)  or alternanceid<1 : #Eviter un bug
+    specialiteid=int(input("Redonne un nombre entier entre 1 et 3  \n"))
 
 Ecole=filtre(specialiteid,alternanceid)
 
