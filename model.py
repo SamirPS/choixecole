@@ -26,6 +26,8 @@ def filtre(specialiteid):
     for ecole in ecole:
         Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
     return Ecole
+
+
 def filtreadmission(niveau):
     """Renvoie les Ecoles en fonction du concours"""
     Concours=[]
