@@ -22,6 +22,8 @@ class ChoixEcole:
         self.Specialité=["Informatique","Sport","Maths"]#liste des spécialité
         self.Ecole=[("TelecomSudParis","Informatique"),("TsP","Sport"),("Samsam","Sport"),("Samsam","Maths")]#Liste des ecoles
         self.label_ecole = Label(self.root, text='Ecole :')
+        self.label_spe = Label(self.root, text='Specialité :' )
+
         
         """On affiche les cases a cocher"""
         
@@ -32,11 +34,12 @@ class ChoixEcole:
         """On place les élèments """
         
         self.label_ecole.grid(row=1, column=3,padx =40)
-        self.label_spe = Label(self.root, text='Specialité :' )
         self.label_spe.grid(row=0, column=1)
     
        
         self.root.mainloop()
+         
+         
     def update_label(self):
             """Met a jour les écoles en fonction de la case qui est cochée"""
             Z=[]
