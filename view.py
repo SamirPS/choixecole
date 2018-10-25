@@ -37,8 +37,8 @@ def Spe():
             
 
 def concours():
-    niveau=input("CCS ou CCP\n")
-    Concours=model.filtreadmission(niveau)
+    nomduconcours=input("CCS ou CCP\n")
+    Concours=model.filtreadmission(nomduconcours)
     if len(Concours)==0:# Si la liste a aucun élèment 
         print("Pas d'école trouvée en fonction des critéres")
     else:
