@@ -28,7 +28,7 @@ def filtre(specialiteid):
     return Ecole
 
 
-def filtreadmission(niveau):
+def filtreadmission(nomduconcours):
     """Renvoie les Ecoles en fonction du concours"""
     Concours=[]
     curseur.execute("SELECT NOM,Admission FROM EcoleS WHERE Admission=?",(niveau,))
