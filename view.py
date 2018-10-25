@@ -15,32 +15,43 @@ import model
 Specialite=[]#liste des spécialité
 Ecole=[]#Liste des ecoles
 
-"""Renvoie les specialites contenues dans la base de données"""
-
-Specialite=model.renvoie_specialite()
-
-"""Affiches les specialités"""
-
-for i in range(len(Specialite)) : #on affiche les spécialite avec un numero pour faciliter l'usage du programme
-    print(i+1,Specialite[i])
-
-"""L'utilisateur choisi sa specialité"""  
-specialiteid=int(input("donne le numero de la spécialite \n"))
-
-"""Afin d'éviter un bug avec le nombre d'items dans la liste"""
-
-
-while specialiteid>len(Specialite) or specialiteid<1 : #Eviter un bug
-    specialiteid=int(input("donne le numero de la spécialite  compris entre 1 et 4 \n"))
-
-"""Renvoie les écoles en fonction de la specialité choisie"""  
-Ecole=model.filtre(specialiteid)
-
-if len(Ecole)==0:# Si la liste a aucun élèment 
+Concours=[]
+def Spe():
+    Specialite=model.renvoie_specialite()
+    for i in range(len(Specialite)) : #on affiche les spécialite avec un numero pour faciliter l'usage du programme
+        print(i+1,Specialite[i])
+        
+    specialiteid=int(input("donne le numero de la spécialite \n"))
     
-    print("Pas d'école trouvée en fonction des critéres")
+    while specialiteid>len(Specialite) or specialiteid<1 : #Eviter un bug
+        specialiteid=int(input("donne le numero de la spécialite  compris entre 1 et 4 \n"))
+    
+    Ecole=model.filtre(specialiteid)
+    if len(Ecole)==0:# Si la liste a aucun élèment 
+        print("Pas d'école trouvée en fonction des critéres")
+    else:
+        print("Voila les écoles : \n") #On affiche les écoles contenue dans la liste 
+        for i in range(len(Ecole)): 
+            print(Ecole[i])
+            
+            
 
-else:
-    print("Voila les écoles : \n") #On affiche les écoles contenue dans la liste 
-    for i in range(len(Ecole)): 
-        print(Ecole[i])
+def concours():
+    niveau=input("CCS ou CCP\n")
+    Concours=model.filtreadmission(niveau)
+    if len(Concours)==0:# Si la liste a aucun élèment 
+        print("Pas d'école trouvée en fonction des critéres")
+    else:
+        print("Voila les écoles : \n") #On affiche les écoles contenue dans la liste 
+        for i in range(len(Concours)): 
+            print(Concours[i])
+    
+def choixtri():
+    choix=input("Trier en foction de la 1)Specialite ou 2)Concours \n")
+    if choix=="1" :
+        Spe()
+    elif choix=="2" :
+        concours()
+    while choix!="1" and choix!="2" :
+        choix=input("Trier en foction de la 1)Specialite ou 2)Concours")       
+choixtri()

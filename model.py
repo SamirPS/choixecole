@@ -26,3 +26,11 @@ def filtre(specialiteid):
     for ecole in ecole:
         Ecole.append(ecole[0]) #appends les ecoles en fonction de la  specialité 
     return Ecole
+def filtreadmission(niveau):
+    """Renvoie les Ecoles en fonction du concours"""
+    Concours=[]
+    curseur.execute("SELECT NOM,Admission FROM EcoleS WHERE Admission=?",(niveau,))
+    concours=curseur.fetchall()
+    for concours in concours :
+        Concours.append(concours[0])
+    return Concours
