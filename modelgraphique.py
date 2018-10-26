@@ -48,7 +48,7 @@ class ChoixEcole:
                     
                     
             for c in range(len(self.Ecole)):
-                text=text+"\n"+self.Ecole[c][0]+"  "+self.Ecole[c][1]
+                text=text+"\n"+self.Ecole[c][0]+"  "+self.Ecole[c][1]+"  "+self.Ecole[c][2]
             self.label_ecole.config(text="Ecole" + text)
             
             

@@ -21,7 +21,7 @@ def renvoie_specialite():
 def filtre(specialiteid):
     """Renvoie les Ecoles en fonction de la specialité choisie"""
     Ecole=[]
-    curseur.execute("SELECT Nom,Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? ",(specialiteid,))
+    curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? ",(specialiteid,))
     ecole = curseur.fetchall() #resultat de la commande
     for ecole in ecole:
         Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 

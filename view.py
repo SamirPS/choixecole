@@ -30,5 +30,5 @@ if len(Ecole)==0:# Si la liste a aucun élèment
 else:
     print("Voila les écoles : \n") #On affiche les écoles contenue dans la liste 
     for i in range(len(Ecole)): 
-        print(Ecole[i][0],Ecole[i][1])
+        print(Ecole[i][0],Ecole[i][1],Ecole[i][2])
         
