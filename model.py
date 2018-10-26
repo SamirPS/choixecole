@@ -18,11 +18,29 @@ def renvoie_specialite():
     return Specialite
 
 
-def filtre(specialiteid):
+def filtre(specialiteid,communeid):
     """Renvoie les Ecoles en fonction de la specialité choisie"""
     Ecole=[]
-    curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? ",(specialiteid,))
-    ecole = curseur.fetchall() #resultat de la commande
-    for ecole in ecole:
-        Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-    return Ecole
+    if communeid=="Peu importe":
+        curseur.execute("SELECT Nom,Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?  ",(specialiteid,))
+        ecole = curseur.fetchall() #resultat de la commande
+        for ecole in ecole:
+            Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+        return Ecole
+    else :
+        curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? ",(specialiteid,communeid,))
+        ecole = curseur.fetchall() #resultat de la commande
+        for ecole in ecole:
+            Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+        return Ecole
+
+def renvoie_commune():
+    Commune=[]
+    Commune.append("Peu importe")
+    curseur.execute("SELECT Commune FROM EcoleS")
+    commune = curseur.fetchall() #resultats de la commande
+    for commune in commune:
+        Commune.append(commune[0]) #apprend les specialité dans la table spe
+    Commune=list(set(Commune))
+    return Commune
+    

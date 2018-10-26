@@ -20,16 +20,24 @@ class ChoixEcole:
         """Initialise les variables"""
        
         self.var_choix = StringVar(self.root)
+        self.var_commune=StringVar(self.root)
         self.Specialité=[]#liste des spécialité
         self.Ecole=[]#Liste des ecoles
+        self.Commune=[]
         self.label_ecole = Label(self.root, text='Ecole :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.Specialité=model.renvoie_specialite()
+        self.Commune=model.renvoie_commune()
         """On affiche les cases a cocher"""
         
         for a in range(len(self.Specialité)):
             choix_1 = Radiobutton(self.root,variable=self.var_choix,text=self.Specialité[a], value=self.Specialité[a],command=self.update_label)
             choix_1.grid(row=a+1, column=1,sticky="w")
+            
+            
+        for d in range(len(self.Commune)):
+            choix_2 = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[d], value=self.Commune[d],command=self.update_label)
+            choix_2.grid(row=d+1, column=2,sticky="w")
         
         """On place les élèments """
         
@@ -41,14 +49,18 @@ class ChoixEcole:
     def update_label(self):
             """Met a jour les écoles en fonction de la case qui est cochée"""
             text=""
-            
+            communeid=""
+            for e in range(len(self.Commune)):
+                if self.var_commune.get()==self.Commune[e]:
+                    communeid=self.Commune[e]
+                    
             for b in range (len(self.Specialité)):
                 if self.var_choix.get()==self.Specialité[b]:
-                    self.Ecole=model.filtre(b+1)
+                    self.Ecole=model.filtre(b+1,communeid)
                     
                     
             for c in range(len(self.Ecole)):
-                text=text+"\n"+self.Ecole[c][0]+"  "+self.Ecole[c][1]+"  "+self.Ecole[c][2]
+                text=text+"\n"+self.Ecole[c][0]+" "+self.Ecole[c][1]
             self.label_ecole.config(text="Ecole" + text)
             
             
