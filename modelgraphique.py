@@ -25,6 +25,7 @@ class ChoixEcole:
         self.Ecole=[]#Liste des ecoles
         self.Commune=[]
         self.label_ecole = Label(self.root, text='Ecole :')
+        self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.Specialité=model.renvoie_specialite()
         self.Commune=model.renvoie_commune()
@@ -42,6 +43,7 @@ class ChoixEcole:
         """On place les élèments """
         
         self.label_ecole.grid(row=1, column=5,padx =40)
+        self.label_commune.grid(row=0,column=2)
         self.label_spe.grid(row=0, column=1)
         self.root.mainloop()
          
