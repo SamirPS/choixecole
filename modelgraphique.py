@@ -4,7 +4,7 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label, Radiobutton,Scrollbar
+from tkinter import Tk,StringVar, Label, Radiobutton
 import model
 
 class ChoixEcole:
@@ -48,7 +48,7 @@ class ChoixEcole:
                     
                     
             for c in range(len(self.Ecole)):
-                text=text+"\n"+self.Ecole[c]
+                text=text+"\n"+self.Ecole[c][0]+"  "+self.Ecole[c][1]
             self.label_ecole.config(text="Ecole" + text)
             
             
