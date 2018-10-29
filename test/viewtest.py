@@ -25,6 +25,7 @@ Ecole=[]#Liste des ecoles
 Commune=[]
 Concours=[]
 
+
 Concours=modeltest.renvoie_concours()
 Commune=modeltest.renvoie_commune()
 Specialite=modeltest.renvoie_specialite()
@@ -50,12 +51,14 @@ for c in range(len(Concours)):
 
 concoursid=input("donne le nom du concours \n")
 
+Note=float(input("Votre Note Test \n"))
 
 
+Ecole=modeltest.filtre(specialiteid,communeid,concoursid,Note)
 
-Ecole=modeltest.filtre(specialiteid,communeid,concoursid)
 
-if len(Ecole)==0:# Si la liste a aucun élèment 
+if Ecole==[]:# Si la liste a aucun élèment 
+    
     print("Pas d'école trouvée en fonction des critéres")
 
 elif concoursid=="Peu importe":

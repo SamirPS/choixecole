@@ -16,48 +16,86 @@ class ChoixEcole:
         # self.root représente la fenêtre dans la quelle se déroule notre application
          
         self.root = Tk() 
-        self.root.title("ChoixEcole") # Ajout d'un titre 
+        self.root.title("ChoixEcole TSI") # Ajout d'un titre 
         """Initialise les variables"""
-        self.var_text=StringVar(self.root)
+        self.var_maths=StringVar(self.root)
+        self.var_physique=StringVar(self.root)
+        self.var_si=StringVar(self.root)
+        self.var_info=StringVar(self.root)
+        self.var_francais=StringVar(self.root)
+        self.var_anglais=StringVar(self.root)
         self.var_choix = StringVar(self.root)
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
-        self.Specialité=[]#liste des spécialité
-        self.Ecole=[]#Liste des ecoles
+        
+        
+        self.Specialite=[]#liste des spécialité
+        self.Ecole=[]
         self.Commune=[]
         self.Concours=[]
-        self.entry_name = Entry(self.root, textvariable=self.var_text)
-        self.label_note=Label(self.root,text='Rentre ta moyenne au CB')
+        
+        
+        self.entry_maths = Entry(self.root, textvariable=self.var_maths)
+        self.entry_physique = Entry(self.root, textvariable=self.var_physique)
+        self.entry_si = Entry(self.root, textvariable=self.var_si)
+        self.entry_info = Entry(self.root, textvariable=self.var_info)
+        self.entry_francais = Entry(self.root, textvariable=self.var_francais)
+        self.entry_anglais = Entry(self.root, textvariable=self.var_anglais)
+        
+        
+        self.label_maths=Label(self.root,text='Rentre ta moyenne de Maths')
+        self.label_physique=Label(self.root,text='Rentre ta moyenne de Physique')
+        self.label_si=Label(self.root,text='Rentre ta moyenne de SI')
+        self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
+        self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
+        self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
         self.label_ecole = Label(self.root, text='Ecole :')
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
-        self.Specialité=modeltest.renvoie_specialite()
+        
+        
+        self.Specialite=modeltest.renvoie_specialite()
         self.Commune=modeltest.renvoie_commune()
         self.Concours=modeltest.renvoie_concours()
-        """On affiche les cases a cocher"""
-        for d in range(len(self.Commune)):
-            choix_2 = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[d], value=self.Commune[d],command=self.update_label)
-            choix_2.grid(row=d+1, column=3,sticky="w")
         
-        for e in range(len(self.Concours)):
-            choix_3= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[e], value=self.Concours[e],command=self.update_label)
-            choix_3.grid(row=e+1, column=4,sticky="w")
+        
+        """On affiche les cases a cocher"""
+        for a in range(len(self.Commune)):
+            choix_2 = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[a], value=self.Commune[a],command=self.update_label)
+            choix_2.grid(row=a+1, column=3,sticky="w")
+        
+        for b in range(len(self.Concours)):
+            choix_3= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[b], value=self.Concours[b],command=self.update_label)
+            choix_3.grid(row=b+1, column=4,sticky="w")
             
-        for a in range(len(self.Specialité)):
-            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=self.Specialité[a], value=self.Specialité[a],command=self.update_label)
-            choix_1.grid(row=a+1, column=2,sticky="w")
+        for c in range(len(self.Specialite)):
+            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=self.Specialite[c], value=self.Specialite[c],command=self.update_label)
+            choix_1.grid(row=c+1, column=2,sticky="w")
             
             
         
         
         """On place les élèments """
-        self.label_note.grid(row=0,column=1)
+        
+        self.label_maths.grid(row=0,column=1)
+        self.label_physique.grid(row=2,column=1)
+        self.label_si.grid(row=4,column=1)
+        self.label_info.grid(row=6,column=1)
+        self.label_francais.grid(row=8,column=1)
+        self.label_anglais.grid(row=10,column=1)
         self.label_ecole.grid(row=1, column=5,padx =40)
         self.label_spe.grid(row=0, column=2)
         self.label_commune.grid(row=0,column=3)
         self.label_concours.grid(row=0,column=4)
-        self.entry_name.grid(row=1,column=1)
+        
+        
+        self.entry_maths.grid(row=1,column=1)
+        self.entry_physique.grid(row=3,column=1)
+        self.entry_si.grid(row=5,column=1)
+        self.entry_info.grid(row=7,column=1)
+        self.entry_francais.grid(row=9,column=1)
+        self.entry_anglais.grid(row=11,column=1)
         
         self.root.mainloop()
          
@@ -66,28 +104,51 @@ class ChoixEcole:
             text=""
             communeid=""
             concoursid=""
-            note=int(self.var_text.get())
-            for  k in range(len(self.Commune)):
-                if self.var_commune.get()==self.Commune[k]:
-                    communeid=self.Commune[k]
+            NoteMode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
+            NoteMaths=float(self.entry_maths.get())
+            NotePhysique=float(self.entry_physique.get())
+            NoteSi=float(self.entry_si.get())
+            NoteFrancais=float(self.entry_francais.get())
+            NoteAnglais=float(self.entry_anglais.get())
+            NoteInfo=float(self.entry_info.get())
+            Note=0
+                
+            for d in range(len(self.Commune)):
+                if self.var_commune.get()==self.Commune[d]:
+                    communeid=self.Commune[d]
             
                     
-            for z in range(len(self.Concours)):
-                if self.var_concours.get()==self.Concours[z]:
-                    concoursid=self.Concours[z]
-                    
-                         
-            for b in range (len(self.Specialité)):
-                if self.var_choix.get()==self.Specialité[b]:
-                    self.Ecole=modeltest.filtre(b+1,communeid,concoursid,note)
+            for e in range(len(self.Concours)):
+                if self.var_concours.get()==self.Concours[e]:
+                    concoursid=self.Concours[e]
+            
+            if concoursid=="CCP" :
+               
+                Note=(9*NoteFrancais+8*NoteMaths+10*NotePhysique+4*NoteAnglais+8*NoteMode+4*NoteInfo+15*NoteSi)/54
+                Note=round(Note,1)
+                
+            if concoursid=="CCS":
+                Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
+                Note=round(Note,1)
+            
+            if concoursid=="Peu importe":
+                  Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
+                  Note=round(Note,1)
+            
+                
+    
+            for f in range (len(self.Specialite)):
+                if self.var_choix.get()==self.Specialite[f]:
+                    self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
+                    break
              
             
             if concoursid=="Peu importe":
-                for c in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[c][0]+" "+self.Ecole[c][1]
+                for g in range(len(self.Ecole)):
+                    text=text+"\n"+self.Ecole[g][0]+" "+self.Ecole[g][1]
             else:
-                for c in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[c][0]
+                for h in range(len(self.Ecole)):
+                    text=text+"\n"+self.Ecole[h][0]
                 
                     
             self.label_ecole.config(text="Ecole :" + text)
