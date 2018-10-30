@@ -126,6 +126,8 @@ class ChoixEcole:
             NoteAnglais=float(self.entry_anglais.get())
             NoteInfo=float(self.entry_info.get())
             Note=0
+            Ecole1=[]
+            Ecole2=[]
                 
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
@@ -145,15 +147,25 @@ class ChoixEcole:
                 Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
                 Note=round(Note,1)
             
-            if concoursid=="Peu importe":
-                  Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
-                  Note=round(Note,1)
             
                 
     
             for f in range (len(self.Specialite)):
-                if self.var_choix.get()==self.Specialite[f]:
-                    self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
+                if concoursid=="Peu importe":
+                    if self.var_choix.get()==self.Specialite[f]:
+                         Note=(9*NoteFrancais+8*NoteMaths+10*NotePhysique+4*NoteAnglais+8*NoteMode+4*NoteInfo+15*NoteSi)/54
+                         Note=round(Note,1)
+                         Ecole1=modeltest.filtre(f+1,communeid,concoursid,Note)
+                         Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
+                         Note=round(Note,1)
+                         Ecole2=modeltest.filtre(f+1,communeid,concoursid,Note)
+                         self.Ecole=Ecole1+Ecole2
+                         self.Ecole=list(set(self.Ecole))
+                         print(self.Ecole)
+                    break
+                else:
+                    if self.var_choix.get()==self.Specialite[f]:
+                        self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
                     break
              
             
