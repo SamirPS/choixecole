@@ -1,4 +1,5 @@
 # choixecole
+!!! SI VOUS PRENEZ LES FICHIER DU DOSSIER TEST REGARDER LE FICHIER PRECAUTION.TXT DANS LE DOSSIER!!!
 Le dossier FichierPourBesnier dispose des fichiers pour le professeur d'informatique .
 
 Le dossier Test dispose des fichiers avec des fonctions non disponible dans l'autre dossier (Fichier les plus récents mais peut avoir des bugs)
