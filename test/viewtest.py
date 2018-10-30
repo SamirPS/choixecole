@@ -25,7 +25,7 @@ Ecole=[]#Liste des ecoles
 Commune=[]
 Concours=[]
 
-
+modeltest.file('choixecole.db')
 Concours=modeltest.renvoie_concours()
 Commune=modeltest.renvoie_commune()
 Specialite=modeltest.renvoie_specialite()
