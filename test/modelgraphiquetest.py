@@ -4,8 +4,13 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label, Radiobutton,Entry
 import modeltest
+
+from tkinter import Tk,StringVar, Label, Radiobutton,Entry,filedialog
+
+
+
+
 
 class ChoixEcole:
    
@@ -15,8 +20,9 @@ class ChoixEcole:
  
         # self.root représente la fenêtre dans la quelle se déroule notre application
          
-        self.root = Tk() 
+        self.root = Tk()
         self.root.title("ChoixEcole TSI") # Ajout d'un titre 
+       
         """Initialise les variables"""
         self.var_maths=StringVar(self.root)
         self.var_physique=StringVar(self.root)
@@ -53,6 +59,11 @@ class ChoixEcole:
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
+        
+        basededonnee=filedialog.askopenfilename(
+        title="Ouvrir un fichier",
+        filetypes=[('SQL Files','.db')])
+        modeltest.file(basededonnee)
         
         
         self.Specialite=modeltest.renvoie_specialite()
@@ -98,7 +109,10 @@ class ChoixEcole:
         self.entry_anglais.grid(row=11,column=1)
         
         self.root.mainloop()
-         
+
+        
+        
+        
     def update_label(self):
             """Met a jour les écoles en fonction de la case qui est cochée"""
             text=""

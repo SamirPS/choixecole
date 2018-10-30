@@ -5,10 +5,16 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
-connexion = sqlite3.connect('choixecole.db')#On ouvre la base de donnée
-curseur = connexion.cursor() #execute les commandes sql
+
+def file(file):
+    global connexion,curseur
+    connexion = sqlite3.connect(file)#On ouvre la base de donnée
+    curseur = connexion.cursor() #execute les commandes sql
+
+
 
 def renvoie_specialite():
+    
     """Nous revoie toutes les spécialité disponible sous forme d'une liste"""
     Specialite=[]
     curseur.execute("SELECT Nom FROM Specialite")
