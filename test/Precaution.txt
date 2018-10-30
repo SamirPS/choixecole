@@ -1,0 +1,8 @@
+Afin d'avoir un bon fonctionnement du programme,on vous demande d'ouvrir une base de données ,elle est doit être sous format sqlite3 et etre avec les même tables,colonnes et retriction que la base de donnée mis en ligne dans ce dossier vous pouvez y rajouter des informations.
+
+Rajouter des écoles dans la table EcoleS
+
+
+Rajouter des spécialites dans la table Specialite
+
+Et afin de les affichier il faut créer un couple unique dans la table EcoleSpe
