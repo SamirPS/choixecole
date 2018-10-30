@@ -6,3 +6,5 @@ Rajouter des écoles dans la table EcoleS
 Rajouter des spécialites dans la table Specialite
 
 Et afin de les affichier il faut créer un couple unique dans la table EcoleSpe
+
+Modifier les coefficient dans la table CCPCoeff et CCSCoeff
