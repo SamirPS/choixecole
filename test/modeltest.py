@@ -198,4 +198,20 @@ def renvoie_concours():
         Concours.append(concours[0]) #apprend les specialité dans la table spe
     Concours=list(set(Concours))
     return Concours
-    
+
+
+def renvoie_coeffccs():
+    Coeffccs=[]
+    curseur.execute("Select Coefficient FROM CCSCoeff")
+    coeffccs=curseur.fetchall()
+    for coeffccs in coeffccs:
+        Coeffccs.append(coeffccs[0])
+    return Coeffccs
+
+def renvoie_coeffccp():
+    Coeffccp=[]
+    curseur.execute("Select Coefficient FROM CCPCoeff")
+    coeffccp=curseur.fetchall()
+    for coeffccp in coeffccp:
+        Coeffccp.append(coeffccp[0])
+    return Coeffccp

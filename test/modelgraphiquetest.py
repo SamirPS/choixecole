@@ -4,13 +4,8 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
-import modeltest
-
 from tkinter import Tk,StringVar, Label, Radiobutton,Entry,filedialog
-
-
-
-
+import modeltest
 
 class ChoixEcole:
    
@@ -39,6 +34,8 @@ class ChoixEcole:
         self.Ecole=[]
         self.Commune=[]
         self.Concours=[]
+        self.Coeffccs=[]
+        self.Coeffccp=[]
         
         
         self.entry_maths = Entry(self.root, textvariable=self.var_maths)
@@ -60,12 +57,13 @@ class ChoixEcole:
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
         
-        basededonnee=filedialog.askopenfilename(
+        self.basededonnee=filedialog.askopenfilename(
         title="Ouvrir un fichier",
         filetypes=[('SQL Files','.db')])
-        modeltest.file(basededonnee)
+        modeltest.file(self.basededonnee)
         
-        
+        self.Coeffccs=modeltest.renvoie_coeffccs()
+        self.Coeffccp=modeltest.renvoie_coeffccp()
         self.Specialite=modeltest.renvoie_specialite()
         self.Commune=modeltest.renvoie_commune()
         self.Concours=modeltest.renvoie_concours()
@@ -140,28 +138,28 @@ class ChoixEcole:
             
             if concoursid=="CCP" :
                
-                Note=(9*NoteFrancais+8*NoteMaths+10*NotePhysique+4*NoteAnglais+8*NoteMode+4*NoteInfo+15*NoteSi)/54
+                Note=(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp)
                 Note=round(Note,1)
+                print(Note)
                 
             if concoursid=="CCS":
-                Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
+                Note=(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)
                 Note=round(Note,1)
-            
             
                 
     
             for f in range (len(self.Specialite)):
                 if concoursid=="Peu importe":
                     if self.var_choix.get()==self.Specialite[f]:
-                         Note=(9*NoteFrancais+8*NoteMaths+10*NotePhysique+4*NoteAnglais+8*NoteMode+4*NoteInfo+15*NoteSi)/54
+                         Note=(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)
                          Note=round(Note,1)
                          Ecole1=modeltest.filtre(f+1,communeid,concoursid,Note)
-                         Note=(17*NoteFrancais+24*NoteMaths+22*NotePhysique+11*NoteAnglais+6*NoteInfo+20*NoteSi)/100
+                         Note=(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp)
                          Note=round(Note,1)
                          Ecole2=modeltest.filtre(f+1,communeid,concoursid,Note)
                          self.Ecole=Ecole1+Ecole2
                          self.Ecole=list(set(self.Ecole))
-                         print(self.Ecole)
+                         
                     break
                 else:
                     if self.var_choix.get()==self.Specialite[f]:
