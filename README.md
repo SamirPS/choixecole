@@ -6,7 +6,7 @@ Le dossier FichierPourBesnier dispose des fichiers pour le professeur d'informat
 
 Le dossier Test dispose des fichiers avec des fonctions non disponible dans l'autre dossier (Fichier les plus récents mais peut avoir des bugs)
 
-Projet informatique TSI2 : Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le fichier view.py est le fichier principal du programme en ligne de commande .
+Projet informatique TSI2 : Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le fichier view.py est le fichier principal du programme en ligne de commande et le modelgraphique permet d'avoir une GUI .
 
 
 Ajout de spécialité : modifier la table Spécialite
