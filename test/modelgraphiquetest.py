@@ -160,7 +160,7 @@ class ChoixEcole:
                          self.Ecole=Ecole1+Ecole2
                          self.Ecole=list(set(self.Ecole))
                          
-                    break
+                         break
                 else:
                     if self.var_choix.get()==self.Specialite[f]:
                         self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
