@@ -4,7 +4,7 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label, Radiobutton,Entry,filedialog
+from tkinter import Menu,Tk,StringVar, Label, Radiobutton,Entry,filedialog
 import modeltest
 
 class ChoixEcole:
@@ -16,8 +16,11 @@ class ChoixEcole:
         # self.root représente la fenêtre dans la quelle se déroule notre application
          
         self.root = Tk()
-        self.root.title("ChoixEcole TSI") # Ajout d'un titre 
-       
+        menubar=Menu(self.root)
+        menu1=Menu(menubar,tearoff=0)
+        menu1.add_command(label="About",command=self.apropros)
+        menu1.add_command(label="Quitter",command=self.root.quit)
+        menubar.add_cascade(label="Fichier", menu=menu1)
         """Initialise les variables"""
         self.var_maths=StringVar(self.root)
         self.var_physique=StringVar(self.root)
@@ -61,6 +64,7 @@ class ChoixEcole:
         title="Ouvrir un fichier",
         filetypes=[('SQL Files','.db')])
         modeltest.file(self.basededonnee)
+        self.root.title(self.basededonnee)
         
         self.Coeffccs=modeltest.renvoie_coeffccs()
         self.Coeffccp=modeltest.renvoie_coeffccp()
@@ -106,13 +110,18 @@ class ChoixEcole:
         self.entry_francais.grid(row=9,column=1)
         self.entry_anglais.grid(row=11,column=1)
         
+        self.root.config(menu=menubar)
         self.root.mainloop()
 
         
         
-        
+    def apropros(self):
+        fenetre=Tk()
+        fenetre.title("A propos")
+        fenetre_label=Label(fenetre,text='Logiciel fait par Samir Akarioh \n Etudiant en prépa TSI \n Lycée Robert doisneau \n akariohsamir@yahoo.com')
+        fenetre_label.grid(row=0,column=1)
+        fenetre.mainloop()
     def update_label(self):
-            """Met a jour les écoles en fonction de la case qui est cochée"""
             text=""
             communeid=""
             concoursid=""
@@ -126,6 +135,7 @@ class ChoixEcole:
             Note=0
             Ecole1=[]
             Ecole2=[]
+            print(text+"5")
                 
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
@@ -164,7 +174,7 @@ class ChoixEcole:
                 else:
                     if self.var_choix.get()==self.Specialite[f]:
                         self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
-                    break
+                        break
              
             
             if concoursid=="Peu importe":
@@ -174,7 +184,7 @@ class ChoixEcole:
                 for h in range(len(self.Ecole)):
                     text=text+"\n"+self.Ecole[h][0]
                 
-                    
+            print(text)        
             self.label_ecole.config(text="Ecole :" + text)
             
             
