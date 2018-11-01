@@ -135,7 +135,6 @@ class ChoixEcole:
             Note=0
             Ecole1=[]
             Ecole2=[]
-            print(text+"5")
                 
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
@@ -184,7 +183,7 @@ class ChoixEcole:
                 for h in range(len(self.Ecole)):
                     text=text+"\n"+self.Ecole[h][0]
                 
-            print(text)        
+                  
             self.label_ecole.config(text="Ecole :" + text)
             
             
