@@ -6,11 +6,14 @@ Created on Sat Oct 20 19:41:49 2018
 """
 from tkinter import Menu,Tk,StringVar, Label, Radiobutton,Entry,filedialog
 import modeltest
+import tkinter.scrolledtext as tkscrolled
 
 class ChoixEcole:
    
     
     def __init__(self):
+        
+        
         """Initialise l'application"""
  
         # self.root représente la fenêtre dans la quelle se déroule notre application
@@ -20,7 +23,7 @@ class ChoixEcole:
         menu1=Menu(menubar,tearoff=0)
         menu1.add_command(label="About",command=self.apropros)
         menu1.add_command(label="Quitter",command=self.root.quit)
-        menubar.add_cascade(label="Fichier", menu=menu1)
+        menubar.add_cascade(label="Option", menu=menu1)
         """Initialise les variables"""
         self.var_maths=StringVar(self.root)
         self.var_physique=StringVar(self.root)
@@ -55,10 +58,11 @@ class ChoixEcole:
         self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
         self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
         self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
-        self.label_ecole = Label(self.root, text='Ecole :')
+        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
+        self.ecolelabel=Label(self.root,text='Ecole:')
         
         self.basededonnee=filedialog.askopenfilename(
         title="Ouvrir un fichier",
@@ -71,6 +75,7 @@ class ChoixEcole:
         self.Specialite=modeltest.renvoie_specialite()
         self.Commune=modeltest.renvoie_commune()
         self.Concours=modeltest.renvoie_concours()
+        
         
         
         """On affiche les cases a cocher"""
@@ -111,6 +116,11 @@ class ChoixEcole:
         self.entry_anglais.grid(row=11,column=1)
         
         self.root.config(menu=menubar)
+            
+ 
+        self.label_ecole.grid(row=2, rowspan=8,column=5)  
+        self.ecolelabel.grid(row=1,column=5)
+        
         self.root.mainloop()
 
         
@@ -118,7 +128,7 @@ class ChoixEcole:
     def apropros(self):
         fenetre=Tk()
         fenetre.title("A propos")
-        fenetre_label=Label(fenetre,text='Logiciel fait par Samir Akarioh \n Etudiant en prépa TSI \n Lycée Robert doisneau \n akariohsamir@yahoo.com')
+        fenetre_label=Label(fenetre,text='Logiciel fait par Samir Akarioh \n Etudiant en prépa TSI \n Lycée Robert doisneau \n akariohsamir@yahoo.com \n Aide : M.Lusseau et M.Besnier')
         fenetre_label.grid(row=0,column=1)
         fenetre.mainloop()
     def update_label(self):
@@ -134,8 +144,8 @@ class ChoixEcole:
             NoteInfo=float(self.entry_info.get())
             Note=0
             Ecole1=[]
-            Ecole2=[]
-                
+            Ecole2=[]  
+            self.label_ecole.delete(0.7,'end');
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
                     communeid=self.Commune[d]
@@ -149,7 +159,6 @@ class ChoixEcole:
                
                 Note=(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp)
                 Note=round(Note,1)
-                print(Note)
                 
             if concoursid=="CCS":
                 Note=(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)
@@ -183,8 +192,11 @@ class ChoixEcole:
                 for h in range(len(self.Ecole)):
                     text=text+"\n"+self.Ecole[h][0]
                 
-                  
-            self.label_ecole.config(text="Ecole :" + text)
+             
+            self.label_ecole.insert(2.0,text)
+            
+            
+                
             
             
         
