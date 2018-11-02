@@ -185,12 +185,16 @@ class ChoixEcole:
                         break
              
             
-            if concoursid=="Peu importe":
-                for g in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[g][0]+" "+self.Ecole[g][1]
-            else:
+            if concoursid=="Peu importe" and communeid=="Peu importe":
+                for h in range(len(self.Ecole)):
+                    text=text+"\n"+self.Ecole[h][0]+" "+self.Ecole[h][1]+" "+self.Ecole[h][2]
+            elif communeid=="Peu importe":
+                for h in range(len(self.Ecole)):
+                    text=text+"\n"+self.Ecole[h][0]+" "+self.Ecole[h][1]
+            else :
                 for h in range(len(self.Ecole)):
                     text=text+"\n"+self.Ecole[h][0]
+              
                 
              
             self.label_ecole.insert(2.0,text)
