@@ -7,6 +7,7 @@ Created on Sat Oct 20 19:41:49 2018
 from tkinter import Menu,Tk,StringVar, Label, Radiobutton,Entry,filedialog
 import modeltest
 import tkinter.scrolledtext as tkscrolled
+from tkinter.ttk import *
 
 
 class ChoixEcole:
@@ -134,21 +135,39 @@ class ChoixEcole:
         fenetre.mainloop()
     def update_label(self):
             text=""
+            test=False
+            NoteMode=self.entry_maths.get()+self.entry_maths.get()
+            NoteMaths=self.entry_maths.get()
+            NotePhysique=self.entry_physique.get()
+            NoteSi=self.entry_si.get()
+            NoteFrancais=self.entry_francais.get()
+            NoteAnglais=self.entry_anglais.get()
+            NoteInfo=self.entry_info.get()
             communeid=""
             concoursid=""
-            NoteMode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
-            NoteMaths=float(self.entry_maths.get())
-            NotePhysique=float(self.entry_physique.get())
-            NoteSi=float(self.entry_si.get())
-            NoteFrancais=float(self.entry_francais.get())
-            NoteAnglais=float(self.entry_anglais.get())
-            NoteInfo=float(self.entry_info.get())
             Note=0
             Ecole1=[]
             Ecole2=[]  
             self.label_ecole.delete(0.7,'end');
-            while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_choix.get()=="" :
+            
+        
+            while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_choix.get()=="":
+                
                 return self.ListeEcole
+            while test==False:
+                if NoteMode=="" or NoteMaths=="" or NotePhysique=="" or NoteSi=="" or NoteFrancais=="" or NoteAnglais=="" or NoteInfo=="":
+                    test=False
+                    return self.ListeEcole
+                else :
+                    NoteMode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
+                    NoteMaths=float(self.entry_maths.get())
+                    NotePhysique=float(self.entry_physique.get())
+                    NoteSi=float(self.entry_si.get())
+                    NoteFrancais=float(self.entry_francais.get())
+                    NoteAnglais=float(self.entry_anglais.get())
+                    NoteInfo=float(self.entry_info.get())
+                    test=True
+                    break
                 
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
