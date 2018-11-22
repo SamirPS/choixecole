@@ -45,13 +45,14 @@ class ChoixEcole:
         self.Coeffccs=[]
         self.Coeffccp=[]
         
-        
-        self.entry_maths = Entry(self.root, textvariable=self.var_maths)
-        self.entry_physique = Entry(self.root, textvariable=self.var_physique)
-        self.entry_si = Entry(self.root, textvariable=self.var_si)
-        self.entry_info = Entry(self.root, textvariable=self.var_info)
-        self.entry_francais = Entry(self.root, textvariable=self.var_francais)
-        self.entry_anglais = Entry(self.root, textvariable=self.var_anglais)
+        vcmd = (self.root.register(self.validate),
+                '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        self.entry_maths = Entry(self.root, textvariable=self.var_maths,validate = 'key', validatecommand = vcmd)
+        self.entry_physique = Entry(self.root, textvariable=self.var_physique,validate = 'key', validatecommand = vcmd)
+        self.entry_si = Entry(self.root, textvariable=self.var_si,validate = 'key', validatecommand = vcmd)
+        self.entry_info = Entry(self.root, textvariable=self.var_info,validate = 'key', validatecommand = vcmd)
+        self.entry_francais = Entry(self.root, textvariable=self.var_francais,validate = 'key', validatecommand = vcmd)
+        self.entry_anglais = Entry(self.root, textvariable=self.var_anglais,validate = 'key', validatecommand = vcmd)
         
         
         self.label_maths=Label(self.root,text='Rentre ta moyenne de Maths')
@@ -123,10 +124,24 @@ class ChoixEcole:
         self.label_ecole.grid(row=2, rowspan=8,column=5)  
         self.ecolelabel.grid(row=1,column=5)
         
+        
+        
         self.root.mainloop()
 
         
-        
+    def validate(self, action, index, value_if_allowed,
+                       prior_value, text, validation_type, trigger_type, widget_name):
+        if(action=='1'):
+            if text in '0123456789.-+':
+                try:
+                    float(value_if_allowed)
+                    return True
+                except ValueError:
+                    return False
+            else:
+                return False
+        else:
+            return True  
     def apropros(self):
         fenetre=Tk()
         fenetre.title("A propos")
