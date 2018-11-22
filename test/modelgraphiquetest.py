@@ -8,6 +8,7 @@ from tkinter import Menu,Tk,StringVar, Label, Radiobutton,Entry,filedialog
 import modeltest
 import tkinter.scrolledtext as tkscrolled
 
+
 class ChoixEcole:
    
     
@@ -37,7 +38,7 @@ class ChoixEcole:
         
         
         self.Specialite=[]#liste des spécialité
-        self.Ecole=[]
+        self.ListeEcole=[]
         self.Commune=[]
         self.Concours=[]
         self.Coeffccs=[]
@@ -58,12 +59,12 @@ class ChoixEcole:
         self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
         self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
         self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
-        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
+        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10)
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
         self.ecolelabel=Label(self.root,text='Ecole:')
-        
+    
         self.basededonnee=filedialog.askopenfilename(
         title="Ouvrir un fichier",
         filetypes=[('SQL Files','.db')])
@@ -146,6 +147,9 @@ class ChoixEcole:
             Ecole1=[]
             Ecole2=[]  
             self.label_ecole.delete(0.7,'end');
+            while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_choix.get()=="" :
+                return self.ListeEcole
+                
             for d in range(len(self.Commune)):
                 if self.var_commune.get()==self.Commune[d]:
                     communeid=self.Commune[d]
@@ -169,31 +173,32 @@ class ChoixEcole:
             for f in range (len(self.Specialite)):
                 if concoursid=="Peu importe":
                     if self.var_choix.get()==self.Specialite[f]:
+                         
                          Note=(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)
                          Note=round(Note,1)
                          Ecole1=modeltest.filtre(f+1,communeid,concoursid,Note)
                          Note=(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp)
                          Note=round(Note,1)
                          Ecole2=modeltest.filtre(f+1,communeid,concoursid,Note)
-                         self.Ecole=Ecole1+Ecole2
-                         self.Ecole=list(set(self.Ecole))
+                         self.ListeEcole=Ecole1+Ecole2
+                         self.ListeEcole=list(set(self.ListeEcole))
                          
                          break
                 else:
                     if self.var_choix.get()==self.Specialite[f]:
-                        self.Ecole=modeltest.filtre(f+1,communeid,concoursid,Note)
+                        
+                        self.ListeEcole=modeltest.filtre(f+1,communeid,concoursid,Note)
                         break
              
-            
             if concoursid=="Peu importe" and communeid=="Peu importe":
-                for h in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[h][0]+" "+self.Ecole[h][1]+" "+self.Ecole[h][2]
+                for h in range(len(self.ListeEcole)):
+                    text=text+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]+" "+self.ListeEcole[h][2]
             elif communeid=="Peu importe":
-                for h in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[h][0]+" "+self.Ecole[h][1]
+                for h in range(len(self.ListeEcole)):
+                    text=text+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]
             else :
-                for h in range(len(self.Ecole)):
-                    text=text+"\n"+self.Ecole[h][0]
+                for h in range(len(self.ListeEcole)):
+                    text=text+"\n"+self.ListeEcole[h][0]
               
                 
              

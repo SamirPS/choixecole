@@ -5,6 +5,7 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 import sqlite3
+Ecole=[]
 
 def file(file):
     global connexion,curseur
@@ -23,6 +24,95 @@ def renvoie_specialite():
         Specialite.append(valeur_spe[0]) #apprend les specialité dans la table spe
     return Specialite
 
+def IdAndNiveauDur(specialiteid):
+    Dur=[]
+    curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Dur' ",(specialiteid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Dur.append(ecole) 
+    return Dur
+def IdAndNiveauMoyen(specialiteid):
+    Moyen=[]
+    curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Moyen' ",(specialiteid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Moyen.append(ecole) 
+    return Moyen
+def IdAndNiveauFacile(specialiteid):
+    Facile=[]
+    curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Facile' ",(specialiteid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Facile.append(ecole) 
+    return Facile
+   
+def CommuneAndNiveauDur(specialiteid,communeid):
+    Dur=[]
+    curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Dur'  ",(specialiteid,communeid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Dur.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Dur
+
+def CommuneAndNiveauMoyen(specialiteid,communeid):
+    Moyen=[]
+    curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Moyen'  ",(specialiteid,communeid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Moyen.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Moyen
+
+def CommuneAndNiveauFacile(specialiteid,communeid):
+    Facile=[]
+    curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Facile'  ",(specialiteid,communeid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Facile.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Facile
+def AdmissionAndNiveauDur(specialiteid,concoursid):
+    Dur=[]
+    curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Dur' ",(specialiteid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Dur.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Dur
+def AdmissionAndNiveauMoyen(specialiteid,concoursid):
+    Moyen=[]
+    curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Moyen' ",(specialiteid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Moyen.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Moyen
+
+def AdmissionAndNiveauFacile(specialiteid,concoursid):
+    Facile=[]
+    curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Facile' ",(specialiteid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Facile.append(ecole) #appends les ecoles en fonction de la  specialité 
+    return Facile
+
+def ConcoursAndNiveauDur(specialiteid,communeid,concoursid):
+    Dur=[]
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Dur' ",(specialiteid,communeid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Dur.append(ecole)
+    return Dur
+def ConcoursAndNiveauMoyen(specialiteid,communeid,concoursid):
+    Moyen=[]
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Moyen' ",(specialiteid,communeid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Moyen.append(ecole)
+    return Moyen
+def ConcoursAndNiveauFacile(specialiteid,communeid,concoursid):
+    Facile=[]
+    curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Facile' ",(specialiteid,communeid,concoursid,))
+    ecole = curseur.fetchall() #resultat de la commande
+    for ecole in ecole:
+        Facile.append(ecole)
+    return Facile    
 
 def filtre(specialiteid,communeid,concoursid,Note):
     """Renvoie les Ecoles en fonction de la specialité choisie"""
@@ -30,150 +120,48 @@ def filtre(specialiteid,communeid,concoursid,Note):
     if Note>15 :    
         if concoursid=="Peu importe":
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Dur' ",(specialiteid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                    
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Moyen'  ",(specialiteid,))
-                ecole= curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole)
-                    
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Facile' ",(specialiteid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole)
-                    #appends les ecoles en fonction de la  specialité 
+                Ecole=IdAndNiveauFacile(specialiteid)+IdAndNiveauMoyen(specialiteid)+IdAndNiveauDur(specialiteid)
                 
                 return Ecole
-            
             else :
-                curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Dur'  ",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-                
-                curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE  IdSpe=? AND Commune=? AND  Niveau='Moyen'  ",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-                
-                curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE  IdSpe=? AND Commune=? AND Niveau='Facile' ",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-                
+                Ecole=CommuneAndNiveauFacile(specialiteid,communeid)+CommuneAndNiveauDur(specialiteid,communeid)+CommuneAndNiveauMoyen(specialiteid,communeid)
                 return Ecole
         else:
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Dur' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-            
-                curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Moyen' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
-
-                curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Facile' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=AdmissionAndNiveauDur(specialiteid,concoursid)+AdmissionAndNiveauMoyen(specialiteid,concoursid)+AdmissionAndNiveauFacile(specialiteid,concoursid)
                 return Ecole
             else :
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Dur' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                    
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Moyen' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                    
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Facile' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                    #appends les ecoles en fonction de la  specialité 
+                Ecole=ConcoursAndNiveauDur(specialiteid,communeid,concoursid)+ConcoursAndNiveauMoyen(specialiteid,communeid,concoursid)+ConcoursAndNiveauFacile(specialiteid,communeid,concoursid)
                 return Ecole
     elif 10<Note<15:
         if concoursid=="Peu importe":
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?  AND Niveau='Moyen'",(specialiteid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=?  AND Niveau='Facile'",(specialiteid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=IdAndNiveauMoyen(specialiteid)+IdAndNiveauFacile(specialiteid)
                 return Ecole
             else :
-                curseur.execute("SELECT Nom Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Moyen'",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                
-                curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Facile'",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=CommuneAndNiveauMoyen(specialiteid,communeid)+CommuneAndNiveauFacile(specialiteid,communeid)
                 return Ecole
         else:
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom ,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND  Niveau='Moyen' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) 
-                
-                curseur.execute("SELECT Nom ,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND  Niveau='Facile' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole)
-                    #appends les ecoles en fonction de la  specialité 
+                Ecole=AdmissionAndNiveauMoyen(specialiteid,concoursid)+AdmissionAndNiveauFacile(specialiteid,concoursid)
                 return Ecole
             else :
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Moyen' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole)
-                
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Facile' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole)
-                    #appends les ecoles en fonction de la  specialité 
+                Ecole=ConcoursAndNiveauMoyen(specialiteid,communeid,concoursid)+ConcoursAndNiveauFacile(specialiteid,communeid,concoursid)
                 return Ecole
     elif Note>0:
         if concoursid=="Peu importe":
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Niveau='Facile' ",(specialiteid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=IdAndNiveauFacile(specialiteid)
                 return Ecole
             else :
-                curseur.execute("SELECT Nom, Admission FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau='Facile' ",(specialiteid,communeid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=CommuneAndNiveauFacile(specialiteid,communeid)
                 return Ecole
         else:
             if communeid=="Peu importe":
-                curseur.execute("SELECT Nom,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? and Admission=? AND Niveau='Facile' ",(specialiteid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=AdmissionAndNiveauFacile(specialiteid,concoursid)
                 return Ecole
             else :
-                curseur.execute("SELECT Nom FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Admission=? AND Niveau='Facile' ",(specialiteid,communeid,concoursid,))
-                ecole = curseur.fetchall() #resultat de la commande
-                for ecole in ecole:
-                    Ecole.append(ecole) #appends les ecoles en fonction de la  specialité 
+                Ecole=ConcoursAndNiveauFacile(specialiteid,communeid,concoursid)
                 return Ecole
         
         
