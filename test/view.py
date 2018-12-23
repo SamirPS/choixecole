@@ -4,8 +4,8 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
-from tkinter import Menu,Tk,StringVar, Label, Radiobutton,Entry,filedialog
-import modeltest
+from tkinter import Tk,StringVar, Label, Radiobutton,Entry
+import model
 import tkinter.scrolledtext as tkscrolled
 from tkinter.ttk import *
 
@@ -18,14 +18,8 @@ class ChoixEcole:
         
         """Initialise l'application"""
  
-        # self.root représente la fenêtre dans la quelle se déroule notre application
          
         self.root = Tk()
-        menubar=Menu(self.root)
-        menu1=Menu(menubar,tearoff=0)
-        menu1.add_command(label="About",command=self.apropros)
-        menu1.add_command(label="Quitter",command=self.root.quit)
-        menubar.add_cascade(label="Option", menu=menu1)
         """Initialise les variables"""
         self.var_maths=StringVar(self.root)
         self.var_physique=StringVar(self.root)
@@ -37,7 +31,7 @@ class ChoixEcole:
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
         
-        
+        """Initialise les listes""" 
         self.Specialite=[]#liste des spécialité
         self.ListeEcole=[]
         self.Commune=[]
@@ -45,6 +39,7 @@ class ChoixEcole:
         self.Coeffccs=[]
         self.Coeffccp=[]
         
+        """Initialise les labels et entry"""
         vcmd = (self.root.register(self.validate),
                 '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.entry_maths = Entry(self.root, textvariable=self.var_maths,validate = 'key', validatecommand = vcmd)
@@ -66,20 +61,14 @@ class ChoixEcole:
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
         self.ecolelabel=Label(self.root,text='Ecole:')
-    
-        self.basededonnee=filedialog.askopenfilename(
-        title="Ouvrir un fichier",
-        filetypes=[('SQL Files','.db')])
-        modeltest.file(self.basededonnee)
-        self.root.title(self.basededonnee)
         
-        self.Coeffccs=modeltest.renvoie_coeffccs()
-        self.Coeffccp=modeltest.renvoie_coeffccp()
-        self.Specialite=modeltest.renvoie_specialite()
-        self.Commune=modeltest.renvoie_commune()
-        self.Concours=modeltest.renvoie_concours()
+        self.Coeffccs=model.renvoie_coeffccs()
+        self.Coeffccp=model.renvoie_coeffccp()
+        self.Specialite=model.renvoie_specialite()
+        self.Commune=model.renvoie_commune()
+        self.Concours=model.renvoie_concours()
         
-        
+        self.label_ecole.configure(state="disabled")
         
         """On affiche les cases a cocher"""
         for a in range(len(self.Commune)):
@@ -118,7 +107,6 @@ class ChoixEcole:
         self.entry_francais.grid(row=9,column=1)
         self.entry_anglais.grid(row=11,column=1)
         
-        self.root.config(menu=menubar)
             
  
         self.label_ecole.grid(row=2, rowspan=8,column=5)  
@@ -142,12 +130,6 @@ class ChoixEcole:
                 return False
         else:
             return True  
-    def apropros(self):
-        fenetre=Tk()
-        fenetre.title("A propos")
-        fenetre_label=Label(fenetre,text='Logiciel fait par Samir Akarioh \n Etudiant en prépa TSI \n Lycée Robert doisneau \n akariohsamir@yahoo.com \n Aide : M.Lusseau et M.Besnier')
-        fenetre_label.grid(row=0,column=1)
-        fenetre.mainloop()
     def update_label(self):
             text=""
             test=False
@@ -163,6 +145,7 @@ class ChoixEcole:
             Note=0
             Ecole1=[]
             Ecole2=[]  
+            self.label_ecole.configure(state="normal")
             self.label_ecole.delete(0.7,'end');
             
         
@@ -210,34 +193,26 @@ class ChoixEcole:
                          
                          Note=(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)
                          Note=round(Note,1)
-                         Ecole1=modeltest.filtre(f+1,communeid,concoursid,Note)
+                         Ecole1=model.filtre(f+1,communeid,concoursid,Note)
                          Note=(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp)
                          Note=round(Note,1)
-                         Ecole2=modeltest.filtre(f+1,communeid,concoursid,Note)
-                         self.ListeEcole=Ecole1+Ecole2
-                         self.ListeEcole=list(set(self.ListeEcole))
+                         Ecole2=model.filtre(f+1,communeid,concoursid,Note)
+                         self.ListeEcole=list(set(Ecole1+Ecole2))
                          
                          break
                 else:
                     if self.var_choix.get()==self.Specialite[f]:
                         
-                        self.ListeEcole=modeltest.filtre(f+1,communeid,concoursid,Note)
+                        self.ListeEcole=model.filtre(f+1,communeid,concoursid,Note)
                         break
              
-            if concoursid=="Peu importe" and communeid=="Peu importe":
-                for h in range(len(self.ListeEcole)):
-                    text=text+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]+" "+self.ListeEcole[h][2]
-            elif communeid=="Peu importe":
-                for h in range(len(self.ListeEcole)):
-                    text=text+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]
-            else :
-                for h in range(len(self.ListeEcole)):
-                    text=text+"\n"+self.ListeEcole[h][0]
+           
+            for h in range(len(self.ListeEcole)):
+                text=text+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]+" "+self.ListeEcole[h][2]
               
                 
-             
             self.label_ecole.insert(2.0,text)
-            
+            self.label_ecole.configure(state="disabled")
             
                 
             
