@@ -11,4 +11,5 @@ Projet informatique TSI2 : Le fichier model.py est le fichier faisaint le lien a
 Ajout de spécialité : modifier la table Spécialite
 Ajout d'école :modifier la table Ecole
 Changez coefficient: modifier table Coeff
+Ecole et Specialité: il faut créer un couple unique dans la table EcoleSpe
 Avec SqliteBroswer par exemple
