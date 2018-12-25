@@ -58,7 +58,7 @@ class ChoixEcole:
         self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
         self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
         self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
-        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10)
+        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
@@ -143,16 +143,16 @@ class ChoixEcole:
         self.ListeEcole=[]
         textaffiche=""
         test=False
-        NoteMode=float(self.entry_maths.get()+self.entry_maths.get())
-        NoteMaths=float(self.entry_maths.get())
-        NotePhysique=float(self.entry_physique.get())
-        NoteSi=float(self.entry_si.get())
-        NoteFrancais=float(self.entry_francais.get())
-        NoteAnglais=float(self.entry_anglais.get())
-        NoteInfo=float(self.entry_info.get())
+        NoteMode=(self.entry_maths.get()+self.entry_maths.get())
+        NoteMaths=(self.entry_maths.get())
+        NotePhysique=(self.entry_physique.get())
+        NoteSi=(self.entry_si.get())
+        NoteFrancais=(self.entry_francais.get())
+        NoteAnglais=(self.entry_anglais.get())
+        NoteInfo=(self.entry_info.get())
         communeid=""
         concoursid=""
-        Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
+        
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.label_ecole.configure(state="normal")
         self.label_ecole.delete(0.7,'end');
@@ -176,6 +176,7 @@ class ChoixEcole:
                 test=True
                 break
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
+        Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
         for d in range(len(self.Commune)):
             if self.var_commune.get()==self.Commune[d]:
                 communeid=self.Commune[d]

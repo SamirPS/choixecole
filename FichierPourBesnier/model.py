@@ -4,9 +4,11 @@
 Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
+
+"""On ouvre la base de données Sqlite3 et on s'y connecte """
 import sqlite3
-connexion = sqlite3.connect("choixecole.db")#On ouvre la base de donnée
-curseur = connexion.cursor() #execute les commandes sql
+connexion = sqlite3.connect("choixecole.db")
+curseur = connexion.cursor()
 
 
 def renvoie_commune():
@@ -77,7 +79,11 @@ def BoucleNote(Note):
 
 
 def filtre(specialiteid,communeid,concoursid,Note):
-    """C'est un filtre qui renvoie les ecoles en fonction des choix et de la note de l'utilisateur"""
+    """
+    C'est un filtre qui renvoie les ecoles en fonction des choix et de la note de l'utilisateur
+    En fonction de la note ,de la commune du concours et de la spécialite.
+    
+    """
     
     Condition=["Facile","Moyen","Dur"]
     Boucle=BoucleNote(Note)
