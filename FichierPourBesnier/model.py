@@ -11,15 +11,20 @@ connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
 
 def renvoie_information(colonne,table):
-    Liste=[]
+    """
+       LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,
+       Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
+       Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
+                                                                                                            """
+    Informationvoulue=[]
     curseur.execute("SELECT "+colonne+" FROM "+table)
     resultat = curseur.fetchall() #resultats de la commande
     for resultat in resultat:
-        Liste.append(resultat[0])
+        Informationvoulue.append(resultat[0])
     if colonne=="Commune" or colonne=="Admission":#apprend les communes dans la liste commune
-        Liste[0:0] = ["Peu importe"]
-        Liste=list(set(Liste)) #enleve les doublons
-    return Liste
+        Informationvoulue[0:0] = ["Peu importe"]
+        Informationvoulue=list(set(Informationvoulue)) #enleve les doublons
+    return Informationvoulue
 
 
 def BoucleNote(Note):
