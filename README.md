@@ -1,6 +1,6 @@
 # choixecole
 
-
+!!!!Ne pas prendre les fichier du dossier Atester!!!!
 
 Le dossier ChoixEcole dispose des fichiers pour le professeur d'informatique .
 
