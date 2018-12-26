@@ -92,9 +92,9 @@ class ChoixEcole:
             choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[c], value=self.Specialite[c],command=self.AffichageEcole)
             choix_specialite.grid(row=c+1, column=2,sticky="w")
         
-        for sam in range(len(self.Alternance)):
-            choix_alternance = Radiobutton(self.root,variable=self.var_alternance,text=self.Alternance[sam], value=self.Alternance[sam],command=self.AffichageEcole)
-            choix_alternance.grid(row=sam+1, column=5,sticky="w")
+        for x in range(len(self.Alternance)):
+            choix_alternance = Radiobutton(self.root,variable=self.var_alternance,text=self.Alternance[x], value=self.Alternance[x],command=self.AffichageEcole)
+            choix_alternance.grid(row=x+1, column=5,sticky="w")
             
         
         
@@ -194,9 +194,9 @@ class ChoixEcole:
             if self.var_concours.get()==self.Concours[e]:
                 concoursid=self.Concours[e]
                 
-        for los in range(len(self.Alternance)):
-            if self.var_alternance.get()==self.Alternance[los]:
-                alternanceid=self.Alternance[los]
+        for v in range(len(self.Alternance)):
+            if self.var_alternance.get()==self.Alternance[v]:
+                alternanceid=self.Alternance[v]
                 
         if concoursid=="CCP" :
            Note=round(Note[0],1)
