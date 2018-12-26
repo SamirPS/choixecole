@@ -76,17 +76,17 @@ class ChoixEcole:
         self.entry_ecole.configure(state="disabled")
         
         """On affiche les cases a cocher"""
-        for a in range(len(self.Commune)):
-            choix_commune = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[a], value=self.Commune[a],command=self.AffichageEcole)
-            choix_commune.grid(row=a+1, column=3,sticky="w")
+        for commune in range(len(self.Commune)):
+            choix_commune = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[commune], value=self.Commune[commune],command=self.AffichageEcole)
+            choix_commune.grid(row=commune+1, column=3,sticky="w")
         
-        for b in range(len(self.Concours)):
-            choix_concours= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[b], value=self.Concours[b],command=self.AffichageEcole)
-            choix_concours.grid(row=b+1, column=4,sticky="w")
+        for concours in range(len(self.Concours)):
+            choix_concours= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[concours], value=self.Concours[concours],command=self.AffichageEcole)
+            choix_concours.grid(row=concours+1, column=4,sticky="w")
             
-        for c in range(len(self.Specialite)):
-            choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[c], value=self.Specialite[c],command=self.AffichageEcole)
-            choix_specialite.grid(row=c+1, column=2,sticky="w")
+        for specialite in range(len(self.Specialite)):
+            choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[specialite], value=self.Specialite[specialite],command=self.AffichageEcole)
+            choix_specialite.grid(row=specialite+1, column=2,sticky="w")
             
             
         
@@ -182,14 +182,14 @@ class ChoixEcole:
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
         Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
         
-        for d in range(len(self.Commune)):
-            if self.var_commune.get()==self.Commune[d]:
-                communeid=self.Commune[d]
+        for communechoisie in range(len(self.Commune)):
+            if self.var_commune.get()==self.Commune[communechoisie]:
+                communeid=self.Commune[communechoisie]
         
                 
-        for e in range(len(self.Concours)):
-            if self.var_concours.get()==self.Concours[e]:
-                concoursid=self.Concours[e]
+        for concourschoisie in range(len(self.Concours)):
+            if self.var_concours.get()==self.Concours[concourschoisie]:
+                concoursid=self.Concours[concourschoisie]
         
         if concoursid=="CCP" :
            Note=round(Note[0],1)
@@ -200,24 +200,24 @@ class ChoixEcole:
         
             
         """Creation de la liste Ecole"""
-        for f in range (len(self.Specialite)):
+        for creationliste in range (len(self.Specialite)):
             if concoursid=="Peu importe":
-                if self.var_specialite.get()==self.Specialite[f]:
-                     for s in range(1):
-                         Note=round(Note[s],1)
-                         self.ListeEcole=self.ListeEcole+model.filtre(f+1,communeid,concoursid,Note)
+                if self.var_specialite.get()==self.Specialite[creationliste]:
+                     for choixnote in range(1):
+                         Note=round(Note[choixnote],1)
+                         self.ListeEcole=self.ListeEcole+model.filtre(creationliste+1,communeid,concoursid,Note)
                          self.ListeEcole=list(set(self.ListeEcole))# Evite les doublons 
                      
                      break
             else:
-                if self.var_specialite.get()==self.Specialite[f]:
+                if self.var_specialite.get()==self.Specialite[creationliste]:
                     
-                    self.ListeEcole=model.filtre(f+1,communeid,concoursid,Note)
+                    self.ListeEcole=model.filtre(creationliste+1,communeid,concoursid,Note)
                     break
          
         """Permet de génerer le texte affiché"""
-        for h in range(len(self.ListeEcole)):
-            textaffiche=textaffiche+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]+" "+self.ListeEcole[h][2]
+        for texteaafficher in range(len(self.ListeEcole)):
+            textaffiche=textaffiche+"\n"+self.ListeEcole[texteaafficher][0]+" "+self.ListeEcole[texteaafficher][1]+" "+self.ListeEcole[texteaafficher][2]
           
         """Affiche le texte et evite de pouvoir écrire par dessus"""   
         self.entry_ecole.insert(2.0,textaffiche)

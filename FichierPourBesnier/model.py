@@ -18,63 +18,33 @@ def renvoie_information(colonne,table):
                                                                                                             """
     Informationvoulue=[]
     curseur.execute("SELECT "+colonne+" FROM "+table)
-    resultat = curseur.fetchall() #resultats de la commande
-    for resultat in resultat:
+    for resultat in curseur:
         Informationvoulue.append(resultat[0])
-    if colonne=="Commune" or colonne=="Admission":#apprend les communes dans la liste commune
+    if colonne=="Commune" or colonne=="Admission" or colonne=="Alt":
         Informationvoulue[0:0] = ["Peu importe"]
-        Informationvoulue=list(set(Informationvoulue)) #enleve les doublons
+        Informationvoulue=list(set(Informationvoulue))
     return Informationvoulue
 
-
-def BoucleNote(Note):
-    """Permet de connaitre le nombres de fois ou on passe dans le for depend de la Note afin d'avoir le Niveau de l'utilisateur"""
-    Boucle=0
-    if Note>15 :
-        Boucle=3
-    elif 10<Note<15:
-        Boucle=2
-    elif  0<Note<10:
-        Boucle=1
-    return Boucle 
-
-
 def filtre(specialiteid,communeid,concoursid,Note):
-    """
-    C'est un filtre qui renvoie les ecoles en fonction des choix et de la note de l'utilisateur
-    En fonction de la note ,de la commune du concours et de la spécialite.
-    
-    """
-    
-    Condition=["Facile","Moyen","Dur"]
-    Boucle=BoucleNote(Note)
+    """Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur"""
     Ecole=[]
+    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe="+str(specialiteid)
+    Condition=[]
     
-    if concoursid=="Peu importe":
-        if communeid=="Peu importe":
-            for z in range(Boucle):
-                curseur.execute("SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? And Niveau=? ",(specialiteid,Condition[z],))
-                ecole=curseur.fetchall()
-                for ecole in ecole :
-                    Ecole.append(ecole)
-        else:
-            for z in range(Boucle):
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau=? ",(specialiteid,communeid,Condition[z],))
-                ecole=curseur.fetchall()
-                for ecole in ecole :
-                    Ecole.append(ecole)
-    else :
-        if communeid=="Peu importe":
-            for z in range(Boucle):
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? And Niveau=? And Admission=? ",(specialiteid,Condition[z],concoursid,))
-                ecole=curseur.fetchall()
-                for ecole in ecole :
-                    Ecole.append(ecole)
-        else:
-            for z in range(Boucle):
-                curseur.execute("SELECT Nom,Admission,Commune  FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe=? AND Commune=? AND Niveau=? And Admission=? ",(specialiteid,communeid,Condition[z],concoursid,))
-                ecole=curseur.fetchall()
-                for ecole in ecole :
-                    Ecole.append(ecole)
-    
+    if Note>15 :
+        Condition.append(("Niveau","<=",2))
+    if 10<Note<15:
+        Condition.append(("Niveau","<=",1))
+    if  0<Note<10:
+        Condition.append(("Niveau","<=",0))
+    if concoursid!="Peu importe" :
+        Condition.append(("Admission","=",concoursid))
+    if communeid!="Peu importe":
+        Condition.append(("Commune","=",communeid))
+    for i in range(len(Condition)):
+        requete=requete+" And "+Condition[i][0]+Condition[i][1]+'"'+str(Condition[i][2])+'"'
+        
+    curseur.execute(requete)
+    for ecole in curseur :
+        Ecole.append(ecole)
     return Ecole
