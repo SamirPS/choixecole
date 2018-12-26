@@ -1,3 +1,5 @@
+# choixecole
+
 English:
 Returns the perfect school for you if you are doing the CCS and/or CCP exams of TSI 
 Do not pick the files from the folder Atester!!!!!!
@@ -14,7 +16,7 @@ School and Speciality: you must have a unique couple in the SchoolSpe table
 With SqliteBroswer for example
 
 Francais:
-# choixecole
+
 
 !!!!Ne pas prendre les fichiers du dossier Atester!!!!
 
