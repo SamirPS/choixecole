@@ -33,6 +33,7 @@ class ChoixEcole:
         self.var_specialite = StringVar(self.root)
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
+        self.var_alternance=StringVar(self.root)
         
         """Initialise les listes""" 
         self.Specialite=[]#liste des spécialité
@@ -41,6 +42,7 @@ class ChoixEcole:
         self.Concours=[]
         self.Coeffccs=[]
         self.Coeffccp=[]
+        self.Alternance=[]
         
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.validate),
@@ -63,6 +65,7 @@ class ChoixEcole:
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
+        self.label_alternance=Label(self.root,text='Alternance')
         self.label_ecole=Label(self.root,text='Ecole:')
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
@@ -71,6 +74,7 @@ class ChoixEcole:
         self.Specialite=model.renvoie_information("Nom","Specialite")
         self.Commune=model.renvoie_information("Commune","EcoleS")
         self.Concours=model.renvoie_information("Admission","EcoleS")
+        self.Alternance=model.renvoie_information("Alt","EcoleS")
         
         """Pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.configure(state="disabled")
@@ -87,7 +91,10 @@ class ChoixEcole:
         for c in range(len(self.Specialite)):
             choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[c], value=self.Specialite[c],command=self.AffichageEcole)
             choix_specialite.grid(row=c+1, column=2,sticky="w")
-            
+        
+        for sam in range(len(self.Alternance)):
+            choix_alternance = Radiobutton(self.root,variable=self.var_alternance,text=self.Alternance[sam], value=self.Alternance[sam],command=self.AffichageEcole)
+            choix_alternance.grid(row=sam+1, column=5,sticky="w")
             
         
         
@@ -99,10 +106,11 @@ class ChoixEcole:
         self.label_info.grid(row=6,column=1)
         self.label_francais.grid(row=8,column=1)
         self.label_anglais.grid(row=10,column=1)
-        self.entry_ecole.grid(row=1, column=5,padx =40)
         self.label_spe.grid(row=0, column=2)
         self.label_commune.grid(row=0,column=3)
         self.label_concours.grid(row=0,column=4)
+        self.label_ecole.grid(row=1,column=10)
+        self.label_alternance.grid(row=0,column=5)
         
         
         self.entry_maths.grid(row=1,column=1)
@@ -111,16 +119,10 @@ class ChoixEcole:
         self.entry_info.grid(row=7,column=1)
         self.entry_francais.grid(row=9,column=1)
         self.entry_anglais.grid(row=11,column=1)
-        
-            
- 
-        self.entry_ecole.grid(row=2, rowspan=8,column=5)  
-        self.label_ecole.grid(row=1,column=5)
-        
-        
+        self.entry_ecole.grid(row=2, rowspan=8,column=10)  
         
         self.root.mainloop()
-
+            
         
     def validate(self, action, index, value_if_allowed,
                        prior_value, text, validation_type, trigger_type, widget_name):
@@ -157,13 +159,14 @@ class ChoixEcole:
         NoteInfo=(self.entry_info.get())
         communeid=""
         concoursid=""
+        alternanceid=""
         
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
         
         """Pour éviter les erreurs dans la console python"""
-        while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_specialite.get()=="":
+        while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_specialite.get()=="" or self.var_alternance.get()=="":
             
             return self.ListeEcole
         while test==False:
@@ -190,14 +193,17 @@ class ChoixEcole:
         for e in range(len(self.Concours)):
             if self.var_concours.get()==self.Concours[e]:
                 concoursid=self.Concours[e]
-        
+                
+        for los in range(len(self.Alternance)):
+            if self.var_alternance.get()==self.Alternance[los]:
+                alternanceid=self.Alternance[los]
+                
         if concoursid=="CCP" :
            Note=round(Note[0],1)
             
         if concoursid=="CCS":
            
             Note=round(Note[1],1)
-        
             
         """Creation de la liste Ecole"""
         for f in range (len(self.Specialite)):
@@ -205,14 +211,14 @@ class ChoixEcole:
                 if self.var_specialite.get()==self.Specialite[f]:
                      for s in range(1):
                          Note=round(Note[s],1)
-                         self.ListeEcole=self.ListeEcole+model.filtre(f+1,communeid,concoursid,Note)
+                         self.ListeEcole=self.ListeEcole+model.filtre(f+1,communeid,concoursid,Note,alternanceid)
                          self.ListeEcole=list(set(self.ListeEcole))# Evite les doublons 
                      
                      break
             else:
                 if self.var_specialite.get()==self.Specialite[f]:
                     
-                    self.ListeEcole=model.filtre(f+1,communeid,concoursid,Note)
+                    self.ListeEcole=model.filtre(f+1,communeid,concoursid,Note,alternanceid)
                     break
          
         """Permet de génerer le texte affiché"""

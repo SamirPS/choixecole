@@ -21,7 +21,7 @@ def renvoie_information(colonne,table):
     resultat = curseur.fetchall() #resultats de la commande
     for resultat in resultat:
         Informationvoulue.append(resultat[0])
-    if colonne=="Commune" or colonne=="Admission":#apprend les communes dans la liste commune
+    if colonne=="Commune" or colonne=="Admission" or colonne=="Alt":#apprend les communes dans la liste commune
         Informationvoulue[0:0] = ["Peu importe"]
         Informationvoulue=list(set(Informationvoulue)) #enleve les doublons
     return Informationvoulue
@@ -38,7 +38,7 @@ def BoucleNote(Note):
         Boucle=1
     return Boucle 
 
-def filtre(specialiteid,communeid,concoursid,Note):
+def filtre(specialiteid,communeid,concoursid,Note,alternanceid):
     boucle=BoucleNote(Note)
     Ecole=[]
     donnee=()
@@ -49,11 +49,12 @@ def filtre(specialiteid,communeid,concoursid,Note):
         Condition.append(("Admission=?",concoursid))
     if communeid!="Peu importe":
         Condition.append(("Commune=?",communeid))
+    if alternanceid!="Peu importe":
+        Condition.append(("Alt=?",alternanceid))
         
     for i in range(1,len(Condition)):
         requete=requete+" And "+Condition[i][0]
         donnee=donnee+(Condition[i][1],)
-        
     for z in range(boucle):
         variable=(specialiteid,Condition[0][z])+donnee
         curseur.execute(requete,variable)
