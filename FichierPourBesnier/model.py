@@ -10,7 +10,6 @@ import sqlite3
 connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
 
-
 def renvoie_commune():
     """Renvoie la liste des Communes des differentes ecoles"""
     

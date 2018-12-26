@@ -11,7 +11,8 @@ from tkinter.ttk import *
 
 
 class ChoixEcole:
-   
+    
+    """Cette class est l'interface graphique du projet choix ecole"""
     
     def __init__(self):
         
@@ -29,7 +30,7 @@ class ChoixEcole:
         self.var_info=StringVar(self.root)
         self.var_francais=StringVar(self.root)
         self.var_anglais=StringVar(self.root)
-        self.var_choix = StringVar(self.root)
+        self.var_specialite = StringVar(self.root)
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
         
@@ -58,11 +59,11 @@ class ChoixEcole:
         self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
         self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
         self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
-        self.label_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
+        self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
-        self.ecolelabel=Label(self.root,text='Ecole:')
+        self.label_ecole=Label(self.root,text='Ecole:')
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.Coeffccs=model.renvoie_coeffccs()
@@ -72,20 +73,20 @@ class ChoixEcole:
         self.Concours=model.renvoie_concours()
         
         """Pour eviter d'écrire dans le champs Ecole"""
-        self.label_ecole.configure(state="disabled")
+        self.entry_ecole.configure(state="disabled")
         
         """On affiche les cases a cocher"""
         for a in range(len(self.Commune)):
-            choix_2 = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[a], value=self.Commune[a],command=self.AffichageEcole)
-            choix_2.grid(row=a+1, column=3,sticky="w")
+            choix_commune = Radiobutton(self.root,variable=self.var_commune,text=self.Commune[a], value=self.Commune[a],command=self.AffichageEcole)
+            choix_commune.grid(row=a+1, column=3,sticky="w")
         
         for b in range(len(self.Concours)):
-            choix_3= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[b], value=self.Concours[b],command=self.AffichageEcole)
-            choix_3.grid(row=b+1, column=4,sticky="w")
+            choix_concours= Radiobutton(self.root,variable=self.var_concours,text=self.Concours[b], value=self.Concours[b],command=self.AffichageEcole)
+            choix_concours.grid(row=b+1, column=4,sticky="w")
             
         for c in range(len(self.Specialite)):
-            choix_1 = Radiobutton(self.root,variable=self.var_choix,text=self.Specialite[c], value=self.Specialite[c],command=self.AffichageEcole)
-            choix_1.grid(row=c+1, column=2,sticky="w")
+            choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[c], value=self.Specialite[c],command=self.AffichageEcole)
+            choix_specialite.grid(row=c+1, column=2,sticky="w")
             
             
         
@@ -98,7 +99,7 @@ class ChoixEcole:
         self.label_info.grid(row=6,column=1)
         self.label_francais.grid(row=8,column=1)
         self.label_anglais.grid(row=10,column=1)
-        self.label_ecole.grid(row=1, column=5,padx =40)
+        self.entry_ecole.grid(row=1, column=5,padx =40)
         self.label_spe.grid(row=0, column=2)
         self.label_commune.grid(row=0,column=3)
         self.label_concours.grid(row=0,column=4)
@@ -113,8 +114,8 @@ class ChoixEcole:
         
             
  
-        self.label_ecole.grid(row=2, rowspan=8,column=5)  
-        self.ecolelabel.grid(row=1,column=5)
+        self.entry_ecole.grid(row=2, rowspan=8,column=5)  
+        self.label_ecole.grid(row=1,column=5)
         
         
         
@@ -123,7 +124,11 @@ class ChoixEcole:
         
     def validate(self, action, index, value_if_allowed,
                        prior_value, text, validation_type, trigger_type, widget_name):
-        """Permet de verifier si l'utilisateur rentre des chiffres dans les entry"""
+        """
+            Permet de verifier si l'utilisateur rentre des chiffres dans les entry
+            Fonction fourni dans la documentation du module Entry
+            
+                                                                                  """
         if(action=='1'):
             if text in '0123456789.':
                 try:
@@ -154,11 +159,11 @@ class ChoixEcole:
         concoursid=""
         
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
-        self.label_ecole.configure(state="normal")
-        self.label_ecole.delete(0.7,'end');
+        self.entry_ecole.configure(state="normal")
+        self.entry_ecole.delete(0.7,'end');
         
         """Pour éviter les erreurs dans la console python"""
-        while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_choix.get()=="":
+        while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_specialite.get()=="":
             
             return self.ListeEcole
         while test==False:
@@ -173,10 +178,10 @@ class ChoixEcole:
                 NoteFrancais=float(self.entry_francais.get())
                 NoteAnglais=float(self.entry_anglais.get())
                 NoteInfo=float(self.entry_info.get())
-                test=True
                 break
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
         Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
+        
         for d in range(len(self.Commune)):
             if self.var_commune.get()==self.Commune[d]:
                 communeid=self.Commune[d]
@@ -197,7 +202,7 @@ class ChoixEcole:
         """Creation de la liste Ecole"""
         for f in range (len(self.Specialite)):
             if concoursid=="Peu importe":
-                if self.var_choix.get()==self.Specialite[f]:
+                if self.var_specialite.get()==self.Specialite[f]:
                      for s in range(1):
                          Note=round(Note[s],1)
                          self.ListeEcole=self.ListeEcole+model.filtre(f+1,communeid,concoursid,Note)
@@ -205,7 +210,7 @@ class ChoixEcole:
                      
                      break
             else:
-                if self.var_choix.get()==self.Specialite[f]:
+                if self.var_specialite.get()==self.Specialite[f]:
                     
                     self.ListeEcole=model.filtre(f+1,communeid,concoursid,Note)
                     break
@@ -215,8 +220,8 @@ class ChoixEcole:
             textaffiche=textaffiche+"\n"+self.ListeEcole[h][0]+" "+self.ListeEcole[h][1]+" "+self.ListeEcole[h][2]
           
         """Affiche le texte et evite de pouvoir écrire par dessus"""   
-        self.label_ecole.insert(2.0,textaffiche)
-        self.label_ecole.configure(state="disabled")
+        self.entry_ecole.insert(2.0,textaffiche)
+        self.entry_ecole.configure(state="disabled")
         
 
 if __name__ == '__main__':
