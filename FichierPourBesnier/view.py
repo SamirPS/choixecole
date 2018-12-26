@@ -66,11 +66,11 @@ class ChoixEcole:
         self.label_ecole=Label(self.root,text='Ecole:')
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
-        self.Coeffccs=model.renvoie_coeffccs()
-        self.Coeffccp=model.renvoie_coeffccp()
-        self.Specialite=model.renvoie_specialite()
-        self.Commune=model.renvoie_commune()
-        self.Concours=model.renvoie_concours()
+        self.Coeffccs=model.renvoie_information("Coefficient","CCSCoeff")
+        self.Coeffccp=model.renvoie_information("Coefficient","CCPCoeff")
+        self.Specialite=model.renvoie_information("Nom","Specialite")
+        self.Commune=model.renvoie_information("Commune","EcoleS")
+        self.Concours=model.renvoie_information("Admission","EcoleS")
         
         """Pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.configure(state="disabled")
