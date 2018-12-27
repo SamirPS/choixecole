@@ -26,7 +26,9 @@ def renvoie_information(colonne,table):
     return Informationvoulue
 
 def filtre(specialiteid,communeid,concoursid,Note):
-    """Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur"""
+    """
+    Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
+    """
     ecoles,conditions,variables=[],[],(specialiteid,)
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE Idspe=?"
     
@@ -34,7 +36,7 @@ def filtre(specialiteid,communeid,concoursid,Note):
         conditions.append(("Niveau","<=",2))
     elif 10<=Note:
         conditions.append(("Niveau","<=",1))
-    else:
+    elif 0<Note:
         conditions.append(("Niveau","<=",0))
         
     if concoursid!=None :
