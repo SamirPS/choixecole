@@ -38,6 +38,8 @@ def filtre(specialiteid,communeid,concoursid,Note):
         conditions.append(("Niveau","<=",1))
     elif 0<Note:
         conditions.append(("Niveau","<=",0))
+    else :
+        return ecoles
         
     if concoursid!=None :
         conditions.append(("Admission","=",concoursid))
