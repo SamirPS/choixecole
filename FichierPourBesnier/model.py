@@ -20,7 +20,7 @@ def renvoie_information(colonne,table):
     curseur.execute("SELECT "+colonne+" FROM "+table)
     for resultat in curseur:
         Informationvoulue.append(resultat[0])
-    if colonne=="Commune" or colonne=="Admission" or colonne=="Alt":
+    if colonne=="Commune" or colonne=="Admission":
         Informationvoulue[0:0] = ["Peu importe"]
         Informationvoulue=list(set(Informationvoulue))
     return Informationvoulue
