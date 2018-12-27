@@ -183,11 +183,17 @@ class ChoixEcole:
         Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
         
         for communechoisie in range(len(self.Commune)):
+            if self.var_commune.get()=="Peu importe":
+                communeid=None
+                break
             if self.var_commune.get()==self.Commune[communechoisie]:
                 communeid=self.Commune[communechoisie]
         
                 
         for concourschoisie in range(len(self.Concours)):
+            if self.var_concours.get()=="Peu importe":
+                concoursid=None
+                break
             if self.var_concours.get()==self.Concours[concourschoisie]:
                 concoursid=self.Concours[concourschoisie]
         
@@ -201,7 +207,7 @@ class ChoixEcole:
             
         """Creation de la liste Ecole"""
         for creationliste in range (len(self.Specialite)):
-            if concoursid=="Peu importe":
+            if concoursid==None:
                 if self.var_specialite.get()==self.Specialite[creationliste]:
                      for choixnote in range(1):
                          Note=round(Note[choixnote],1)

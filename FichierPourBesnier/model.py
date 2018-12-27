@@ -27,24 +27,26 @@ def renvoie_information(colonne,table):
 
 def filtre(specialiteid,communeid,concoursid,Note):
     """Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur"""
-    Ecole=[]
-    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE IdSpe="+str(specialiteid)
-    Condition=[]
+    ecoles,conditions,variables=[],[],(specialiteid,)
+    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE Idspe=?"
     
-    if Note>15 :
-        Condition.append(("Niveau","<=",2))
-    if 10<Note<15:
-        Condition.append(("Niveau","<=",1))
-    if  0<Note<10:
-        Condition.append(("Niveau","<=",0))
-    if concoursid!="Peu importe" :
-        Condition.append(("Admission","=",concoursid))
-    if communeid!="Peu importe":
-        Condition.append(("Commune","=",communeid))
-    for i in range(len(Condition)):
-        requete=requete+" And "+Condition[i][0]+Condition[i][1]+'"'+str(Condition[i][2])+'"'
+    if Note>=15 :
+        conditions.append(("Niveau","<=",2))
+    elif 10<=Note:
+        conditions.append(("Niveau","<=",1))
+    else:
+        conditions.append(("Niveau","<=",0))
         
-    curseur.execute(requete)
+    if concoursid!=None :
+        conditions.append(("Admission","=",concoursid))
+    if communeid!=None:
+        conditions.append(("Commune","=",communeid))
+        
+    for i in range(len(conditions)):
+        requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
+        variables=variables+(conditions[i][2],)   
+        
+    curseur.execute(requete,variables)
     for ecole in curseur :
-        Ecole.append(ecole)
-    return Ecole
+        ecoles.append(ecole)
+    return ecoles
