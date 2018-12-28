@@ -34,14 +34,6 @@ class ChoixEcole:
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
         
-        """Initialise les listes""" 
-        self.Specialite=[]#liste des spécialité
-        self.ListeEcole=[]
-        self.Commune=[]
-        self.Concours=[]
-        self.Coeffccs=[]
-        self.Coeffccp=[]
-        
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.validate),
                 '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
@@ -71,6 +63,7 @@ class ChoixEcole:
         self.Specialite=model.renvoie_information("Nom","Specialite")
         self.Commune=model.renvoie_information("Commune","EcoleS")
         self.Concours=model.renvoie_information("Admission","EcoleS")
+        self.ListeEcole=model.renvoie_information("Nom,Admission,Commune","EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id")
         
         """Pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.configure(state="disabled")
@@ -88,9 +81,6 @@ class ChoixEcole:
             choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.Specialite[specialite], value=self.Specialite[specialite],command=self.AffichageEcole)
             choix_specialite.grid(row=specialite+1, column=2,sticky="w")
             
-            
-        
-        
         """On place les élèments """
         
         self.label_maths.grid(row=0,column=1)
@@ -144,46 +134,48 @@ class ChoixEcole:
         
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
-        
-        self.ListeEcole=[]
+        samir=[]
         textaffiche=""
-        test=False
         NoteMode=(self.entry_maths.get()+self.entry_maths.get())
         NoteMaths=(self.entry_maths.get())
         NotePhysique=(self.entry_physique.get())
         NoteSi=(self.entry_si.get())
         NoteFrancais=(self.entry_francais.get())
         NoteAnglais=(self.entry_anglais.get())
-        NoteInfo=(self.entry_info.get())
+        NoteInfo=((self.entry_info.get()))
+        
         communeid=""
         concoursid=""
+        Note=0
         
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
         
         """Pour éviter les erreurs dans la console python"""
-        while  self.var_commune.get()=="" or  self.var_concours.get()=="" or  self.var_specialite.get()=="":
-            
-            return self.ListeEcole
-        while test==False:
-            if NoteMode=="" or NoteMaths=="" or NotePhysique=="" or NoteSi=="" or NoteFrancais=="" or NoteAnglais=="" or NoteInfo=="":
-                test=False
-                return self.ListeEcole
-            else :
-                NoteMode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
-                NoteMaths=float(self.entry_maths.get())
-                NotePhysique=float(self.entry_physique.get())
-                NoteSi=float(self.entry_si.get())
-                NoteFrancais=float(self.entry_francais.get())
-                NoteAnglais=float(self.entry_anglais.get())
-                NoteInfo=float(self.entry_info.get())
-                break
+        if NoteMode=="" or NoteMaths=="" or NotePhysique=="" or NoteSi=="" or NoteFrancais=="" or NoteAnglais=="" or NoteInfo=="":
+            NoteMode=20 
+            NoteMaths=20
+            NotePhysique=20
+            NoteSi=20
+            NoteFrancais=20
+            NoteAnglais=20
+            NoteInfo=20
+        else:
+            NoteMode=float(self.entry_maths.get()+self.entry_maths.get())
+            NoteMaths=float(self.entry_maths.get())
+            NotePhysique=float(self.entry_physique.get())
+            NoteSi=float(self.entry_si.get())
+            NoteFrancais=float(self.entry_francais.get())
+            NoteAnglais=float(self.entry_anglais.get())
+            NoteInfo=float((self.entry_info.get()))
+                
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
-        Note=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
+        
+        Notek=[(self.Coeffccp[0]*NoteMode+self.Coeffccp[1]*NoteMaths+self.Coeffccp[2]*NotePhysique+self.Coeffccp[3]*NoteSi+self.Coeffccp[4]*NoteFrancais+self.Coeffccp[5]*NoteAnglais+self.Coeffccp[6]*NoteInfo)/sum(self.Coeffccp),(self.Coeffccs[0]*NoteMode+self.Coeffccs[1]*NoteMaths+self.Coeffccs[2]*NotePhysique+self.Coeffccs[3]*NoteSi+self.Coeffccs[4]*NoteFrancais+self.Coeffccs[5]*NoteAnglais+self.Coeffccs[6]*NoteInfo)/sum(self.Coeffccs)]
         
         for communechoisie in range(len(self.Commune)):
-            if self.var_commune.get()=="Peu importe":
+            if self.var_commune.get()=="Peu importe" or self.var_commune.get()=="" :
                 communeid=None
                 break
             if self.var_commune.get()==self.Commune[communechoisie]:
@@ -191,18 +183,18 @@ class ChoixEcole:
         
                 
         for concourschoisie in range(len(self.Concours)):
-            if self.var_concours.get()=="Peu importe":
+            if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
                 concoursid=None
                 break
             if self.var_concours.get()==self.Concours[concourschoisie]:
                 concoursid=self.Concours[concourschoisie]
         
         if concoursid=="CCP" :
-           Note=round(Note[0],1)
+           Note=round(Notek[0],1)
             
         if concoursid=="CCS":
            
-            Note=round(Note[1],1)
+            Note=round(Notek[1],1)
         
             
         """Creation de la liste Ecole"""
@@ -210,17 +202,25 @@ class ChoixEcole:
             if concoursid==None:
                 if self.var_specialite.get()==self.Specialite[creationliste]:
                      for choixnote in range(1):
-                         Note=round(Note[choixnote],1)
-                         self.ListeEcole=self.ListeEcole+model.filtre(creationliste+1,communeid,concoursid,Note)
-                         self.ListeEcole=list(set(self.ListeEcole))# Evite les doublons 
-                     
-                     break
+                         Note=round(Notek[choixnote],1)
+                         samir=samir+model.filtre(creationliste+1,communeid,concoursid,Note)
+                         self.ListeEcole=list(set(samir))# Evite les doublons
+                         break
+                elif self.var_specialite.get()=="":
+                        for choixnote in range(1):
+                            Note=round(Notek[choixnote],1)
+                            samir=samir+model.filtre(None,communeid,concoursid,Note)
+                            self.ListeEcole=list(set(samir))# Evite les doublons 
+                            break
             else:
                 if self.var_specialite.get()==self.Specialite[creationliste]:
                     
                     self.ListeEcole=model.filtre(creationliste+1,communeid,concoursid,Note)
                     break
-         
+                elif self.var_specialite.get()=="":
+                    self.ListeEcole=model.filtre(None,communeid,concoursid,Note)
+                    break
+                    
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.ListeEcole)):
             textaffiche=textaffiche+"\n"+self.ListeEcole[texteaafficher][0]+" "+self.ListeEcole[texteaafficher][1]+" "+self.ListeEcole[texteaafficher][2]

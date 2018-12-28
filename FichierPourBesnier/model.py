@@ -29,27 +29,30 @@ def filtre(specialiteid,communeid,concoursid,Note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    ecoles,conditions,variables=[],[],(specialiteid,)
-    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE Idspe=?"
     
+    conditions=[]
     if Note>=15 :
         conditions.append(("Niveau","<=",2))
     elif 10<=Note:
         conditions.append(("Niveau","<=",1))
-    elif 0<Note:
+    elif 0<=Note:
         conditions.append(("Niveau","<=",0))
-    else :
-        return ecoles
         
+    if specialiteid!=None:
+        conditions.append(("Idspe","=",specialiteid))
     if concoursid!=None :
         conditions.append(("Admission","=",concoursid))
     if communeid!=None:
         conditions.append(("Commune","=",communeid))
-        
+    
+    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id"
+    variables=()  
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   
         
+        
+    ecoles=[]
     curseur.execute(requete,variables)
     for ecole in curseur :
         ecoles.append(ecole)
