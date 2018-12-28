@@ -16,26 +16,26 @@ def renvoie_information(colonne,table):
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
                                                                                                             """
-    Informationvoulue=[]
     curseur.execute("SELECT "+colonne+" FROM "+table)
+    informationvoulue=[]
     for resultat in curseur:
-        Informationvoulue.append(resultat[0])
+        informationvoulue.append(resultat[0])
     if colonne=="Commune" or colonne=="Admission":
-        Informationvoulue[0:0] = ["Peu importe"]
-        Informationvoulue=list(set(Informationvoulue))
-    return Informationvoulue
+        informationvoulue[0:0] = ["Peu importe"]
+        informationvoulue=list(set(informationvoulue))
+    return informationvoulue
 
-def filtre(specialiteid,communeid,concoursid,Note):
+def filtre(specialiteid,communeid,concoursid,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
     
     conditions=[]
-    if Note>=15 :
+    if note>=15 :
         conditions.append(("Niveau","<=",2))
-    elif 10<=Note:
+    elif 10<=note:
         conditions.append(("Niveau","<=",1))
-    elif 0<=Note:
+    elif 0<=note:
         conditions.append(("Niveau","<=",0))
         
     if specialiteid!=None:
@@ -47,6 +47,7 @@ def filtre(specialiteid,communeid,concoursid,Note):
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id"
     variables=()  
+    
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   
