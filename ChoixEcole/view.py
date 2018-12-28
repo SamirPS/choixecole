@@ -32,6 +32,7 @@ class ChoixEcole:
         self.var_specialite = StringVar(self.root)
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
+        self.var_alternance=StringVar(self.root)
         
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.validate),
@@ -55,6 +56,8 @@ class ChoixEcole:
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
         self.label_ecole=Label(self.root,text='Ecole:')
+        self.label_alternance=Label(self.root,text='Alternance')
+        
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.coeffccs=model.renvoie_information("Coefficient","CCSCoeff")
@@ -62,11 +65,12 @@ class ChoixEcole:
         self.specialite=model.renvoie_information("Nom","Specialite")
         self.commune=model.renvoie_information("Commune","EcoleS")
         self.concours=model.renvoie_information("Admission","EcoleS")
+        self.alternance=model.renvoie_information("Alternance","EcoleSpe")
         
         """Permet d'afficher les ecoles contenue dans la base de données"""
         
         textaffiche=""
-        self.listeecoles=model.filtre(None,None,None,20)
+        self.listeecoles=model.filtre(None,None,None,None,20)
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
         self.entry_ecole.insert(2.0,textaffiche)
@@ -87,6 +91,9 @@ class ChoixEcole:
             choix_concours= Radiobutton(self.root,variable=self.var_concours,text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole)
             choix_concours.grid(row=concours+1, column=4,sticky="w")
             
+        for alternance in range(len(self.alternance)):
+            choix_alternance = Radiobutton(self.root,variable=self.var_alternance,text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole)
+            choix_alternance.grid(row=alternance+1, column=5,sticky="w")
         
             
             """On place les élèments """
@@ -97,20 +104,20 @@ class ChoixEcole:
         self.label_info.grid(row=6,column=1)
         self.label_francais.grid(row=8,column=1)
         self.label_anglais.grid(row=10,column=1)
-        self.entry_ecole.grid(row=1, column=5,padx =40)
         self.label_spe.grid(row=0, column=2)
         self.label_commune.grid(row=0,column=3)
         self.label_concours.grid(row=0,column=4)
-       
+        self.label_ecole.grid(row=1,column=10)
+        self.label_alternance.grid(row=0,column=5)
+        
+        
         self.entry_maths.grid(row=1,column=1)
         self.entry_physique.grid(row=3,column=1)
         self.entry_si.grid(row=5,column=1)
         self.entry_info.grid(row=7,column=1)
         self.entry_francais.grid(row=9,column=1)
         self.entry_anglais.grid(row=11,column=1)
-        
-        self.entry_ecole.grid(row=2, rowspan=8,column=5)  
-        self.label_ecole.grid(row=1,column=5)
+        self.entry_ecole.grid(row=2, rowspan=8,column=10)  
         
         self.root.mainloop()
 
@@ -181,6 +188,13 @@ class ChoixEcole:
             if self.var_commune.get()==self.commune[communechoisie]:
                 communeid=self.commune[communechoisie]
         
+        for alternancechoisie in range(len(self.alternance)):
+            if self.var_alternance.get()=="Peu importe" or self.var_alternance.get()=="" :
+                alternanceid=None
+                break
+            if self.var_alternance.get()==self.alternance[alternancechoisie]:
+                alternanceid=self.alternance[alternancechoisie]
+        
                 
         for concourschoisie in range(len(self.concours)):
             if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
@@ -195,7 +209,6 @@ class ChoixEcole:
         if concoursid=="CCS":
            
             note=round(noteconcours[1],1)
-        
             
         """Creation de la liste Ecole"""
         for creationliste in range (len(self.specialite)):
@@ -203,24 +216,24 @@ class ChoixEcole:
                 if self.var_specialite.get()==self.specialite[creationliste]:
                      for n in range(1):
                          note=round(noteconcours[n],1)
-                         ecoleintermediare=ecoleintermediare+model.filtre(creationliste+1,communeid,concoursid,note)
+                         ecoleintermediare=ecoleintermediare+model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)
                          self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
                          break
                 elif self.var_specialite.get()=="":
                         for n in range(1):
                             note=round(noteconcours[n],1)
-                            ecoleintermediare=ecoleintermediare+model.filtre(None,communeid,concoursid,note)
+                            ecoleintermediare=ecoleintermediare+model.filtre(None,communeid,concoursid,alternanceid,note)
                             self.listeecoles=list(set(ecoleintermediare))# Evite les doublons 
                             break
             else:
                 if self.var_specialite.get()==self.specialite[creationliste]:
                     
-                    self.listeecoles=model.filtre(creationliste+1,communeid,concoursid,note)
+                    self.listeecoles=model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)
                     break
                 elif self.var_specialite.get()=="":
-                    self.listeecoles=model.filtre(None,communeid,concoursid,note)
+                    self.listeecoles=model.filtre(None,communeid,concoursid,alternanceid,note)
                     break
-                
+       
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]

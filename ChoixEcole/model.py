@@ -20,12 +20,12 @@ def renvoie_information(colonne,table):
     informationvoulue=[]
     for resultat in curseur:
         informationvoulue.append(resultat[0])
-    if colonne=="Commune" or colonne=="Admission":
+    if colonne=="Commune" or colonne=="Admission" or colonne=="Alternance":
         informationvoulue[0:0] = ["Peu importe"]
         informationvoulue=list(set(informationvoulue))
     return informationvoulue
 
-def filtre(specialiteid,communeid,concoursid,note):
+def filtre(specialiteid,communeid,concoursid,alternanceid,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
@@ -40,6 +40,8 @@ def filtre(specialiteid,communeid,concoursid,note):
         
     if specialiteid!=None:
         conditions.append(("Idspe","=",specialiteid))
+    if alternanceid!=None:
+        conditions.append(("Alternance","=",alternanceid))
     if concoursid!=None :
         conditions.append(("Admission","=",concoursid))
     if communeid!=None:
@@ -51,7 +53,6 @@ def filtre(specialiteid,communeid,concoursid,note):
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   
-        
         
     ecoles=[]
     curseur.execute(requete,variables)
