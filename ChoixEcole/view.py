@@ -43,7 +43,7 @@ class ChoixEcole:
         self.entry_info = Entry(self.root, textvariable=self.var_info,validate = 'key', validatecommand = vcmd)
         self.entry_francais = Entry(self.root, textvariable=self.var_francais,validate = 'key', validatecommand = vcmd)
         self.entry_anglais = Entry(self.root, textvariable=self.var_anglais,validate = 'key', validatecommand = vcmd)
-        
+        self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
         
         self.label_maths=Label(self.root,text='Rentre ta moyenne de Maths')
         self.label_physique=Label(self.root,text='Rentre ta moyenne de Physique')
@@ -51,7 +51,6 @@ class ChoixEcole:
         self.label_info=Label(self.root,text='Rentre ta moyenne en Informatique')
         self.label_francais=Label(self.root,text='Rentre ta moyenne de Francais')
         self.label_anglais=Label(self.root,text='Rentre ta moyenne d"Anglais')
-        self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
         self.label_commune = Label(self.root, text='Commune :')
         self.label_spe = Label(self.root, text='Specialité :' )
         self.label_concours=Label(self.root,text='Concours:')
@@ -70,7 +69,7 @@ class ChoixEcole:
         """Permet d'afficher les ecoles contenue dans la base de données"""
         
         textaffiche=""
-        self.listeecoles=model.filtre(None,None,None,None,20)
+        self.listeecoles=list(set(model.filtre(None,None,None,None,20)))
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
         self.entry_ecole.insert(2.0,textaffiche)
@@ -228,10 +227,10 @@ class ChoixEcole:
             else:
                 if self.var_specialite.get()==self.specialite[creationliste]:
                     
-                    self.listeecoles=model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)
+                    self.listeecoles=list(set(model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)))
                     break
                 elif self.var_specialite.get()=="":
-                    self.listeecoles=model.filtre(None,communeid,concoursid,alternanceid,note)
+                    self.listeecoles=list(set(model.filtre(None,communeid,concoursid,alternanceid,note)))
                     break
        
         """Permet de génerer le texte affiché"""
@@ -242,8 +241,5 @@ class ChoixEcole:
         self.entry_ecole.insert(2.0,textaffiche)
         self.entry_ecole.configure(state="disabled")
         
-        
-   
-
 if __name__ == '__main__':
     ChoixEcole()

@@ -29,7 +29,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    
     conditions=[]
     if note>=15 :
         conditions.append(("Niveau","<=",2))
