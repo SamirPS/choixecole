@@ -49,7 +49,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id"
     variables=()  
-    
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   

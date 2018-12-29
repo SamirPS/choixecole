@@ -150,7 +150,7 @@ class ChoixEcole:
                 except ValueError:
                     return False
                 
-            elif text in '0123456789.' and float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  :
+            elif text in '0123456789.' and 10.00<float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  :
                 """Pour limiter les décimales des notes du type 15.55"""
                 try:
                     float(value_if_allowed)
