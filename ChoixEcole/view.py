@@ -21,6 +21,7 @@ class ChoixEcole:
  
         self.root = Tk()
         self.root.title("ChoixEcole")
+        self.root.geometry('900x260')
         
         """Initialise les variables"""
         self.var_maths=StringVar(self.root)
@@ -59,6 +60,7 @@ class ChoixEcole:
         
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
+        
         self.coeffccs=model.renvoie_information("Coefficient","CCSCoeff")
         self.coeffccp=model.renvoie_information("Coefficient","CCPCoeff")
         self.specialite=model.renvoie_information("Nom","Specialite")
@@ -66,13 +68,13 @@ class ChoixEcole:
         self.concours=model.renvoie_information("Admission","EcoleS")
         self.alternance=model.renvoie_information("Alternance","EcoleSpe")
         
-        """Permet d'afficher les ecoles contenue dans la base de données"""
+        """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         
         textaffiche=""
         self.listeecoles=list(set(model.filtre(None,None,None,None,20)))
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
-        self.entry_ecole.insert(2.0,textaffiche)
+        self.entry_ecole.insert(0.0,textaffiche)
         
         """Pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.configure(state="disabled")
@@ -106,7 +108,7 @@ class ChoixEcole:
         self.label_spe.grid(row=0, column=2)
         self.label_commune.grid(row=0,column=3)
         self.label_concours.grid(row=0,column=4)
-        self.label_ecole.grid(row=1,column=10)
+        self.label_ecole.grid(row=0,column=10)
         self.label_alternance.grid(row=0,column=5)
         
         
@@ -116,7 +118,7 @@ class ChoixEcole:
         self.entry_info.grid(row=7,column=1)
         self.entry_francais.grid(row=9,column=1)
         self.entry_anglais.grid(row=11,column=1)
-        self.entry_ecole.grid(row=2, rowspan=8,column=10)  
+        self.entry_ecole.grid(row=1, rowspan=8,column=10)  
         
         self.root.mainloop()
 
@@ -167,6 +169,14 @@ class ChoixEcole:
             notefrancais=20
             noteanglais=20
             noteinfo=20
+        elif notemode=="0" or notemaths=="0" or notephysique=="0" or notesi=="0" or notefrancais=="0" or noteanglais=="0" or noteinfo=="0":
+            notemode=0 
+            notemaths=0
+            notephysique=0
+            notesi=0
+            notefrancais=0
+            noteanglais=0
+            noteinfo=0
         else:
             notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
             notemaths=float(self.entry_maths.get())
@@ -186,7 +196,7 @@ class ChoixEcole:
                 break
             if self.var_commune.get()==self.commune[communechoisie]:
                 communeid=self.commune[communechoisie]
-        
+                
         for alternancechoisie in range(len(self.alternance)):
             if self.var_alternance.get()=="Peu importe" or self.var_alternance.get()=="" :
                 alternanceid=None
@@ -194,13 +204,19 @@ class ChoixEcole:
             if self.var_alternance.get()==self.alternance[alternancechoisie]:
                 alternanceid=self.alternance[alternancechoisie]
         
-                
         for concourschoisie in range(len(self.concours)):
             if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
                 concoursid=None
                 break
             if self.var_concours.get()==self.concours[concourschoisie]:
                 concoursid=self.concours[concourschoisie]
+        
+        for specialitechoisie in range(len(self.specialite)):
+            if self.var_specialite.get()=="Peu importe" or self.var_specialite.get()=="":
+                specialiteid=None
+                break
+            if self.var_specialite.get()==self.specialite[specialitechoisie]:
+                specialiteid=specialitechoisie+1
         
         if concoursid=="CCP" :
            note=round(noteconcours[0],1)
@@ -210,35 +226,22 @@ class ChoixEcole:
             note=round(noteconcours[1],1)
             
         """Creation de la liste Ecole"""
-        for creationliste in range (len(self.specialite)):
-            if concoursid==None:
-                if self.var_specialite.get()==self.specialite[creationliste]:
-                     for n in range(1):
-                         note=round(noteconcours[n],1)
-                         ecoleintermediare=ecoleintermediare+model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)
-                         self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
-                         break
-                elif self.var_specialite.get()=="":
-                        for n in range(1):
-                            note=round(noteconcours[n],1)
-                            ecoleintermediare=ecoleintermediare+model.filtre(None,communeid,concoursid,alternanceid,note)
-                            self.listeecoles=list(set(ecoleintermediare))# Evite les doublons 
-                            break
-            else:
-                if self.var_specialite.get()==self.specialite[creationliste]:
-                    
-                    self.listeecoles=list(set(model.filtre(creationliste+1,communeid,concoursid,alternanceid,note)))
-                    break
-                elif self.var_specialite.get()=="":
-                    self.listeecoles=list(set(model.filtre(None,communeid,concoursid,alternanceid,note)))
-                    break
-       
+        if concoursid==None:
+                 for n in range(1):
+                     note=round(noteconcours[n],1)
+                     ecoleintermediare=ecoleintermediare+model.filtre(specialiteid,communeid,concoursid,alternanceid,note)
+                     self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
+                     break
+        else:
+            self.listeecoles=list(set(model.filtre(specialiteid+1,communeid,concoursid,alternanceid,note)))
+            
+   
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
           
         """Affiche le texte et evite de pouvoir écrire par dessus"""   
-        self.entry_ecole.insert(2.0,textaffiche)
+        self.entry_ecole.insert(0.0,textaffiche)
         self.entry_ecole.configure(state="disabled")
         
 if __name__ == '__main__':

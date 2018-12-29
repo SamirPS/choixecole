@@ -12,7 +12,7 @@ curseur = connexion.cursor()
 
 def renvoie_information(colonne,table):
     """
-       LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,
+       LA fonction prend en variable la colonne et  la table de la base de donnée qui doivent être des str,
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
                                                                                                             """
@@ -27,15 +27,18 @@ def renvoie_information(colonne,table):
 
 def filtre(specialiteid,communeid,concoursid,alternanceid,note):
     """
-    Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
-    """
+    Construit la requete Sql et filtre les ecoles en fonction des choix de l'utilisateur
+                                                                                    """
     conditions=[]
+   
     if note>=15 :
         conditions.append(("Niveau","<=",2))
     elif 10<=note:
         conditions.append(("Niveau","<=",1))
-    elif 0<=note:
+    elif 0<note:
         conditions.append(("Niveau","<=",0))
+    else:
+        return []
         
     if specialiteid!=None:
         conditions.append(("Idspe","=",specialiteid))
