@@ -23,7 +23,7 @@ class ChoixEcole:
         self.root.title("ChoixEcole")
         self.root.geometry('900x260')
         
-        """Initialise les variables"""
+        """Initialise les variables et met 20 comme valeur par defaut """
         self.var_maths=StringVar(self.root)
         self.var_physique=StringVar(self.root)
         self.var_si=StringVar(self.root)
@@ -34,6 +34,13 @@ class ChoixEcole:
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
         self.var_alternance=StringVar(self.root)
+        
+        self.var_maths.set(20)
+        self.var_physique.set(20)
+        self.var_si.set(20)
+        self.var_info.set(20)
+        self.var_francais.set(20)
+        self.var_anglais.set(20)
         
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.validate),
@@ -127,17 +134,30 @@ class ChoixEcole:
     def validate(self, action, index, value_if_allowed,
                        prior_value, text, validation_type, trigger_type, widget_name):
         """
-            Permet de verifier si l'utilisateur rentre des chiffres dans les entry
+            Permet de verifier si l'utilisateur rentre des chiffres dans les entry 
+            Et limite les decimales
             Fonction fourni dans la documentation du module Entry
-            
-                                                                                  """
+           
+                                                                                 """
+                                                            
         if(action=='1'):
-            if text in '0123456789.':
+            if text in '0123456789.' and float(value_if_allowed)<=10.00 and len(value_if_allowed)<5 and  value_if_allowed!="0.00" :
+                """Pour limiter les decimales des notes du type 9.99 ou 5.55"""
+                
                 try:
                     float(value_if_allowed)
                     return True
                 except ValueError:
                     return False
+                
+            elif text in '0123456789.' and float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  :
+                """Pour limiter les décimales des notes du type 15.55"""
+                try:
+                    float(value_if_allowed)
+                    return True
+                except ValueError:
+                    return False
+                
             else:
                 return False
         else:
@@ -161,7 +181,11 @@ class ChoixEcole:
         self.entry_ecole.delete(0.7,'end');
         
         """Pour éviter les erreurs dans la console python"""
-        if notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
+        if notemode=="0" or notemaths=="0" or notephysique=="0" or notesi=="0" or notefrancais=="0" or noteanglais=="0" or noteinfo=="0":
+            self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
+            self.entry_ecole.configure(state="disabled")
+            return
+        elif notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
             notemode=20 
             notemaths=20
             notephysique=20
@@ -169,14 +193,7 @@ class ChoixEcole:
             notefrancais=20
             noteanglais=20
             noteinfo=20
-        elif notemode=="0" or notemaths=="0" or notephysique=="0" or notesi=="0" or notefrancais=="0" or noteanglais=="0" or noteinfo=="0":
-            notemode=0 
-            notemaths=0
-            notephysique=0
-            notesi=0
-            notefrancais=0
-            noteanglais=0
-            noteinfo=0
+        
         else:
             notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
             notemaths=float(self.entry_maths.get())
@@ -234,8 +251,7 @@ class ChoixEcole:
                      break
         else:
             self.listeecoles=list(set(model.filtre(specialiteid+1,communeid,concoursid,alternanceid,note)))
-            
-   
+        
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]

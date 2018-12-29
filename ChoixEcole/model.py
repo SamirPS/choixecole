@@ -37,8 +37,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
         conditions.append(("Niveau","<=",1))
     elif 0<note:
         conditions.append(("Niveau","<=",0))
-    else:
-        return []
         
     if specialiteid!=None:
         conditions.append(("Idspe","=",specialiteid))
