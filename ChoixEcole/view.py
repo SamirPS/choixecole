@@ -141,7 +141,7 @@ class ChoixEcole:
                                                                                  """
                                                             
         if(action=='1'):
-            if text in '0123456789.' and float(value_if_allowed)<=10.00 and len(value_if_allowed)<5 and  value_if_allowed!="0.00" :
+            if text in '0123456789.' and float(value_if_allowed)<=10.00 and len(value_if_allowed)<5 and  value_if_allowed!="0.00" and  value_if_allowed!="000" :
                 """Pour limiter les decimales des notes du type 9.99 ou 5.55"""
                 
                 try:
@@ -150,7 +150,7 @@ class ChoixEcole:
                 except ValueError:
                     return False
                 
-            elif text in '0123456789.' and 10.00<float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  :
+            elif text in '0123456789.' and 10.00<float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  and  value_if_allowed!="000":
                 """Pour limiter les décimales des notes du type 15.55"""
                 try:
                     float(value_if_allowed)
