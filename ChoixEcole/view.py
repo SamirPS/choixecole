@@ -43,8 +43,7 @@ class ChoixEcole:
         self.var_anglais.set(20)
         
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
-        vcmd = (self.root.register(self.validate),
-                '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        vcmd = (self.root.register(self.callback),'%P' )
         self.entry_maths = Entry(self.root, textvariable=self.var_maths,validate = 'key', validatecommand = vcmd)
         self.entry_physique = Entry(self.root, textvariable=self.var_physique,validate = 'key', validatecommand = vcmd)
         self.entry_si = Entry(self.root, textvariable=self.var_si,validate = 'key', validatecommand = vcmd)
@@ -130,72 +129,52 @@ class ChoixEcole:
         self.root.mainloop()
 
         
-   
-    def validate(self, action, index, value_if_allowed,
-                       prior_value, text, validation_type, trigger_type, widget_name):
-        """
-            Permet de verifier si l'utilisateur rentre des chiffres dans les entry 
-            Et limite les decimales
-            Fonction fourni dans la documentation du module Entry
-           
-                                                                                 """
-                                                            
-        if(action=='1'):
-            if text in '0123456789.' and float(value_if_allowed)<=10.00 and len(value_if_allowed)<5 and  value_if_allowed!="0.00" and  value_if_allowed!="000" :
-                """Pour limiter les decimales des notes du type 9.99 ou 5.55"""
-                
-                try:
-                    float(value_if_allowed)
-                    return True
-                except ValueError:
-                    return False
-                
-            elif text in '0123456789.' and 10.00<float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 and  value_if_allowed!="00.00"  and  value_if_allowed!="000":
-                """Pour limiter les décimales des notes du type 15.55"""
-                try:
-                    float(value_if_allowed)
-                    return True
-                except ValueError:
-                    return False
-                
-            else:
-                return False
+    def callback(self, P):
+        if  P =="" :
+            return True
+        elif P.replace(".", "", 1).isdigit() and float(P)<=20.00 and len(P)<6  :
+            return True
         else:
-            return True   
-        
-        
+            return False
+    
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
         textaffiche=""
-        notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
-        notemaths=float(self.entry_maths.get())
-        notephysique=float(self.entry_physique.get())
-        notesi=float(self.entry_si.get())
-        notefrancais=float(self.entry_francais.get())
-        noteanglais=float(self.entry_anglais.get())
-        noteinfo=float((self.entry_info.get()))
-             
+        notemode=(self.entry_maths.get()+self.entry_maths.get())
+        notemaths=(self.entry_maths.get())
+        notephysique=(self.entry_physique.get())
+        notesi=(self.entry_si.get())
+        notefrancais=(self.entry_francais.get())
+        noteanglais=(self.entry_anglais.get())
+        noteinfo=((self.entry_info.get()))
+              
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
-        
-        """Pour gérer tout les cas des zeros possible et si les entrys note sont vides on met tout a 20"""
-        
-        if float(notemode)==0.0 or float(notemaths)==0.0 or float(notephysique)==0.0 or float(notesi)==0.0 or float(notefrancais)==0.0 or float(noteanglais)==0.0 or float(noteinfo)==0.0:
-            self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
-            self.entry_ecole.configure(state="disabled")
-            return
-        
-        elif notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
-            notemode=20 
+        """Pour éviter les erreurs dans la console python"""
+        if notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
+            notemode=20
             notemaths=20
             notephysique=20
             notesi=20
             notefrancais=20
             noteanglais=20
             noteinfo=20
+         
+        elif float(float(self.entry_maths.get())+float(self.entry_maths.get()))/2==0.0 or float(notemaths)==0.0 or float(notephysique)==0.0 or float(notesi)==0.0 or float(notefrancais)==0.0 or float(noteanglais)==0.0 or float(noteinfo)==0.0:
+            self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
+            self.entry_ecole.configure(state="disabled")
+            return
         
+        else:
+            notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
+            notemaths=float(self.entry_maths.get())
+            notephysique=float(self.entry_physique.get())
+            notesi=float(self.entry_si.get())
+            notefrancais=float(self.entry_francais.get())
+            noteanglais=float(self.entry_anglais.get())
+            noteinfo=float((self.entry_info.get()))
             
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
        
