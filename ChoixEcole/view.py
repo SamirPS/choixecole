@@ -168,23 +168,25 @@ class ChoixEcole:
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
         textaffiche=""
-        notemode=(self.entry_maths.get()+self.entry_maths.get())
-        notemaths=(self.entry_maths.get())
-        notephysique=(self.entry_physique.get())
-        notesi=(self.entry_si.get())
-        notefrancais=(self.entry_francais.get())
-        noteanglais=(self.entry_anglais.get())
-        noteinfo=((self.entry_info.get()))
+        notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
+        notemaths=float(self.entry_maths.get())
+        notephysique=float(self.entry_physique.get())
+        notesi=float(self.entry_si.get())
+        notefrancais=float(self.entry_francais.get())
+        noteanglais=float(self.entry_anglais.get())
+        noteinfo=float((self.entry_info.get()))
              
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
         
-        """Pour éviter les erreurs dans la console python"""
-        if notemode=="0" or notemaths=="0" or notephysique=="0" or notesi=="0" or notefrancais=="0" or noteanglais=="0" or noteinfo=="0":
+        """Pour gérer tout les cas des zeros possible et si les entrys note sont vides on met tout a 20"""
+        
+        if float(notemode)==0.0 or float(notemaths)==0.0 or float(notephysique)==0.0 or float(notesi)==0.0 or float(notefrancais)==0.0 or float(noteanglais)==0.0 or float(noteinfo)==0.0:
             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
             self.entry_ecole.configure(state="disabled")
             return
+        
         elif notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
             notemode=20 
             notemaths=20
@@ -194,15 +196,7 @@ class ChoixEcole:
             noteanglais=20
             noteinfo=20
         
-        else:
-            notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
-            notemaths=float(self.entry_maths.get())
-            notephysique=float(self.entry_physique.get())
-            notesi=float(self.entry_si.get())
-            notefrancais=float(self.entry_francais.get())
-            noteanglais=float(self.entry_anglais.get())
-            noteinfo=float((self.entry_info.get()))
-                
+            
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
        
         noteconcours=[(self.coeffccp[0]*notemode+self.coeffccp[1]*notemaths+self.coeffccp[2]*notephysique+self.coeffccp[3]*notesi+self.coeffccp[4]*notefrancais+self.coeffccp[5]*noteanglais+self.coeffccp[6]*noteinfo)/sum(self.coeffccp),(self.coeffccs[0]*notemode+self.coeffccs[1]*notemaths+self.coeffccs[2]*notephysique+self.coeffccs[3]*notesi+self.coeffccs[4]*notefrancais+self.coeffccs[5]*noteanglais+self.coeffccs[6]*noteinfo)/sum(self.coeffccs)]
@@ -210,28 +204,24 @@ class ChoixEcole:
         for communechoisie in range(len(self.commune)):
             if self.var_commune.get()=="Peu importe" or self.var_commune.get()=="" :
                 communeid=None
-                break
             if self.var_commune.get()==self.commune[communechoisie]:
                 communeid=self.commune[communechoisie]
                 
         for alternancechoisie in range(len(self.alternance)):
             if self.var_alternance.get()=="Peu importe" or self.var_alternance.get()=="" :
                 alternanceid=None
-                break
             if self.var_alternance.get()==self.alternance[alternancechoisie]:
                 alternanceid=self.alternance[alternancechoisie]
         
         for concourschoisie in range(len(self.concours)):
             if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
                 concoursid=None
-                break
             if self.var_concours.get()==self.concours[concourschoisie]:
                 concoursid=self.concours[concourschoisie]
         
         for specialitechoisie in range(len(self.specialite)):
             if self.var_specialite.get()=="Peu importe" or self.var_specialite.get()=="":
                 specialiteid=None
-                break
             if self.var_specialite.get()==self.specialite[specialitechoisie]:
                 specialiteid=specialitechoisie+1
         
