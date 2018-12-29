@@ -130,9 +130,7 @@ class ChoixEcole:
 
         
     def callback(self, P):
-        if  P =="" :
-            return True
-        elif P.replace(".", "", 1).isdigit() and float(P)<=20.00 and len(P)<6  :
+        if P.replace(".", "", 1).isdigit() and float(P)<=20.00 and len(P)<6 or P=="" :
             return True
         else:
             return False
