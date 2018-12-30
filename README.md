@@ -1,23 +1,23 @@
 <B> ChoixEcole</B>
 
 
-Francais:
+<U> Francais: </U>
 
 Le dossier ChoixEcole dispose des fichiers pour le professeur d'informatique .
 
-Projet informatique TSI2 : Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le view.py est l'interface graphique.
+<U>Projet informatique TSI2 </U>: Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le view.py est l'interface graphique.
 
 
-Ajout de spécialité : modifier la table Spécialite
+<U>Ajout de spécialité </U>: modifier la table Spécialite
 
 
-Ajout d'école :modifier la table Ecole
+<U>Ajout d'école </U>:modifier la table Ecole
 
 
-Changez coefficient: modifier table Coeff
+<U>Changez coefficient </U>: modifier table Coeff
 
 
-Pour les afficher : il faut créer un couple unique dans la table EcoleSpe
+<U>Pour les afficher </U>: il faut créer un couple unique dans la table EcoleSpe
 
 
 Avec SqliteBroswer par exemple
