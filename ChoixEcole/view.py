@@ -30,6 +30,7 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.geometry('900x260')
+        self.root.resizable(False, False)
          
         """Initialise les variables et met 20 comme valeur par defaut """
         self.var_specialite = StringVar(self.root)
