@@ -114,24 +114,36 @@ class ChoixEcole:
  
          
     def callback(self, P,S):
-        """Permet que l'utilisateur ne rentre pas ² ni des lettres et gere la longeur des notes """
-        if S=="²":
+          """Permet que l'utilisateur ne rentre pas ² ni des lettres et gere la longeur des notes """
+          if S=="²":
             return False
-        elif P.replace(".", "", 1).isdigit() and float(P)<=20.00  or P=="" :
+          elif P.replace(".", "", 1).isdigit() and float(P)<1.00   or P=="" :
             try :
-                if P[0]!="0" and P[1]!="." and len(P)<6:
-                    return True 
-                elif  P[1]=="." and len(P)<5 and P!="00":
+                if  P[1]=="." and len(P)<5 and  P[0]=="0" and P!="00":
                     return True
-                elif P[1]!="."  and len(P)<6 and P!="000":
+                elif P[1]=="0" and len(P)<6 and  P[0]=="0" and P!="000":
                     return True
                 else :
                     return False
-            except IndexError :
+            except IndexError:
                 return True
-        else:
-            return False
-     
+             
+          elif  P.replace(".", "", 1).isdigit() and float(P)<10.00 and P[0]!="0" and len(P)<5 :
+             return True
+ 
+          elif  P.replace(".", "", 1).isdigit() and 1.00<=float(P)<10.00 and P[0]=="0":
+            try :
+                if  P[1]=="0" and len(P)<5 :
+                    return True
+                elif P[1]!="0" and len(P)<6 and P!="000":
+                    return True
+                else :
+                    return False
+            except IndexError:
+                return True
+          elif P.replace(".", "", 1).isdigit() and 10.00<=float(P)<=20.00 and len(P)<6 and P[0]!="0":
+             return True
+          return False
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
