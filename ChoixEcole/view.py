@@ -133,8 +133,10 @@ class ChoixEcole:
         """Permet de savoir si on rentre des bon floats """
         if P=="":
             return True
+        elif P in "²":
+            return False
         
-        elif P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0"  :
+        elif P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0" or  P=="" :
             try : 
                 if  P[1]=="." and len(P)<5 and P!="00":
                     return True
@@ -146,7 +148,6 @@ class ChoixEcole:
                 return True
             
         elif  P.replace(".", "", 1).isdigit() and float(P)<10.00 and P[0]!="0" and len(P)<5 :
-            
             return True
         elif  P.replace(".", "", 1).isdigit() and 1.00<=float(P)<10.00 and P[0]=="0":
             try : 
@@ -159,8 +160,8 @@ class ChoixEcole:
             except IndexError:
                 return True
         elif P.replace(".", "", 1).isdigit() and 10.00<=float(P)<=20.00 and len(P)<6 and P[0]!="0":
-            
             return True
+        
         else:
             return False
     
