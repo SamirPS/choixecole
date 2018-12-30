@@ -1,14 +1,14 @@
 <B> ChoixEcole</B>
 
 
-<U> Francais: </U>
+<u> Francais: </u>
 
 Le dossier ChoixEcole dispose des fichiers pour le professeur d'informatique .
 
-<U>Projet informatique TSI2 </U>: Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le view.py est l'interface graphique.
+<u>Projet informatique TSI2 </u>: Le fichier model.py est le fichier faisaint le lien avec la base de donnée et le view.py est l'interface graphique.
 
 
-<U>Ajout de spécialité </U>: modifier la table Spécialite
+<u>Ajout de spécialité </u>: modifier la table Spécialite
 
 
 <U>Ajout d'école </U>:modifier la table Ecole
