@@ -155,6 +155,7 @@ class ChoixEcole:
         notefrancais=(self.entry_francais.get())
         noteanglais=(self.entry_anglais.get())
         noteinfo=((self.entry_info.get()))
+        note=0
               
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
@@ -190,24 +191,25 @@ class ChoixEcole:
         for communechoisie in range(len(self.commune)):
             if self.var_commune.get()=="Peu importe" or self.var_commune.get()=="" :
                 communeid=None
+                break
             if self.var_commune.get()==self.commune[communechoisie]:
                 communeid=self.commune[communechoisie]
                 
         for alternancechoisie in range(len(self.alternance)):
             if self.var_alternance.get()=="Peu importe" or self.var_alternance.get()=="" :
                 alternanceid=None
+                break
             if self.var_alternance.get()==self.alternance[alternancechoisie]:
                 alternanceid=self.alternance[alternancechoisie]
         
         for concourschoisie in range(len(self.concours)):
             if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
                 concoursid=None
+                break
             if self.var_concours.get()==self.concours[concourschoisie]:
                 concoursid=self.concours[concourschoisie]
         
         for specialitechoisie in range(len(self.specialite)):
-            if self.var_specialite.get()=="Peu importe" or self.var_specialite.get()=="":
-                specialiteid=None
             if self.var_specialite.get()==self.specialite[specialitechoisie]:
                 specialiteid=specialitechoisie+1
         
@@ -226,7 +228,7 @@ class ChoixEcole:
                      self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
                      break
         else:
-            self.listeecoles=list(set(model.filtre(specialiteid+1,communeid,concoursid,alternanceid,note)))
+            self.listeecoles=list(set(model.filtre(specialiteid,communeid,concoursid,alternanceid,note)))
         
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
