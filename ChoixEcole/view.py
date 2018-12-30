@@ -38,7 +38,8 @@ class ChoixEcole:
         self.var_alternance=StringVar(self.root)
          
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
-        vcmd = (self.root.register(self.callback),'%P','%S' )
+        vcmd = (self.root.register(self.callback),
+                '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
        
@@ -113,41 +114,23 @@ class ChoixEcole:
         self.root.mainloop()
  
          
-    def callback(self, P,S):
-          """Permet que l'utilisateur ne rentre pas ² ni des lettres et gere la longeur des notes """
-          if S=="²":
+    def callback(self, action, index, value_if_allowed,
+    prior_value, text, validation_type, trigger_type, widget_name):
+        if text=="²" :
             return False
-         
-          elif P.replace(".", "", 1).isdigit() and float(P)<10.00  and P[0]=="0" or P=="" :
+        elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 or value_if_allowed == "":
             try :
-                if  P[1]=="." and len(P)<5 and P!="00":
+                if value_if_allowed[2]==".":
                     return True
-                elif P[1]=="0" and len(P)<6 and P!="000":
-                    return True
-                else :
+                else:
                     return False
             except IndexError:
                 return True
-             
-          elif  P.replace(".", "", 1).isdigit() and float(P)<10.00 and P[0]!="0" and len(P)<5 :
-             
-            return True
- 
-          elif  P.replace(".", "", 1).isdigit() and 1.00<=float(P)<10.00 and P[0]=="0":
-            try :
-                if  P[1]=="0" and len(P)<5 :
-                    return True
-                elif P[1]!="0" and len(P)<6 and P!="000":
-                    return True
-                else :
-                    return False
-            except IndexError:
-                return True
-          elif P.replace(".", "", 1).isdigit() and 10.00<=float(P)<=20.00 and len(P)<6 and P[0]!="0":
-             
-            return True
-          else:
+        else:
             return False
+        
+            
+        
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
