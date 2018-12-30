@@ -168,7 +168,7 @@ class ChoixEcole:
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
         textaffiche=""
-        notemode=(self.entry_maths.get()+self.entry_maths.get())
+        notemode=(self.entry_maths.get()+self.entry_si.get())
         notemaths=(self.entry_maths.get())
         notephysique=(self.entry_physique.get())
         notesi=(self.entry_si.get())
@@ -176,6 +176,10 @@ class ChoixEcole:
         noteanglais=(self.entry_anglais.get())
         noteinfo=((self.entry_info.get()))
         note=0
+        specialiteid=""
+        communeid=""
+        concoursid=""
+        alternanceid=""
               
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
@@ -196,7 +200,7 @@ class ChoixEcole:
             return
         
         else:
-            notemode=(float(self.entry_maths.get())+float(self.entry_maths.get()))/2
+            notemode=(float(self.entry_maths.get())+float(self.entry_si.get()))/2
             notemaths=float(self.entry_maths.get())
             notephysique=float(self.entry_physique.get())
             notesi=float(self.entry_si.get())
@@ -230,6 +234,9 @@ class ChoixEcole:
                 concoursid=self.concours[concourschoisie]
         
         for specialitechoisie in range(len(self.specialite)):
+            if self.var_specialite.get()=="":
+                specialiteid=None
+                break
             if self.var_specialite.get()==self.specialite[specialitechoisie]:
                 specialiteid=specialitechoisie+1
         
@@ -242,7 +249,7 @@ class ChoixEcole:
             
         """Creation de la liste Ecole"""
         if concoursid==None:
-                 for n in range(1):
+                 for n in range(2):
                      note=round(noteconcours[n],1)
                      ecoleintermediare=ecoleintermediare+model.filtre(specialiteid,communeid,concoursid,alternanceid,note)
                      self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
