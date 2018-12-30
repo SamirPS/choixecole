@@ -9,7 +9,6 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
-
 def renvoie_information(colonne,table):
     """
        LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,

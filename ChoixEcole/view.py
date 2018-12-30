@@ -114,20 +114,21 @@ class ChoixEcole:
  
          
     def callback(self, action, value_if_allowed, text):
-        if text=="²" :
+        """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes"""
+        
+        if text=="²":
             return False
-        elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 or value_if_allowed == "":
+        elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
             try :
-                if value_if_allowed[2]==".":
+                if value_if_allowed[2]=="." and len(value_if_allowed)<6 :
+                    return True
+                elif value_if_allowed[1]=="." and len(value_if_allowed)<5 :
                     return True
                 else:
                     return False
             except IndexError:
                 return True
-        else:
-            return False
-        
-            
+        return False
         
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
