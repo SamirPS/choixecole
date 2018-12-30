@@ -43,7 +43,7 @@ class ChoixEcole:
         self.var_anglais.set(20)
         
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
-        vcmd = (self.root.register(self.callback),'%P' )
+        vcmd = (self.root.register(self.callback),'%P','%S' )
         self.entry_maths = Entry(self.root, textvariable=self.var_maths,validate = 'key', validatecommand = vcmd)
         self.entry_physique = Entry(self.root, textvariable=self.var_physique,validate = 'key', validatecommand = vcmd)
         self.entry_si = Entry(self.root, textvariable=self.var_si,validate = 'key', validatecommand = vcmd)
@@ -129,9 +129,11 @@ class ChoixEcole:
         self.root.mainloop()
 
         
-    def callback(self, P):
+    def callback(self, P,S):
         """Permet de savoir si on rentre des bon floats """
-        if P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0" or  P=="" :
+        if S=="²":
+            return False
+        elif P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0" or  P=="" :
             try : 
                 if  P[1]=="." and len(P)<5 and P!="00":
                     return True
