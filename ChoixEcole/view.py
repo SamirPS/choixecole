@@ -38,8 +38,7 @@ class ChoixEcole:
         self.var_alternance=StringVar(self.root)
          
         """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
-        vcmd = (self.root.register(self.callback),
-                '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        vcmd = (self.root.register(self.callback),'%d',  '%P', '%S')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
        
@@ -114,8 +113,7 @@ class ChoixEcole:
         self.root.mainloop()
  
          
-    def callback(self, action, index, value_if_allowed,
-    prior_value, text, validation_type, trigger_type, widget_name):
+    def callback(self, action, value_if_allowed, text):
         if text=="²" :
             return False
         elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 and len(value_if_allowed)<6 or value_if_allowed == "":
