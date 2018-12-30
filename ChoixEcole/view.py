@@ -131,12 +131,7 @@ class ChoixEcole:
         
     def callback(self, P):
         """Permet de savoir si on rentre des bon floats """
-        if P=="":
-            return True
-        elif P in "²":
-            return False
-        
-        elif P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0" or  P=="" :
+        if P.replace(".", "", 1).isdigit() and float(P)<1.00  and P[0]=="0" or  P=="" :
             try : 
                 if  P[1]=="." and len(P)<5 and P!="00":
                     return True
@@ -169,49 +164,31 @@ class ChoixEcole:
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
         textaffiche=""
-        notemode=(self.entry_maths.get()+self.entry_si.get())
-        notemaths=(self.entry_maths.get())
-        notephysique=(self.entry_physique.get())
-        notesi=(self.entry_si.get())
-        notefrancais=(self.entry_francais.get())
-        noteanglais=(self.entry_anglais.get())
-        noteinfo=((self.entry_info.get()))
         note=0
         specialiteid=""
         communeid=""
         concoursid=""
         alternanceid=""
-              
+        matiere=[self.entry_maths.get()+self.entry_si.get(),self.entry_maths.get(),self.entry_physique.get(),self.entry_si.get(),self.entry_francais.get(),self.entry_anglais.get(),(self.entry_info.get())]
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
         """Pour éviter les erreurs dans la console python"""
-        if notemode=="" or notemaths=="" or notephysique=="" or notesi=="" or notefrancais=="" or noteanglais=="" or noteinfo=="":
-            notemode=20
-            notemaths=20
-            notephysique=20
-            notesi=20
-            notefrancais=20
-            noteanglais=20
-            noteinfo=20
-         
-        elif float(float(self.entry_maths.get())+float(self.entry_maths.get()))/2==0.0 or float(notemaths)==0.0 or float(notephysique)==0.0 or float(notesi)==0.0 or float(notefrancais)==0.0 or float(noteanglais)==0.0 or float(noteinfo)==0.0:
+        
+        if matiere[0]=="" or matiere[1]=="" or matiere[2]=="" or matiere[3]=="" or matiere[4]=="" or matiere[5]=="" or matiere[6]=="":
+            for samir in range(len(matiere)):
+                matiere[samir]=20
+        elif float((float(matiere[1])+float(matiere[3]))/2)==0.0 or matiere[1]==0.0 or matiere[2]==0.0 or matiere[3]==0.0 or matiere[4]==0.0 or matiere[5]==0.0 or matiere[6]==0.0 :
             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
             self.entry_ecole.configure(state="disabled")
             return
-        
         else:
-            notemode=(float(self.entry_maths.get())+float(self.entry_si.get()))/2
-            notemaths=float(self.entry_maths.get())
-            notephysique=float(self.entry_physique.get())
-            notesi=float(self.entry_si.get())
-            notefrancais=float(self.entry_francais.get())
-            noteanglais=float(self.entry_anglais.get())
-            noteinfo=float((self.entry_info.get()))
-            
+            matiere[0]=(float(self.entry_maths.get())+float(self.entry_si.get()))/2
+            for i in range(1,len(matiere)):
+                matiere[i]=float(matiere[i])
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """   
        
-        noteconcours=[(self.coeffccp[0]*notemode+self.coeffccp[1]*notemaths+self.coeffccp[2]*notephysique+self.coeffccp[3]*notesi+self.coeffccp[4]*notefrancais+self.coeffccp[5]*noteanglais+self.coeffccp[6]*noteinfo)/sum(self.coeffccp),(self.coeffccs[0]*notemode+self.coeffccs[1]*notemaths+self.coeffccs[2]*notephysique+self.coeffccs[3]*notesi+self.coeffccs[4]*notefrancais+self.coeffccs[5]*noteanglais+self.coeffccs[6]*noteinfo)/sum(self.coeffccs)]
+        noteconcours=[sum((self.coeffccp[k]*matiere[k] for k in range (len(matiere))))/sum(self.coeffccp)]+[sum((self.coeffccs[j]*matiere[j] for j in range (len(matiere))))/sum(self.coeffccs)]
         
         for communechoisie in range(len(self.commune)):
             if self.var_commune.get()=="Peu importe" or self.var_commune.get()=="" :
@@ -242,16 +219,16 @@ class ChoixEcole:
                 specialiteid=specialitechoisie+1
         
         if concoursid=="CCP" :
-           note=round(noteconcours[0],1)
+           note=round(noteconcours[0],2)
             
         if concoursid=="CCS":
            
-            note=round(noteconcours[1],1)
+            note=round(noteconcours[1],2)
             
         """Creation de la liste Ecole"""
         if concoursid==None:
                  for n in range(2):
-                     note=round(noteconcours[n],1)
+                     note=round(noteconcours[n],2)
                      ecoleintermediare=ecoleintermediare+model.filtre(specialiteid,communeid,concoursid,alternanceid,note)
                      self.listeecoles=list(set(ecoleintermediare))# Evite les doublons
                      break
