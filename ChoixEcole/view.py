@@ -148,9 +148,16 @@ class ChoixEcole:
         elif  P.replace(".", "", 1).isdigit() and float(P)<10.00 and P[0]!="0" and len(P)<5 :
             
             return True
-        elif  P.replace(".", "", 1).isdigit() and 1.00<=float(P)<10.00 and P[0]=="0" and len(P)<6:
-            
-            return True
+        elif  P.replace(".", "", 1).isdigit() and 1.00<=float(P)<10.00 and P[0]=="0":
+            try : 
+                if  P[1]=="0" and len(P)<5 and float(P)<1.00:
+                    return True
+                elif P[1]!="0" and len(P)<6 and P!="000":
+                    return True
+                else :
+                    return False
+            except IndexError:
+                return True
         elif P.replace(".", "", 1).isdigit() and 10.00<=float(P)<=20.00 and len(P)<6 and P[0]!="0":
             
             return True
