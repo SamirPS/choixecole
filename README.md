@@ -1,4 +1,6 @@
-#ChoixEcole
+<B> ChoixEcole</B>
+
+
 Francais:
 
 Le dossier ChoixEcole dispose des fichiers pour le professeur d'informatique .
