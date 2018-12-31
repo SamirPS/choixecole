@@ -146,42 +146,32 @@ class ChoixEcole:
         
         noteconcours=[sum((self.coeffccp[ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.coeffccp)]+[sum((self.coeffccs[ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.coeffccs)]
         
-        for specialitechoisie in range(len(self.specialite)):
-            if self.var_affichage[0].get()=="":
-                specialiteid=None
-                break
-            if self.var_affichage[0].get()==self.specialite[specialitechoisie]:
-                specialiteid=specialitechoisie+1
-                
-        for communechoisie in range(len(self.commune)):
-            if self.var_affichage[1].get()=="Peu importe" or self.var_affichage[1].get()=="" :
-                communeid=None
-                break
-            if self.var_affichage[1].get()==self.commune[communechoisie]:
-                communeid=self.commune[communechoisie]
+        if self.var_affichage[0].get()=="":
+            specialiteid=None
+        else:
+            specialiteid=self.specialite.index(self.var_affichage[0].get())+1
+            
+        if self.var_affichage[1].get() not in self.commune or self.var_affichage[1].get()=="Peu importe":
+            communeid=None
+        else :
+            communeid=self.var_affichage[1].get()
         
-        for concourschoisie in range(len(self.concours)):
-            if self.var_affichage[2].get()=="Peu importe" or self.var_affichage[2].get()=="":
-                concoursid=None
-                break
-            if self.var_affichage[2].get()==self.concours[concourschoisie]:
-                concoursid=self.concours[concourschoisie]
-                  
-        for alternancechoisie in range(len(self.alternance)):
-            if self.var_affichage[3].get()=="Peu importe" or self.var_affichage[3].get()=="" :
-                alternanceid=None
-                break
-            if self.var_affichage[3].get()==self.alternance[alternancechoisie]:
-                alternanceid=self.alternance[alternancechoisie]
-         
+        if self.var_affichage[2].get() not in self.concours or self.var_affichage[2].get()=="Peu importe":
+            concoursid=None
+        else :
+            concoursid=self.var_affichage[2].get()
+            
+        if self.var_affichage[3].get() not in self.alternance or self.var_affichage[3].get()=="Peu importe":
+            alternanceid=None
+        else :
+            alternanceid=self.var_affichage[3].get()
         
         if concoursid=="CCP" :
            note=round(noteconcours[0],2)
              
         if concoursid=="CCS":
-            
             note=round(noteconcours[1],2)
-             
+            
         """Creation de la liste Ecole"""
         if concoursid==None:
                  for n in range(2):
