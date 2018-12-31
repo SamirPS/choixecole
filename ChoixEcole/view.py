@@ -32,11 +32,6 @@ class ChoixEcole:
         self.root.geometry('900x260')
         self.root.resizable(False, False)
          
-        """Initialise les variables"""
-        self.var_specialite = StringVar(self.root)
-        self.var_commune=StringVar(self.root)
-        self.var_concours=StringVar(self.root)
-        self.var_alternance=StringVar(self.root)
          
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.callback),  '%P', '%S')
@@ -50,13 +45,13 @@ class ChoixEcole:
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
  
-        """Initialise les labels et les affiches """
+        """Initialise les variables et les entrys et label pour afficher Specialite,Commune,Concours,Alternane 
+           Et les elements 
+                                                                         """
+        self.affichage=('Specialité :','Commune :','Concours:','Alternance')
+        self.var_affichage=[StringVar(self.root) for x in range(len(self.affichage))]
+        self.labels_affichage= [ Label(self.root, text=f' {valeur}') for valeur in self.affichage ] 
         
-        Label(self.root, text='Specialité :' ).grid(row=0, column=2)
-        Label(self.root, text='Commune :').grid(row=0,column=3)
-        Label(self.root,text='Concours:').grid(row=0,column=4)
-        Label(self.root,text='Alternance').grid(row=0,column=5)
-        Label(self.root,text='Ecole:').grid(row=0,column=10)
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
          
@@ -80,26 +75,28 @@ class ChoixEcole:
          
         """On affiche les cases a cocher"""
         for specialite in range(len(self.specialite)):
-            Radiobutton(self.root,variable=self.var_specialite,text=self.specialite[specialite], value=self.specialite[specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[0],text=self.specialite[specialite], value=self.specialite[specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
         
         for commune in range(len(self.commune)):
-            Radiobutton(self.root,variable=self.var_commune,text=self.commune[commune], value=self.commune[commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[1],text=self.commune[commune], value=self.commune[commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
         
         for concours in range(len(self.concours)):
-            Radiobutton(self.root,variable=self.var_concours,text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[2],text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
         
         for alternance in range(len(self.alternance)):
-            Radiobutton(self.root,variable=self.var_alternance,text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[3],text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
             
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
             lab.grid(row=i*2, column=1)
-         
+        for i,lab in enumerate(self.labels_affichage):
+            lab.grid(row=0 ,column=i+2)
         for i, entry in enumerate(self.entries_matiere):
             entry.grid(row=i*2+1, column=1)
  
         self.entry_ecole.grid(row=1, rowspan=8,column=10) 
-         
+        Label(self.root,text='Ecole:').grid(row=0,column=10)
+        
         self.root.mainloop()
  
          
@@ -126,11 +123,13 @@ class ChoixEcole:
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         note=0
         zeropossible=("0","00.00","0.","00","00.0","0.0","0.00","00.")
-               
+        
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
+        
         """Pour éviter les erreurs dans la console python"""
+        
         for zero in range (len(zeropossible)):
             if zeropossible[zero] in matiere :
                 self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
@@ -146,35 +145,36 @@ class ChoixEcole:
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         
         noteconcours=[sum((self.coeffccp[ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.coeffccp)]+[sum((self.coeffccs[ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.coeffccs)]
-
-        for communechoisie in range(len(self.commune)):
-            if self.var_commune.get()=="Peu importe" or self.var_commune.get()=="" :
-                communeid=None
-                break
-            if self.var_commune.get()==self.commune[communechoisie]:
-                communeid=self.commune[communechoisie]
-                 
-        for alternancechoisie in range(len(self.alternance)):
-            if self.var_alternance.get()=="Peu importe" or self.var_alternance.get()=="" :
-                alternanceid=None
-                break
-            if self.var_alternance.get()==self.alternance[alternancechoisie]:
-                alternanceid=self.alternance[alternancechoisie]
-         
-        for concourschoisie in range(len(self.concours)):
-            if self.var_concours.get()=="Peu importe" or self.var_concours.get()=="":
-                concoursid=None
-                break
-            if self.var_concours.get()==self.concours[concourschoisie]:
-                concoursid=self.concours[concourschoisie]
-         
+        
         for specialitechoisie in range(len(self.specialite)):
-            if self.var_specialite.get()=="":
+            if self.var_affichage[0].get()=="":
                 specialiteid=None
                 break
-            if self.var_specialite.get()==self.specialite[specialitechoisie]:
+            if self.var_affichage[0].get()==self.specialite[specialitechoisie]:
                 specialiteid=specialitechoisie+1
+                
+        for communechoisie in range(len(self.commune)):
+            if self.var_affichage[1].get()=="Peu importe" or self.var_affichage[1].get()=="" :
+                communeid=None
+                break
+            if self.var_affichage[1].get()==self.commune[communechoisie]:
+                communeid=self.commune[communechoisie]
+        
+        for concourschoisie in range(len(self.concours)):
+            if self.var_affichage[2].get()=="Peu importe" or self.var_affichage[2].get()=="":
+                concoursid=None
+                break
+            if self.var_affichage[2].get()==self.concours[concourschoisie]:
+                concoursid=self.concours[concourschoisie]
+                  
+        for alternancechoisie in range(len(self.alternance)):
+            if self.var_affichage[3].get()=="Peu importe" or self.var_affichage[3].get()=="" :
+                alternanceid=None
+                break
+            if self.var_affichage[3].get()==self.alternance[alternancechoisie]:
+                alternanceid=self.alternance[alternancechoisie]
          
+        
         if concoursid=="CCP" :
            note=round(noteconcours[0],2)
              
