@@ -39,7 +39,7 @@ class ChoixEcole:
         self.var_alternance=StringVar(self.root)
          
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
-        vcmd = (self.root.register(self.callback),'%d',  '%P', '%S')
+        vcmd = (self.root.register(self.callback),  '%P', '%S')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
@@ -103,9 +103,8 @@ class ChoixEcole:
         self.root.mainloop()
  
          
-    def callback(self, action, value_if_allowed, text):
+    def callback(self, value_if_allowed, text):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes"""
-        
         if text=="²":
             return False
         elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
@@ -132,15 +131,15 @@ class ChoixEcole:
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
         """Pour éviter les erreurs dans la console python"""
-        for i in range (len(zeropossible)):
-            if zeropossible[i] in matiere :
+        for zero in range (len(zeropossible)):
+            if zeropossible[zero] in matiere :
                 self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
                 self.entry_ecole.configure(state="disabled")
                 return
                 
         if "" in matiere : 
-            for j in range (len((matiere))):
-                matiere[j]=20
+            for vide in range (len((matiere))):
+                matiere[vide]=20
         else:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(1,len(self.entries_matiere))]
              
