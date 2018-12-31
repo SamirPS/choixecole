@@ -9,14 +9,14 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
+
 def renvoie_information(colonne,table):
     """
        LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
                                                                                                             """
-    curseur.execute("SELECT "+colonne+" FROM "+table)
-    informationvoulue=[resultat[0] for resultat in curseur ]
+    informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
     if colonne=="Commune" or colonne=="Admission" or colonne=="Alternance":
         informationvoulue=list(set(informationvoulue))
         informationvoulue=["Peu importe"]+informationvoulue
@@ -50,6 +50,5 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   
         
-    curseur.execute(requete,variables)
-    ecoles=[ecole for ecole in curseur]
+    ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
