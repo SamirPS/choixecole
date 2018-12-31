@@ -16,11 +16,9 @@ def renvoie_information(colonne,table):
        Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
                                                                                                             """
     curseur.execute("SELECT "+colonne+" FROM "+table)
-    informationvoulue=[]
-    for resultat in curseur:
-        informationvoulue.append(resultat[0])
+    informationvoulue=[resultat[0] for resultat in curseur ]
     if colonne=="Commune" or colonne=="Admission" or colonne=="Alternance":
-        informationvoulue[0:0] = ["Peu importe"]
+        informationvoulue=["Peu importe"]+informationvoulue
         informationvoulue=list(set(informationvoulue))
     return informationvoulue
 
