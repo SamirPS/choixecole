@@ -72,11 +72,9 @@ class ChoixEcole:
         for commune in range(len(self.information_desirer[1])):
             Radiobutton(self.root,variable=self.var_affichage[1],text=self.information_desirer[1][commune], value=self.information_desirer[1][commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
         
-        for concours in range(len(self.information_desirer[2])):
-            Radiobutton(self.root,variable=self.var_affichage[2],text=self.information_desirer[2][concours], value=self.information_desirer[2][concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
-        
-        for alternance in range(len(self.information_desirer[3])):
-            Radiobutton(self.root,variable=self.var_affichage[3],text=self.information_desirer[3][alternance], value=self.information_desirer[3][alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
+        for concours_alternance in range(len(self.information_desirer[2])):
+            Radiobutton(self.root,variable=self.var_affichage[2],text=self.information_desirer[2][concours_alternance], value=self.information_desirer[2][concours_alternance],command=self.AffichageEcole).grid(row=concours_alternance+1, column=4,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[3],text=self.information_desirer[3][concours_alternance], value=self.information_desirer[3][concours_alternance],command=self.AffichageEcole).grid(row=concours_alternance+1, column=5,sticky="w")
             
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
