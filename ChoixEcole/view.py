@@ -41,7 +41,6 @@ class ChoixEcole:
         self.var_affichage=[StringVar(self.root) for x in range(len(self.affichage))]
         self.labels_affichage= [ Label(self.root, text=f' {valeur}') for valeur in self.affichage ] 
         
-        
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCSCoeff"),("Coefficient","CCSCoeff"))
         self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]
@@ -78,10 +77,8 @@ class ChoixEcole:
  
         self.entry_ecole.grid(row=1, rowspan=8,column=10) 
         Label(self.root,text='Ecole:').grid(row=0,column=10)
-        
         self.root.mainloop()
  
-         
     def callback(self, value_if_allowed, text):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes"""
         if text=="²":
