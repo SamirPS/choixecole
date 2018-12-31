@@ -20,11 +20,8 @@ from tkinter.ttk import *
  
 class ChoixEcole:
      
-    """Cette class est l'interface graphique du projet choix ecole"""
-     
     def __init__(self):
-         
-         
+        
         """Initialise l'application et change le titre"""
   
         self.root = Tk()
@@ -32,8 +29,8 @@ class ChoixEcole:
         self.root.geometry('900x260')
         self.root.resizable(False, False)
          
-         
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
+        
         vcmd = (self.root.register(self.callback),  '%P', '%S')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
@@ -54,16 +51,11 @@ class ChoixEcole:
         
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
-         
-        self.coeffccs=model.renvoie_information("Coefficient","CCSCoeff")
-        self.coeffccp=model.renvoie_information("Coefficient","CCPCoeff")
-        self.specialite=model.renvoie_information("Nom","Specialite")
-        self.commune=model.renvoie_information("Commune","EcoleS")
-        self.concours=model.renvoie_information("Admission","EcoleS")
-        self.alternance=model.renvoie_information("Alternance","EcoleSpe")
-         
+        self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCSCoeff"),("Coefficient","CCSCoeff"))
+        self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]
+
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
-         
+        
         textaffiche=""
         self.listeecoles=list(set(model.filtre(None,None,None,None,20)))
         for texteaafficher in range(len(self.listeecoles)):
@@ -74,17 +66,17 @@ class ChoixEcole:
         self.entry_ecole.configure(state="disabled")
          
         """On affiche les cases a cocher"""
-        for specialite in range(len(self.specialite)):
-            Radiobutton(self.root,variable=self.var_affichage[0],text=self.specialite[specialite], value=self.specialite[specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
+        for specialite in range(len(self.information_desirer[0])):
+            Radiobutton(self.root,variable=self.var_affichage[0],text=self.information_desirer[0][specialite], value=self.information_desirer[0][specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
         
-        for commune in range(len(self.commune)):
-            Radiobutton(self.root,variable=self.var_affichage[1],text=self.commune[commune], value=self.commune[commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
+        for commune in range(len(self.information_desirer[1])):
+            Radiobutton(self.root,variable=self.var_affichage[1],text=self.information_desirer[1][commune], value=self.information_desirer[1][commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
         
-        for concours in range(len(self.concours)):
-            Radiobutton(self.root,variable=self.var_affichage[2],text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
+        for concours in range(len(self.information_desirer[2])):
+            Radiobutton(self.root,variable=self.var_affichage[2],text=self.information_desirer[2][concours], value=self.information_desirer[2][concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
         
-        for alternance in range(len(self.alternance)):
-            Radiobutton(self.root,variable=self.var_affichage[3],text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
+        for alternance in range(len(self.information_desirer[3])):
+            Radiobutton(self.root,variable=self.var_affichage[3],text=self.information_desirer[3][alternance], value=self.information_desirer[3][alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
             
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
@@ -144,24 +136,24 @@ class ChoixEcole:
              
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         
-        noteconcours=[sum((self.coeffccp[ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.coeffccp)]+[sum((self.coeffccs[ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.coeffccs)]
+        noteconcours=[sum((self.information_desirer[5][ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.information_desirer[5])]+[sum((self.information_desirer[4][ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.information_desirer[4])]
         
         if self.var_affichage[0].get()=="":
             choix_specialite=None
         else:
-            choix_specialite=self.specialite.index(self.var_affichage[0].get())+1
+            choix_specialite=self.information_desirer[0].index(self.var_affichage[0].get())+1
             
-        if self.var_affichage[1].get() not in self.commune or self.var_affichage[1].get()=="Peu importe":
+        if self.var_affichage[1].get() not in self.information_desirer[1] or self.var_affichage[1].get()=="Peu importe":
             choix_commune=None
         else :
             choix_commune=self.var_affichage[1].get()
         
-        if self.var_affichage[2].get() not in self.concours or self.var_affichage[2].get()=="Peu importe":
+        if self.var_affichage[2].get() not in self.information_desirer[2] or self.var_affichage[2].get()=="Peu importe":
             choix_concours=None
         else :
             choix_concours=self.var_affichage[2].get()
             
-        if self.var_affichage[3].get() not in self.alternance or self.var_affichage[3].get()=="Peu importe":
+        if self.var_affichage[3].get() not in self.information_desirer[3] or self.var_affichage[3].get()=="Peu importe":
             choix_alternance=None
         else :
             choix_alternance=self.var_affichage[3].get()
