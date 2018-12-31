@@ -44,11 +44,11 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
         conditions.append(("Commune","=",communeid))
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id"
-    variables=()  
+    
+    variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
-        variables=variables+(conditions[i][2],)   
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
