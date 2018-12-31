@@ -147,40 +147,40 @@ class ChoixEcole:
         noteconcours=[sum((self.coeffccp[ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.coeffccp)]+[sum((self.coeffccs[ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.coeffccs)]
         
         if self.var_affichage[0].get()=="":
-            specialiteid=None
+            choix_specialite=None
         else:
-            specialiteid=self.specialite.index(self.var_affichage[0].get())+1
+            choix_specialite=self.specialite.index(self.var_affichage[0].get())+1
             
         if self.var_affichage[1].get() not in self.commune or self.var_affichage[1].get()=="Peu importe":
-            communeid=None
+            choix_commune=None
         else :
-            communeid=self.var_affichage[1].get()
+            choix_commune=self.var_affichage[1].get()
         
         if self.var_affichage[2].get() not in self.concours or self.var_affichage[2].get()=="Peu importe":
-            concoursid=None
+            choix_concours=None
         else :
-            concoursid=self.var_affichage[2].get()
+            choix_concours=self.var_affichage[2].get()
             
         if self.var_affichage[3].get() not in self.alternance or self.var_affichage[3].get()=="Peu importe":
-            alternanceid=None
+            choix_alternance=None
         else :
-            alternanceid=self.var_affichage[3].get()
+            choix_alternance=self.var_affichage[3].get()
         
-        if concoursid=="CCP" :
+        if choix_concours=="CCP" :
            note=round(noteconcours[0],2)
              
-        if concoursid=="CCS":
+        if choix_concours=="CCS":
             note=round(noteconcours[1],2)
             
         """Creation de la liste Ecole"""
-        if concoursid==None:
+        if choix_concours==None:
                  for n in range(2):
                      note=round(noteconcours[n],2)
-                     ecoleintermediare=ecoleintermediare+model.filtre(specialiteid,communeid,concoursid,alternanceid,note)
+                     ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,note)
                      self.listeecoles=list(set(ecoleintermediare))
                      break
         else:
-            self.listeecoles=list(set(model.filtre(specialiteid,communeid,concoursid,alternanceid,note)))
+            self.listeecoles=list(set(model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,note)))
          
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
