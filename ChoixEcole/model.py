@@ -26,7 +26,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    
     conditions=[]
     if note>=15 :
         conditions.append(("Niveau","<=",2))
@@ -51,8 +50,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,note):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
         variables=variables+(conditions[i][2],)   
         
-    ecoles=[]
     curseur.execute(requete,variables)
-    for ecole in curseur :
-        ecoles.append(ecole)
+    ecoles=[ecole for ecole in curseur]
     return ecoles
