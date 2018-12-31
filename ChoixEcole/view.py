@@ -5,19 +5,11 @@ Created on Sun Dec 30 19:59:28 2018
 
 @author: samir
 """
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 20 19:41:49 2018
-@author: samir
-"""
 from tkinter import Tk,StringVar, Label, Radiobutton,Entry
 import model
 import tkinter.scrolledtext as tkscrolled
 from tkinter.ttk import *
- 
- 
+
 class ChoixEcole:
      
     def __init__(self):
