@@ -32,30 +32,32 @@ class ChoixEcole:
         self.root.geometry('900x260')
         self.root.resizable(False, False)
          
-        """Initialise les variables et met 20 comme valeur par defaut """
+        """Initialise les variables"""
         self.var_specialite = StringVar(self.root)
         self.var_commune=StringVar(self.root)
         self.var_concours=StringVar(self.root)
         self.var_alternance=StringVar(self.root)
          
-        """Initialise les labels et entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
+        """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         vcmd = (self.root.register(self.callback),'%d',  '%P', '%S')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
-       
+        """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
+        
         self.matieres = ('Maths', 'Physique', 'SI', 'Informatique', 'Francais', 'Anglais')
         self.var_matieres = [StringVar(self.root) for x in range(len(self.matieres))]
         self.labels_matiere = [ Label(self.root, text=f'Rentre ta moyenne de {mat}') for mat in self.matieres ] 
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
  
- 
-        self.label_commune = Label(self.root, text='Commune :')
-        self.label_spe = Label(self.root, text='Specialité :' )
-        self.label_concours=Label(self.root,text='Concours:')
-        self.label_ecole=Label(self.root,text='Ecole:')
-        self.label_alternance=Label(self.root,text='Alternance')
-         
+        """Initialise les labels et les affiches """
+        
+        Label(self.root, text='Specialité :' ).grid(row=0, column=2)
+        Label(self.root, text='Commune :').grid(row=0,column=3)
+        Label(self.root,text='Concours:').grid(row=0,column=4)
+        Label(self.root,text='Alternance').grid(row=0,column=5)
+        Label(self.root,text='Ecole:').grid(row=0,column=10)
+        
          
         """Initalise les listes en utilisant les fonction du fichier model.py"""
          
@@ -79,36 +81,24 @@ class ChoixEcole:
          
         """On affiche les cases a cocher"""
         for specialite in range(len(self.specialite)):
-            choix_specialite = Radiobutton(self.root,variable=self.var_specialite,text=self.specialite[specialite], value=self.specialite[specialite],command=self.AffichageEcole)
-            choix_specialite.grid(row=specialite+1, column=2,sticky="w")
-             
+            Radiobutton(self.root,variable=self.var_specialite,text=self.specialite[specialite], value=self.specialite[specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
+        
         for commune in range(len(self.commune)):
-            choix_commune = Radiobutton(self.root,variable=self.var_commune,text=self.commune[commune], value=self.commune[commune],command=self.AffichageEcole)
-            choix_commune.grid(row=commune+1, column=3,sticky="w")
-         
+            Radiobutton(self.root,variable=self.var_commune,text=self.commune[commune], value=self.commune[commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
+        
         for concours in range(len(self.concours)):
-            choix_concours= Radiobutton(self.root,variable=self.var_concours,text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole)
-            choix_concours.grid(row=concours+1, column=4,sticky="w")
-             
+            Radiobutton(self.root,variable=self.var_concours,text=self.concours[concours], value=self.concours[concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
+        
         for alternance in range(len(self.alternance)):
-            choix_alternance = Radiobutton(self.root,variable=self.var_alternance,text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole)
-            choix_alternance.grid(row=alternance+1, column=5,sticky="w")
-         
-             
-            """On place les élèments """
+            Radiobutton(self.root,variable=self.var_alternance,text=self.alternance[alternance], value=self.alternance[alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
+            
+        """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
             lab.grid(row=i*2, column=1)
          
         for i, entry in enumerate(self.entries_matiere):
             entry.grid(row=i*2+1, column=1)
  
-         
-        self.label_spe.grid(row=0, column=2)
-        self.label_commune.grid(row=0,column=3)
-        self.label_concours.grid(row=0,column=4)
-        self.label_ecole.grid(row=0,column=10)
-        self.label_alternance.grid(row=0,column=5)
-         
         self.entry_ecole.grid(row=1, rowspan=8,column=10) 
          
         self.root.mainloop()
@@ -152,7 +142,7 @@ class ChoixEcole:
             return
          
         else:
-            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[O].get()) for O in range(1,len(self.entries_matiere))]
+            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(1,len(self.entries_matiere))]
              
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         
@@ -195,7 +185,7 @@ class ChoixEcole:
              
         """Creation de la liste Ecole"""
         if concoursid==None:
-                 for n in range(1):
+                 for n in range(2):
                      note=round(noteconcours[n],2)
                      ecoleintermediare=ecoleintermediare+model.filtre(specialiteid,communeid,concoursid,alternanceid,note)
                      self.listeecoles=list(set(ecoleintermediare))
