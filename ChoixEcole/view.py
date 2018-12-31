@@ -132,11 +132,11 @@ class ChoixEcole:
             matiere=[20 for vide in range (len(matiere))]
             
         else:
-            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(1,len(self.entries_matiere))]
+            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
              
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         
-        noteconcours=[sum((self.information_desirer[5][ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.information_desirer[5])]+[sum((self.information_desirer[4][ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.information_desirer[4])]
+        noteconcours=[sum((self.information_desirer[4][ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.information_desirer[4])]+[sum((self.information_desirer[5][ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.information_desirer[5])]
         
         if self.var_affichage[0].get()=="":
             choix_specialite=None
@@ -152,17 +152,12 @@ class ChoixEcole:
             choix_concours=None
         else :
             choix_concours=self.var_affichage[2].get()
+            note=round(noteconcours[self.information_desirer[2].index(self.var_affichage[2].get())-1],2)
             
         if self.var_affichage[3].get() not in self.information_desirer[3] or self.var_affichage[3].get()=="Peu importe":
             choix_alternance=None
         else :
             choix_alternance=self.var_affichage[3].get()
-        
-        if choix_concours=="CCP" :
-           note=round(noteconcours[0],2)
-             
-        if choix_concours=="CCS":
-            note=round(noteconcours[1],2)
             
         """Creation de la liste Ecole"""
         if choix_concours==None:
