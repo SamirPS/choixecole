@@ -138,8 +138,8 @@ class ChoixEcole:
                 return
                 
         if "" in matiere : 
-            for vide in range (len((matiere))):
-                matiere[vide]=20
+            matiere=[20 for vide in range (len(matiere))]
+            
         else:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(1,len(self.entries_matiere))]
              

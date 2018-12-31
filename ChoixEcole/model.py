@@ -18,8 +18,8 @@ def renvoie_information(colonne,table):
     curseur.execute("SELECT "+colonne+" FROM "+table)
     informationvoulue=[resultat[0] for resultat in curseur ]
     if colonne=="Commune" or colonne=="Admission" or colonne=="Alternance":
-        informationvoulue=["Peu importe"]+informationvoulue
         informationvoulue=list(set(informationvoulue))
+        informationvoulue=["Peu importe"]+informationvoulue
     return informationvoulue
 
 def filtre(specialiteid,communeid,concoursid,alternanceid,note):
