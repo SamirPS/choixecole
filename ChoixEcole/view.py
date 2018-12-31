@@ -169,8 +169,7 @@ class ChoixEcole:
                  for n in range(2):
                      note=round(noteconcours[n],2)
                      ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,note)
-                     self.listeecoles=list(set(ecoleintermediare))
-                     break
+                 self.listeecoles=list(set(ecoleintermediare))
         else:
             self.listeecoles=list(set(model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,note)))
          
