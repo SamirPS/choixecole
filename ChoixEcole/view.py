@@ -30,7 +30,7 @@ class ChoixEcole:
         
         self.matieres = ('Maths', 'Physique', 'SI', 'Informatique', 'Francais', 'Anglais')
         self.var_matieres = [StringVar(self.root) for x in range(len(self.matieres))]
-        self.labels_matiere = [ Label(self.root, text=f'Rentre ta moyenne de {mat}') for mat in self.matieres ] 
+        self.labels_matiere = [ Label(self.root, text='Rentre ta moyenne de '+mat) for mat in self.matieres ] 
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
  
@@ -39,7 +39,7 @@ class ChoixEcole:
                                                                          """
         self.affichage=('Specialité :','Commune :','Concours:','Alternance')
         self.var_affichage=[StringVar(self.root) for x in range(len(self.affichage))]
-        self.labels_affichage= [ Label(self.root, text=f' {valeur}') for valeur in self.affichage ] 
+        self.labels_affichage= [ Label(self.root, text=valeur) for valeur in self.affichage ] 
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCSCoeff"),("Coefficient","CCSCoeff"))
@@ -77,6 +77,7 @@ class ChoixEcole:
  
         self.entry_ecole.grid(row=1, rowspan=8,column=10) 
         Label(self.root,text='Ecole:').grid(row=0,column=10)
+        
         self.root.mainloop()
  
     def callback(self, value_if_allowed, text):
