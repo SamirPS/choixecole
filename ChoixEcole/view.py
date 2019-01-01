@@ -42,7 +42,7 @@ class ChoixEcole:
         self.labels_affichage= [ Label(self.root, text=valeur) for valeur in self.affichage ] 
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
-        self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCSCoeff"),("Coefficient","CCSCoeff"))
+        self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCPCoeff"),("Coefficient","CCSCoeff"))
         self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]
 
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
@@ -95,7 +95,13 @@ class ChoixEcole:
             except IndexError:
                 return True
         return False
+    
+    def NoteCoefficient(self,coefficient,matiere):
+        """Renvoie la note coefficiente"""
         
+        note=[sum((coefficient[i]*matiere[i] for i in range (len(matiere))))/sum(coefficient)]
+        return note[0]     
+    
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
         ecoleintermediare=[]
@@ -124,7 +130,7 @@ class ChoixEcole:
              
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         
-        noteconcours=[sum((self.information_desirer[4][ccp]*matiere[ccp] for ccp in range (len(matiere))))/sum(self.information_desirer[4])]+[sum((self.information_desirer[5][ccs]*matiere[ccs] for ccs in range (len(matiere))))/sum(self.information_desirer[5])]
+        noteconcours=[self.NoteCoefficient(self.information_desirer[i],matiere) for i in range(4,6)]
         
         if self.var_affichage[0].get()=="":
             choix_specialite=None
