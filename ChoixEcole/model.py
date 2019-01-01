@@ -14,7 +14,7 @@ def renvoie_information(colonne,table):
     """
        LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
-       Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
+       Ex:renvoie_information("Nom","Specialite") renvoie les spécialites dans la liste Informationvoulue
                                                                                                             """
     colonne_peuimporte=("Commune","Admission","Alternance")
     informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
