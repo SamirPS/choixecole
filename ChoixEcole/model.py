@@ -16,8 +16,9 @@ def renvoie_information(colonne,table):
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie la liste des spécialites dans la liste Informationvoulue
                                                                                                             """
+    colonne_peuimporte=("Commune","Admission","Alternance")
     informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
-    if colonne=="Commune" or colonne=="Admission" or colonne=="Alternance":
+    if colonne in colonne_peuimporte:
         informationvoulue=["Peu importe"]+sorted(list(set(informationvoulue)))
     return informationvoulue
 
