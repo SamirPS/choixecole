@@ -29,7 +29,7 @@ class ChoixEcole:
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
         
         self.matieres = ('Maths', 'Physique', 'SI', 'Informatique', 'Francais', 'Anglais')
-        self.var_matieres = [StringVar(self.root) for x in range(len(self.matieres))]
+        self.var_matieres = [StringVar(self.root) for mat in range(len(self.matieres))]
         self.labels_matiere = [ Label(self.root, text='Rentre ta moyenne de '+mat) for mat in self.matieres ] 
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
@@ -38,8 +38,8 @@ class ChoixEcole:
            Et les elements 
                                                                          """
         self.affichage=('Specialité :','Commune :','Concours:','Alternance')
-        self.var_affichage=[StringVar(self.root) for x in range(len(self.affichage))]
-        self.labels_affichage= [ Label(self.root, text=valeur) for valeur in self.affichage ] 
+        self.var_affichage=[StringVar(self.root) for aff in range(len(self.affichage))]
+        self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"),("Coefficient","CCPCoeff"),("Coefficient","CCSCoeff"))
