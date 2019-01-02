@@ -23,7 +23,7 @@ def renvoie_information(colonne,table):
     return informationvoulue
 
 def renvoie_coefficient():
-    colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais "
+    colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais,Bonification "
     CCP,CCS={},{}
     curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCS'" )
     for resultat in curseur:

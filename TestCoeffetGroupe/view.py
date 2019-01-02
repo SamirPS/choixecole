@@ -18,7 +18,6 @@ class ChoixEcole:
   
         self.root = Tk()
         self.root.title("ChoixEcole")
-        self.root.geometry('900x260')
         self.root.resizable(False, False)
          
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
@@ -40,16 +39,23 @@ class ChoixEcole:
         self.affichage=('Specialité :','Commune :','Concours:','Alternance')
         self.var_affichage=[StringVar(self.root) for aff in range(len(self.affichage))]
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
+        for i in range(1,4):
+            self.var_affichage[i].set("Peu importe")
         self.ccs,self.ccp=model.renvoie_coefficient()
+        
+        """Les années de prepa"""
+        self.anneeprepa=("3/2","5/2","7/2")
+        self.annee=StringVar(self.root)
+        self.annee.set("3/2")
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"))
         self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]
-
+        
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         
         textaffiche=""
-        self.listeecoles=list(set(model.filtre(None,None,None,None,None,299999)))
+        self.listeecoles=list(set(model.filtre(None,None,None,None,None,999999)))
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
         self.entry_ecole.insert(0.0,textaffiche)
@@ -60,13 +66,14 @@ class ChoixEcole:
         """On affiche les cases a cocher"""
         for specialite in range(len(self.information_desirer[0])):
             Radiobutton(self.root,variable=self.var_affichage[0],text=self.information_desirer[0][specialite], value=self.information_desirer[0][specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
-        
         for commune in range(len(self.information_desirer[1])):
             Radiobutton(self.root,variable=self.var_affichage[1],text=self.information_desirer[1][commune], value=self.information_desirer[1][commune],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
         for concours in range(len(self.information_desirer[2])):
             Radiobutton(self.root,variable=self.var_affichage[2],text=self.information_desirer[2][concours], value=self.information_desirer[2][concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
         for alternance in range(len(self.information_desirer[3])):
             Radiobutton(self.root,variable=self.var_affichage[3],text=self.information_desirer[3][alternance], value=self.information_desirer[3][alternance],command=self.AffichageEcole).grid(row=alternance+1, column=5,sticky="w")
+        for annee in range(len(self.anneeprepa)):
+             Radiobutton(self.root,variable=self.annee,text=self.anneeprepa[annee], value=self.anneeprepa[annee],command=self.AffichageEcole).grid(row=annee+1, column=6,sticky="w")
             
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
@@ -76,8 +83,9 @@ class ChoixEcole:
         for i, entry in enumerate(self.entries_matiere):
             entry.grid(row=i*2+1, column=1)
  
-        self.entry_ecole.grid(row=1, rowspan=8,column=10) 
-        Label(self.root,text='Ecole:').grid(row=0,column=10)
+        self.entry_ecole.grid(row=1,rowspan=8,column=16) 
+        Label(self.root,text='Ecole:').grid(row=0,column=16)
+        Label(self.root,text='Année:').grid(row=0,column=6)
         
         self.root.mainloop()
  
@@ -130,28 +138,32 @@ class ChoixEcole:
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         noteccp=[model.NoteCoefficient(self.ccp[cle],matiere) for cle in self.ccp]
         noteccs=[model.NoteCoefficient(self.ccs[cle],matiere) for cle in self.ccs]
-        
+        bonificationccs=[self.ccs[cle][-1] for cle in self.ccs]
+        bonificationccp=[self.ccp[cle][-1] for cle in self.ccp]
         if self.var_affichage[0].get()=="":
             choix_specialite=None
         else:
             choix_specialite=self.information_desirer[0].index(self.var_affichage[0].get())+1
             
-        if self.var_affichage[1].get() not in self.information_desirer[1] or self.var_affichage[1].get()=="Peu importe":
+        if  self.var_affichage[1].get()=="Peu importe":
             choix_commune=None
         else :
             choix_commune=self.var_affichage[1].get()
         
-        if self.var_affichage[2].get() not in self.information_desirer[2] or self.var_affichage[2].get()=="Peu importe":
+        if  self.var_affichage[2].get()=="Peu importe":
             choix_concours=None
         else :
             choix_concours=self.var_affichage[2].get()
             
-        if self.var_affichage[3].get() not in self.information_desirer[3] or self.var_affichage[3].get()=="Peu importe":
+        if self.var_affichage[3].get()=="Peu importe":
             choix_alternance=None
         else :
             choix_alternance=self.var_affichage[3].get()
         
-        
+        if self.annee.get()=="3/2":
+            noteccp=[noteccp[i]+bonificationccp[i] for i in range (len(noteccp))]
+            noteccs=[noteccs[i]+bonificationccs[i] for i in range (len(noteccs))]
+            
         if choix_concours=="CCS":
             self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_specialite,choix_commune,choix_concours,choix_alternance)))
         elif choix_concours=="CCP":
