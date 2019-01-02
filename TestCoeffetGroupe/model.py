@@ -38,7 +38,7 @@ def renvoie_coefficient():
 
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
-    note=[sum((coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere))))/sum(coefficient)]
+    note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere)))]
     return note[0] 
   
 def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
@@ -46,13 +46,7 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    conditions=[]
-    if note>=15 :
-        conditions.append(("Niveau","<=",2))
-    elif 10<=note:
-        conditions.append(("Niveau","<=",1))
-    else:
-        conditions.append(("Niveau","<=",0))
+    conditions=[("Points","<=",note)]
     
     if groupe!=None:
         conditions.append(("Groupe","=",groupe))
@@ -65,11 +59,11 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
     if communeid!=None:
         conditions.append(("Commune","=",communeid))
     
-    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id"
+    requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
-        requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
+        requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
         
-    ecoles=[ecole for ecole in curseur.execute(requete,variables)]
+    ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
     return ecoles

@@ -49,7 +49,7 @@ class ChoixEcole:
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         
         textaffiche=""
-        self.listeecoles=list(set(model.filtre(None,None,None,None,None,20)))
+        self.listeecoles=list(set(model.filtre(None,None,None,None,None,299999)))
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
         self.entry_ecole.insert(0.0,textaffiche)
