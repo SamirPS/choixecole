@@ -40,7 +40,7 @@ class ChoixEcole:
         self.affichage=('Specialité :','Commune :','Concours:','Alternance')
         self.var_affichage=[StringVar(self.root) for aff in range(len(self.affichage))]
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
-        self.ccs,self.ccp,self.GroupeCCS,self.GroupeCCP=model.renvoie_coefficient()
+        self.ccs,self.ccp=model.renvoie_coefficient()
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Commune","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"))
@@ -97,7 +97,12 @@ class ChoixEcole:
                 return True
         return False
     
-
+    def Ecole(self,listenote,dictonnaire,choix_specialite,choix_commune,choix_concours,choix_alternance):
+        for note in range(len(listenote)):
+                for cle in dictonnaire:
+                    self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,cle,listenote[note])
+        return self.listeecoles
+        
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
         self.listeecoles=[]
@@ -124,8 +129,8 @@ class ChoixEcole:
         else:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteccp=[model.NoteCoefficient(self.ccp[groupe],matiere) for groupe in self.GroupeCCP]
-        noteccs=[model.NoteCoefficient(self.ccs[groupe],matiere) for groupe in self.GroupeCCS]
+        noteccp=[model.NoteCoefficient(self.ccp[cle],matiere) for cle in self.ccp]
+        noteccs=[model.NoteCoefficient(self.ccs[cle],matiere) for cle in self.ccs]
         
         if self.var_affichage[0].get()=="":
             choix_specialite=None
@@ -146,21 +151,15 @@ class ChoixEcole:
             choix_alternance=None
         else :
             choix_alternance=self.var_affichage[3].get()
-         
+        
+        
         if choix_concours=="CCS":
-            for note in range(len(noteccs)):
-                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
-            self.listeecoles=list(set(self.listeecoles))
+            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_specialite,choix_commune,choix_concours,choix_alternance)))
         elif choix_concours=="CCP":
-            for note in range(len(noteccp)):
-                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
-            self.listeecoles=list(set(self.listeecoles))  
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_specialite,choix_commune,choix_concours,choix_alternance)))
         else:
-            for note in range(len(noteccs)):
-                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
-            for note in range(len(noteccp)):
-                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
-            self.listeecoles=list(set(self.listeecoles))  
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_specialite,choix_commune,choix_concours,choix_alternance)+self.Ecole(noteccs,self.ccs,choix_specialite,choix_commune,choix_concours,choix_alternance)))
+ 
             
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
