@@ -100,8 +100,8 @@ class ChoixEcole:
 
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
-        ecoleintermediare=[]
-        textaffiche=""
+        self.listeecoles=[]
+        textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         note=0
         zeropossible=("0","00.00","0.","00","00.0","0.0","0.00","00.")
@@ -149,18 +149,18 @@ class ChoixEcole:
          
         if choix_concours=="CCS":
             for note in range(len(noteccs)):
-                ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
-            self.listeecoles=list(set(ecoleintermediare))
+                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
+            self.listeecoles=list(set(self.listeecoles))
         elif choix_concours=="CCP":
             for note in range(len(noteccp)):
-                ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
-            self.listeecoles=list(set(ecoleintermediare))  
+                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
+            self.listeecoles=list(set(self.listeecoles))  
         else:
             for note in range(len(noteccs)):
-                ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
+                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCS[note],noteccs[note])
             for note in range(len(noteccp)):
-                ecoleintermediare=ecoleintermediare+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
-            self.listeecoles=list(set(ecoleintermediare))  
+                self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,self.GroupeCCP[note],noteccp[note])
+            self.listeecoles=list(set(self.listeecoles))  
             
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):

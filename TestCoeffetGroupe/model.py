@@ -70,7 +70,6 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
         requete=requete+" AND "+conditions[i][0]+conditions[i][1]+"? "
-
-
+        
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
