@@ -10,6 +10,8 @@ Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction 
 
 5)De mếme pour l'alternance
 
+Si vous changez les notes vous devez cocher un button (en dessous de Spécialité,Commune,Concours,Alternance) pour mettre a jour la liste des écoles.
+
 Le programme en ayant vos notes et vos choix va vous afficher dans la zone de texte à droite les écoles où vous serez éligible .Maintenant je vais vous expliquer comment ajouter une école ou une spécialité :
 
 École : Ajouter une entrée dans la table École et remplissez tous les champs. Points est la barre d'admissibilité et le groupe est pour avoir les bons coefficient choisissez un nom disponible dans la table coefficient .Pour l'afficher dans le programme il faut créer un couple unique dans la table EcoleSpe compose de l'id de l'école, l'id de la spécialité et celui de l'alternance .Spécialité : Ajouter une nouvelle entrée et mettez le nom de votre spécialité l'id à gauche est celui à mettre dans idspé dans la table EcoleSpe.
