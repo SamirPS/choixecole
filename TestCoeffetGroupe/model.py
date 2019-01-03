@@ -24,7 +24,7 @@ def renvoie_information(colonne,table):
 
 def renvoie_coefficient():
     colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais,Bonification "
-    CCP,CCS={},{}
+    CCS,CCP={},{}
     curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCS'" )
     for resultat in curseur:
         CCS[resultat[0]]=list(resultat[1:])
@@ -33,11 +33,14 @@ def renvoie_coefficient():
         CCP[resultat[0]]=list(resultat[1:])
     return CCS,CCP
 
+        
+    
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
     note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere)))]
     return note[0] 
-  
+
+   
 def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
     
     """
@@ -57,10 +60,8 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
         conditions.append(("Commune","=",communeid))
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
-    
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
         requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
-        
     ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
     return ecoles
