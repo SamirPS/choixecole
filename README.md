@@ -1,9 +1,21 @@
 Le projet ChoixEcole vous renvoie les écoles accesible pour vous en fonction de vos choix et notes voici un petit tutoriel pour utiliser le programme :
+
+
 1)Rentrer vos notes
+
+
 2)Choisir la Spécialite si vous savez pas laissez vide
+
+
 3)Choisir une commune ou peu importe
+
+
 4)Choisir un concours ou peu importe 
+
+
 5) De mếme pour l'alternance
+
+
 
 Le programme en ayant vos notes et vos choix va vous afficher dans la zone de texte a droite les écoles ou vous serez éligible .
 
