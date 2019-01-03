@@ -1,4 +1,4 @@
-Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction de vos choix et notes voici un petit tutoriel pour utiliser le programme :
+Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction de vos choix et notes voici un petit tutoriel pour utiliser le programme (il faut lancer le fichier view.py qui est l'interface graphique !!!):
 
 1)Rentrer vos notes
 
