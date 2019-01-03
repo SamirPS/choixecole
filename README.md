@@ -16,4 +16,4 @@ Le programme en ayant vos notes et vos choix va vous afficher dans la zone de te
 
 Vous pouvez gérer la base de données grâce à Sqlite BrowserVous avez des exemples dans la base de données au cas ou .Remarque :
 
-On peut maintenant mettre que des chiffres dans les entrys grâce à la fonction callback qui gère tout type des notes. La fonction filtre a été modifié et n'a plus de redondance ainsi que les fonctions renvoie_specialite,renvoiea_lternance et autre qui ont été factorisés en une seule fonction.
+On peut maintenant mettre que des chiffres dans les entrys grâce à la fonction callback qui gère tout type des notes. La fonction filtre a été modifié et n'a plus de redondance ainsi que les fonctions renvoie_specialite,renvoie_alternance et autre qui ont été factorisés en une seule fonction car dans chaque fonction on récuperai juste le premier objet du tuple.J'ai aussi changer la table coeffccp et coeffccs en coefficient afin de gérer grâce a des dictionnaire les différents concours,banque de note et points de bonification propre a chaque groupe.
