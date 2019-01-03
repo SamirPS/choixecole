@@ -27,9 +27,9 @@ class ChoixEcole:
          
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
         
-        self.matieres = ('Maths', 'Physique', 'SI', 'Informatique', 'Francais', 'Anglais')
+        self.matieres = ('de maths', 'de physique', 'de si', "d'informatique", 'de francais',"d'anglais")
         self.var_matieres = [StringVar(self.root) for mat in range(len(self.matieres))]
-        self.labels_matiere = [ Label(self.root, text='Rentre ta moyenne de '+mat) for mat in self.matieres ] 
+        self.labels_matiere = [ Label(self.root, text='Moyenne '+mat) for mat in self.matieres ] 
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
  
