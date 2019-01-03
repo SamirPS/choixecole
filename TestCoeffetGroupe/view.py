@@ -53,9 +53,12 @@ class ChoixEcole:
         self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
-        
+        self.listeecoles=[]
         textaffiche=""
-        self.listeecoles=list(set(model.filtre(None,None,None,None,None,999999)))
+        for cle in self.ccs:
+            self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,999999)))
+        for cle in self.ccp:
+            self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,999999)))
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
         self.entry_ecole.insert(0.0,textaffiche)
