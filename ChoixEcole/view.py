@@ -111,24 +111,16 @@ class ChoixEcole:
                 return True
         return False
     
-    def renvoie_note(self,matiere):
-        noteccp,noteccs={},{}
+    def renvoie_note_pointsdebonification(self,matiere):
+        noteccp,noteccs,bonificationccs,bonificationccp={},{},{},{}
         for cle in self.ccp :
-            note=model.NoteCoefficient(self.ccp[cle],matiere)
-            noteccp[cle]=note
-        for cle in self.ccs :
-            note=model.NoteCoefficient(self.ccs[cle],matiere)
-            noteccs[cle]=note
-        return noteccs,noteccp
-    
-    def renvoie_pointsbonification(self):
-        bonificationccp,bonificationccs={},{}
-        for cle in self.ccp :
+            noteccp[cle]=model.NoteCoefficient(self.ccp[cle],matiere)
             bonificationccp[cle]=self.ccp[cle][-1]
         for cle in self.ccs :
+            noteccs[cle]=model.NoteCoefficient(self.ccs[cle],matiere)
             bonificationccs[cle]=self.ccs[cle][-1]
-        return bonificationccs,bonificationccp
-        
+        return noteccs,noteccp,bonificationccs,bonificationccp    
+    
     def Ecole(self,listenote,dictonnaire,choix_specialite,choix_commune,choix_concours,choix_alternance):
         for cle in dictonnaire:
             self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_commune,choix_concours,choix_alternance,cle,listenote[cle])
@@ -160,9 +152,7 @@ class ChoixEcole:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
         
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteccs,noteccp=self.renvoie_note(matiere)
-        bonificationccs,bonificationccp=self.renvoie_pointsbonification()
-        
+        noteccs,noteccp,bonificationccs,bonificationccp=self.renvoie_note_pointsdebonification(matiere) 
         if self.var_affichage[0].get()=="":
             choix_specialite=None
         else:
@@ -188,6 +178,7 @@ class ChoixEcole:
                 noteccp[cle]=noteccp[cle]+bonificationccp[cle]
             for cle in noteccs:
                 noteccs[cle]=noteccs[cle]+bonificationccs[cle]
+                
         if choix_concours=="CCS":
             self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_specialite,choix_commune,choix_concours,choix_alternance)))
         elif choix_concours=="CCP":
