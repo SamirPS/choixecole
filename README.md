@@ -14,10 +14,10 @@ Ajout de spécialité : modifier la table Spécialite
 Ajout d'école :modifier la table Ecole
 
 
-Changez coefficient : modifier table Coeff
+Changez coefficient : modifier table Coefficient 
 
 
-Pour les afficher: il faut créer un couple unique dans la table EcoleSpe
+Pour les afficher: il faut créer un couple unique dans la table EcoleSpe et rajouter si c'est en alternance ou non
 
 
 Avec SqliteBroswer par exemple
