@@ -72,7 +72,7 @@ class ChoixEcole:
         for specialite in range(len(self.information_desirer[0])):
             Radiobutton(self.root,variable=self.var_affichage[0],text=self.information_desirer[0][specialite], value=self.information_desirer[0][specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
         for region in range(len(self.information_desirer[1])):
-            Radiobutton(self.root,variable=self.var_affichage[1],text=self.information_desirer[1][region], value=self.information_desirer[1][region],command=self.AffichageEcole).grid(row=commune+1, column=3,sticky="w")
+            Radiobutton(self.root,variable=self.var_affichage[1],text=self.information_desirer[1][region], value=self.information_desirer[1][region],command=self.AffichageEcole).grid(row=region+1, column=3,sticky="w")
         for concours in range(len(self.information_desirer[2])):
             Radiobutton(self.root,variable=self.var_affichage[2],text=self.information_desirer[2][concours], value=self.information_desirer[2][concours],command=self.AffichageEcole).grid(row=concours+1, column=4,sticky="w")
         for alternance in range(len(self.information_desirer[3])):
