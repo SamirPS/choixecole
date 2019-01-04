@@ -33,8 +33,6 @@ def renvoie_coefficient():
         CCP[resultat[0]]=list(resultat[1:])
     return CCS,CCP
 
-        
-    
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
     note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere)))]

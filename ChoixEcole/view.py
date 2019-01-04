@@ -22,7 +22,7 @@ class ChoixEcole:
          
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         
-        vcmd = (self.root.register(self.callback),  '%P', '%S')
+        vcmd = (self.root.register(self.callback),  '%P')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
@@ -94,11 +94,9 @@ class ChoixEcole:
         
         self.root.mainloop()
  
-    def callback(self, value_if_allowed, text):
+    def callback(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes"""
-        if text=="²":
-            return False
-        elif value_if_allowed.replace(".", "", 1).isdigit() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
+        if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
             try :
                 if value_if_allowed[2]=="." and len(value_if_allowed)<6 :
                     return True
