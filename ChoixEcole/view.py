@@ -126,7 +126,6 @@ class ChoixEcole:
         """Recuperer les variables entrée par l'utilisateur"""
         textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        zeropossible=("0","00.00","0.","00","00.0","0.0","0.00","00.")
         
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
@@ -134,15 +133,13 @@ class ChoixEcole:
         
         """Pour éviter les erreurs dans la console python"""
         
-        for zero in range (len(zeropossible)):
-            if zeropossible[zero] in matiere :
-                self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
-                self.entry_ecole.configure(state="disabled")
-                return
-                
         if "" in matiere : 
             matiere=[20 for i in range (len(matiere))]
             
+        elif 0.0 in [float(i) for i in matiere] :
+            self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
+            self.entry_ecole.configure(state="disabled")
+            return 
         else:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
         
