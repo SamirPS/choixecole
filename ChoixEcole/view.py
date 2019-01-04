@@ -136,7 +136,7 @@ class ChoixEcole:
         if "" in matiere : 
             matiere=[20 for i in range (len(matiere))]
             
-        elif 0.0 in [float(i) for i in matiere] :
+        elif 0.0 in map(float,matiere) :
             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
             self.entry_ecole.configure(state="disabled")
             return 
