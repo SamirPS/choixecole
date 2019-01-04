@@ -16,7 +16,7 @@ def renvoie_information(colonne,table):
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie les spécialites dans la liste Informationvoulue
                                                                                                             """
-    colonne_peuimporte=("Commune","Admission","Alternance")
+    colonne_peuimporte=("Region","Admission","Alternance")
     informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
     if colonne in colonne_peuimporte :
         informationvoulue=["Peu importe"]+sorted(list(set(informationvoulue)))
@@ -41,7 +41,7 @@ def NoteCoefficient(coefficient,matiere):
     return note[0] 
 
    
-def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
+def filtre(specialiteid,choix_region,concoursid,alternanceid,groupe,note):
     
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
@@ -56,8 +56,8 @@ def filtre(specialiteid,communeid,concoursid,alternanceid,groupe,note):
         conditions.append(("Alternance","=",alternanceid))
     if concoursid!=None :
         conditions.append(("Admission","=",concoursid))
-    if communeid!=None:
-        conditions.append(("Commune","=",communeid))
+    if choix_region!=None:
+        conditions.append(("Region","=",choix_region))
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
