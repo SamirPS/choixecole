@@ -95,7 +95,7 @@ class ChoixEcole:
         self.root.mainloop()
  
     def callback(self, value_if_allowed):
-        """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes"""
+        """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
             try :
                 if value_if_allowed[2]=="." and len(value_if_allowed)<6 :
@@ -117,13 +117,13 @@ class ChoixEcole:
         return noteccs,noteccp,bonificationccs,bonificationccp    
     
     def Ecole(self,listenote,dictonnaire,choix_specialite,choix_region,choix_concours,choix_alternance):
+        self.listeecoles=[]
         for cle in dictonnaire:
             self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_region,choix_concours,choix_alternance,cle,listenote[cle])
         return self.listeecoles
         
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
-        self.listeecoles=[]
         textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         zeropossible=("0","00.00","0.","00","00.0","0.0","0.00","00.")
