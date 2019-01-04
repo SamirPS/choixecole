@@ -102,8 +102,6 @@ class ChoixEcole:
                     return True
                 elif value_if_allowed[1]=="." and len(value_if_allowed)<5 :
                     return True
-                else:
-                    return False
             except IndexError:
                 return True
         return False
