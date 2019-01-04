@@ -4,7 +4,7 @@ Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction 
 
 2)Choisir la Spécialité si vous ne savez pas laissez vide
 
-3)Choisir une commune ou peu importe
+3)Choisir une region ou peu importe
 
 4)Choisir un concours ou peu importe
 
