@@ -2,7 +2,7 @@ Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction 
 
 1)Rentrer vos notes
 
-2)Choisir la Spécialité si vous ne savez pas laissez vide
+2)Choisir la Spécialité ou peu importe
 
 3)Choisir une region ou peu importe
 
