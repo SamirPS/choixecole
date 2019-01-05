@@ -16,7 +16,7 @@ def renvoie_information(colonne,table):
        Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
        Ex:renvoie_information("Nom","Specialite") renvoie les spécialites dans la liste Informationvoulue
                                                                                                             """
-    colonne_peuimporte=("Region","Admission","Alternance")
+    colonne_peuimporte=("Nom","Region","Admission","Alternance")
     informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
     if colonne in colonne_peuimporte :
         informationvoulue=["Peu importe"]+sorted(list(set(informationvoulue)))
@@ -32,6 +32,7 @@ def renvoie_coefficient():
     for resultat in curseur:
         CCP[resultat[0]]=list(resultat[1:])
     return CCS,CCP
+
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
     note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere)))]

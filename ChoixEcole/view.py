@@ -39,12 +39,11 @@ class ChoixEcole:
         self.affichage=('Specialité :','Region :','Concours:','Alternance')
         self.var_affichage=[StringVar(self.root) for aff in range(len(self.affichage))]
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
-        for i in range(1,4):
-            self.var_affichage[i].set("Peu importe")
-        self.ccs,self.ccp=model.renvoie_coefficient()
+        for i in range(0,4): self.var_affichage[i].set("Peu importe")
+        
         """Les années de prepa"""
-        self.anneeprepa=("3/2","5/2","7/2")
         self.annee=StringVar(self.root)
+        self.anneeprepa=("3/2","5/2","7/2")
         self.annee.set("3/2")
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
@@ -53,7 +52,7 @@ class ChoixEcole:
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.listeecoles=[]
-        
+        self.ccs,self.ccp=model.renvoie_coefficient()
         textaffiche=""
         
         for cle in self.ccs:
@@ -126,7 +125,7 @@ class ChoixEcole:
         """Recuperer les variables entrée par l'utilisateur"""
         textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        
+        choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get())+1,"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
@@ -135,7 +134,7 @@ class ChoixEcole:
         
         if "" in matiere : 
             matiere=[20 for i in range (len(matiere))]
-            
+         
         elif 0.0 in map(float,matiere) :
             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
             self.entry_ecole.configure(state="disabled")
@@ -145,39 +144,22 @@ class ChoixEcole:
         
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         noteccs,noteccp,bonificationccs,bonificationccp=self.renvoie_note_pointsdebonification(matiere) 
-        
-        if self.var_affichage[0].get()=="":
-            choix_specialite=None
-        else:
-            choix_specialite=self.information_desirer[0].index(self.var_affichage[0].get())+1
-            
-        if  self.var_affichage[1].get()=="Peu importe":
-            choix_region=None
-        else :
-            choix_region=self.var_affichage[1].get()
-        
-        if  self.var_affichage[2].get()=="Peu importe":
-            choix_concours=None
-        else :
-            choix_concours=self.var_affichage[2].get()
-            
-        if self.var_affichage[3].get()=="Peu importe":
-            choix_alternance=None
-        else :
-            choix_alternance=self.var_affichage[3].get()
-        
+        for cle in choix_utilisateur:
+            if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==1:
+                choix_utilisateur[cle]=None
+                
         if self.annee.get()=="3/2":
             for cle in noteccp:
                 noteccp[cle]=noteccp[cle]+bonificationccp[cle]
             for cle in noteccs:
                 noteccs[cle]=noteccs[cle]+bonificationccs[cle]
                 
-        if choix_concours=="CCS":
-            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_specialite,choix_region,choix_concours,choix_alternance)))
-        elif choix_concours=="CCP":
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_specialite,choix_region,choix_concours,choix_alternance)))
+        if choix_utilisateur["Concours"]=="CCS":
+            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
+        elif  choix_utilisateur["Concours"]=="CCP":
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
         else:
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_specialite,choix_region,choix_concours,choix_alternance)+self.Ecole(noteccs,self.ccs,choix_specialite,choix_region,choix_concours,choix_alternance)))
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])+self.Ecole(noteccs,self.ccs,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
  
             
         """Permet de génerer le texte affiché"""
