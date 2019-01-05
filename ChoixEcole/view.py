@@ -52,12 +52,11 @@ class ChoixEcole:
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.listeecoles=[]
-        self.ccs,self.ccp=model.renvoie_coefficient()
+        self.ccsandccp=model.renvoie_coefficient()
         textaffiche=""
-        
-        for cle in self.ccs:
+        for cle in self.ccsandccp["CCS"]:
             self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,5000)))
-        for cle in self.ccp:
+        for cle in self.ccsandccp["CCP"]:
             self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,5000)))
             
         for texteaafficher in range(len(self.listeecoles)):
@@ -106,16 +105,14 @@ class ChoixEcole:
                 return True
         return False
     
-    def renvoie_note_pointsdebonification(self,matiere):
+    def renvoie_note(self,matiere):
         
-        noteccp,noteccs,bonificationccs,bonificationccp={},{},{},{}
-        for cle in self.ccp :
-            noteccp[cle]=model.NoteCoefficient(self.ccp[cle],matiere)
-            bonificationccp[cle]=self.ccp[cle][-1]
-        for cle in self.ccs :
-            noteccs[cle]=model.NoteCoefficient(self.ccs[cle],matiere)
-            bonificationccs[cle]=self.ccs[cle][-1]
-        return noteccs,noteccp,bonificationccs,bonificationccp    
+        noteccpandccs={"CCS":{},"CCP":{}}
+        for cle in self.ccsandccp["CCP"] :
+            noteccpandccs["CCP"][cle]=model.NoteCoefficient(self.ccsandccp["CCP"][cle],matiere)
+        for cle in self.ccsandccp["CCS"]:
+            noteccpandccs["CCS"][cle]=model.NoteCoefficient(self.ccsandccp["CCS"][cle],matiere)
+        return noteccpandccs 
     
     def Ecole(self,listenote,dictonnaire,choix_utilisateur):
         
@@ -146,24 +143,23 @@ class ChoixEcole:
             matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
         
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteccs,noteccp,bonificationccs,bonificationccp=self.renvoie_note_pointsdebonification(matiere) 
-        
+        noteccpandccs=self.renvoie_note(matiere) 
         for cle in choix_utilisateur:
             if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==1:
                 choix_utilisateur[cle]=None
                 
         if self.annee.get()=="3/2":
-            for cle in noteccp:
-                noteccp[cle]=noteccp[cle]+bonificationccp[cle]
-            for cle in noteccs:
-                noteccs[cle]=noteccs[cle]+bonificationccs[cle]
+            for cle in noteccpandccs["CCP"]:
+                noteccpandccs["CCP"][cle]=noteccpandccs["CCP"][cle]+self.ccsandccp["CCP"][cle][-1]
+            for cle in noteccpandccs["CCS"]:
+                noteccpandccs["CCS"][cle]=noteccpandccs["CCS"][cle]+self.ccsandccp["CCS"][cle][-1]
                 
         if choix_utilisateur["Concours"]=="CCS":
-            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCS"],self.ccsandccp["CCS"],choix_utilisateur)))
         elif  choix_utilisateur["Concours"]=="CCP":
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.ccsandccp["CCP"],choix_utilisateur)))
         else:
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur)+self.Ecole(noteccs,self.ccs,choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.ccsandccp["CCP"],choix_utilisateur)+self.Ecole(noteccpandccs["CCS"],self.ccsandccp["CCS"],choix_utilisateur)))
  
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):

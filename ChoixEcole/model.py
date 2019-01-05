@@ -26,14 +26,15 @@ def renvoie_information(colonne,table):
 
 def renvoie_coefficient():
     colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais,Bonification "
-    CCS,CCP={},{}
+    CCSANDCCP={"CCS":{},"CCP":{}}
     curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCS'" )
     for resultat in curseur:
-        CCS[resultat[0]]=list(resultat[1:])
+        CCSANDCCP["CCS"][resultat[0]]=list(resultat[1:])
     curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCP'" )
     for resultat in curseur:
-        CCP[resultat[0]]=list(resultat[1:])
-    return CCS,CCP
+        CCSANDCCP["CCP"][resultat[0]]=list(resultat[1:])
+    return CCSANDCCP
+
 
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
