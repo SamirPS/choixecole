@@ -115,10 +115,10 @@ class ChoixEcole:
             bonificationccs[cle]=self.ccs[cle][-1]
         return noteccs,noteccp,bonificationccs,bonificationccp    
     
-    def Ecole(self,listenote,dictonnaire,choix_specialite,choix_region,choix_concours,choix_alternance):
+    def Ecole(self,listenote,dictonnaire,choix_utilisateur):
         self.listeecoles=[]
         for cle in dictonnaire:
-            self.listeecoles=self.listeecoles+model.filtre(choix_specialite,choix_region,choix_concours,choix_alternance,cle,listenote[cle])
+            self.listeecoles=self.listeecoles+model.filtre(choix_utilisateur["Specialite"],choix_utilisateur["Region"],choix_utilisateur["Concours"],choix_utilisateur["Alternance"],cle,listenote[cle])
         return self.listeecoles
         
     def AffichageEcole(self):
@@ -155,11 +155,11 @@ class ChoixEcole:
                 noteccs[cle]=noteccs[cle]+bonificationccs[cle]
                 
         if choix_utilisateur["Concours"]=="CCS":
-            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
+            self.listeecoles=list(set(self.Ecole(noteccs,self.ccs,choix_utilisateur)))
         elif  choix_utilisateur["Concours"]=="CCP":
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur)))
         else:
-            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])+self.Ecole(noteccs,self.ccs,choix_utilisateur["Specialite"], choix_utilisateur["Region"], choix_utilisateur["Concours"], choix_utilisateur["Alternance"])))
+            self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur)+self.Ecole(noteccs,self.ccs,choix_utilisateur)))
  
             
         """Permet de génerer le texte affiché"""
