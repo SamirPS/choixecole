@@ -3,7 +3,7 @@ Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction 
 les 3 fichiers doivent être dans le même dossier .
 
 
-Si tout les champs groupe de EcoleS le programme ne se lancera pas vous devez remplir ce champs en lisant la suite !!!
+!!!Si tout les champs groupe de EcoleS le programme affichera aucune école vous devez remplir ce champ en lisant la suite !!!
 
 1)Rentrer vos notes
 
