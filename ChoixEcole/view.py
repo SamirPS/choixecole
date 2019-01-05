@@ -52,11 +52,11 @@ class ChoixEcole:
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.listeecoles=[]
-        self.ccsandccp=model.renvoie_coefficient()
+        self.concours=model.renvoie_coefficient()    
         textaffiche=""
-        for cle in self.ccsandccp["CCS"]:
+        for cle in self.concours["CCS"]:
             self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,5000)))
-        for cle in self.ccsandccp["CCP"]:
+        for cle in self.concours["CCP"]:
             self.listeecoles+=list(set(model.filtre(None,None,None,None,cle,5000)))
             
         for texteaafficher in range(len(self.listeecoles)):
@@ -108,10 +108,10 @@ class ChoixEcole:
     def renvoie_note(self,matiere):
         
         noteccpandccs={"CCS":{},"CCP":{}}
-        for cle in self.ccsandccp["CCP"] :
-            noteccpandccs["CCP"][cle]=model.NoteCoefficient(self.ccsandccp["CCP"][cle],matiere)
-        for cle in self.ccsandccp["CCS"]:
-            noteccpandccs["CCS"][cle]=model.NoteCoefficient(self.ccsandccp["CCS"][cle],matiere)
+        for cle in self.concours["CCP"] :
+            noteccpandccs["CCP"][cle]=model.NoteCoefficient(self.concours["CCP"][cle],matiere)
+        for cle in self.concours["CCS"]:
+            noteccpandccs["CCS"][cle]=model.NoteCoefficient(self.concours["CCS"][cle],matiere)
         return noteccpandccs 
     
     def Ecole(self,listenote,dictonnaire,choix_utilisateur):
@@ -150,16 +150,16 @@ class ChoixEcole:
                 
         if self.annee.get()=="3/2":
             for cle in noteccpandccs["CCP"]:
-                noteccpandccs["CCP"][cle]=noteccpandccs["CCP"][cle]+self.ccsandccp["CCP"][cle][-1]
+                noteccpandccs["CCP"][cle]=noteccpandccs["CCP"][cle]+self.concours["CCP"][cle][-1]
             for cle in noteccpandccs["CCS"]:
-                noteccpandccs["CCS"][cle]=noteccpandccs["CCS"][cle]+self.ccsandccp["CCS"][cle][-1]
+                noteccpandccs["CCS"][cle]=noteccpandccs["CCS"][cle]+self.concours["CCS"][cle][-1]
                 
         if choix_utilisateur["Concours"]=="CCS":
-            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCS"],self.ccsandccp["CCS"],choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCS"],self.concours["CCS"],choix_utilisateur)))
         elif  choix_utilisateur["Concours"]=="CCP":
-            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.ccsandccp["CCP"],choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.concours["CCP"],choix_utilisateur)))
         else:
-            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.ccsandccp["CCP"],choix_utilisateur)+self.Ecole(noteccpandccs["CCS"],self.ccsandccp["CCS"],choix_utilisateur)))
+            self.listeecoles=list(set(self.Ecole(noteccpandccs["CCP"],self.concours["CCP"],choix_utilisateur)+self.Ecole(noteccpandccs["CCS"],self.concours["CCS"],choix_utilisateur)))
  
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):

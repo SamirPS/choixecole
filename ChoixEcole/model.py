@@ -25,15 +25,18 @@ def renvoie_information(colonne,table):
     return informationvoulue
 
 def renvoie_coefficient():
+    """Donne la liste des concours et par la suite des dossier(pas implante encore) et donne les groupes et coefficient grâce a un 
+       dictonnaire """
+       
     colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais,Bonification "
-    CCSANDCCP={"CCS":{},"CCP":{}}
-    curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCS'" )
-    for resultat in curseur:
-        CCSANDCCP["CCS"][resultat[0]]=list(resultat[1:])
-    curseur.execute("Select "+colonne+" From Coefficient WHERE Concours='CCP'" )
-    for resultat in curseur:
-        CCSANDCCP["CCP"][resultat[0]]=list(resultat[1:])
-    return CCSANDCCP
+    liste_concours=list(set(renvoie_information("Concours","Coefficient")))
+    concours={}
+    for nom in liste_concours:
+        concours[nom]={}
+        curseur.execute("Select "+colonne+" From Coefficient WHERE Concours="+'"'+nom+'"')
+        for resultat in curseur:
+            concours[nom][resultat[0]]=list(resultat[1:])
+    return concours
 
 
 def NoteCoefficient(coefficient,matiere):
