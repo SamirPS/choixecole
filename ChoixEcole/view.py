@@ -121,6 +121,7 @@ class ChoixEcole:
         
     def AffichageEcole(self):
         """Recuperer les variables entrée par l'utilisateur"""
+        self.listeecoles=[]
         textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get())+1,"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
@@ -145,19 +146,21 @@ class ChoixEcole:
         for cle in choix_utilisateur:
             if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==1:
                 choix_utilisateur[cle]=None
-                
+        
+        
         if self.annee.get()=="3/2":
-            for cle in noteconcours["CCP"]:
-                noteconcours["CCP"][cle]=noteconcours["CCP"][cle]+self.concours["CCP"][cle][-1]
-            for cle in noteconcours["CCS"]:
-                noteconcours["CCS"][cle]=noteconcours["CCS"][cle]+self.concours["CCS"][cle][-1]
+            for nom in noteconcours:
+                for cle in noteconcours[nom]:
+                    noteconcours[nom][cle]=noteconcours[nom][cle]+self.concours[nom][cle][-1]
+                    
+        for nom in noteconcours:
+            if choix_utilisateur["Concours"]==None:
+                self.listeecoles+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
+            elif choix_utilisateur["Concours"]==nom:
+                self.listeecoles=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
+                break
                 
-        if choix_utilisateur["Concours"]=="CCS":
-            self.listeecoles=list(set(self.Ecole(noteconcours["CCS"],self.concours["CCS"],choix_utilisateur)))
-        elif  choix_utilisateur["Concours"]=="CCP":
-            self.listeecoles=list(set(self.Ecole(noteconcours["CCP"],self.concours["CCP"],choix_utilisateur)))
-        else:
-            self.listeecoles=list(set(self.Ecole(noteconcours["CCP"],self.concours["CCP"],choix_utilisateur)+self.Ecole(noteconcours["CCS"],self.concours["CCS"],choix_utilisateur)))
+           
  
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
