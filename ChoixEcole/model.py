@@ -49,8 +49,10 @@ def filtre(specialiteid,choix_region,concoursid,alternanceid,groupe,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    conditions=[("Points","<=",note)]
+    conditions=[]
     
+    if note!=None:
+        conditions.append(("Points","<=",note))
     if groupe!=None:
         conditions.append(("Groupe","=",groupe))
     if specialiteid!=None:
@@ -66,5 +68,6 @@ def filtre(specialiteid,choix_region,concoursid,alternanceid,groupe,note):
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
         requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
+        
     ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
     return ecoles

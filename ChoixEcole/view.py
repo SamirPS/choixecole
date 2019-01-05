@@ -54,13 +54,14 @@ class ChoixEcole:
         self.listeecoles=[]
         self.concours=model.renvoie_coefficient()    
         textaffiche=""
-        for cle in self.concours:
-            for nom in self.concours[cle]:
-                self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,5000)))
-                
-        for texteaafficher in range(len(self.listeecoles)):
-            textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
-        
+        if self.concours!={}:
+            for cle in self.concours:
+                for nom in self.concours[cle]:
+                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
+                    
+            for texteaafficher in range(len(self.listeecoles)):
+                textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
+            
         """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.insert(0.0,textaffiche)
         self.entry_ecole.configure(state="disabled")
