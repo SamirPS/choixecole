@@ -62,12 +62,13 @@ class ChoixEcole:
             
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
-        self.entry_ecole.insert(0.0,textaffiche)
         
-        """Pour eviter d'écrire dans le champs Ecole"""
+        """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
+        self.entry_ecole.insert(0.0,textaffiche)
         self.entry_ecole.configure(state="disabled")
          
         """On affiche les cases a cocher"""
+        
         for specialite in range(len(self.information_desirer[0])):
             Radiobutton(self.root,variable=self.var_affichage[0],text=self.information_desirer[0][specialite], value=self.information_desirer[0][specialite],command=self.AffichageEcole).grid(row=specialite+1, column=2,sticky="w")
         for region in range(len(self.information_desirer[1])):
@@ -106,6 +107,7 @@ class ChoixEcole:
         return False
     
     def renvoie_note_pointsdebonification(self,matiere):
+        
         noteccp,noteccs,bonificationccs,bonificationccp={},{},{},{}
         for cle in self.ccp :
             noteccp[cle]=model.NoteCoefficient(self.ccp[cle],matiere)
@@ -116,6 +118,7 @@ class ChoixEcole:
         return noteccs,noteccp,bonificationccs,bonificationccp    
     
     def Ecole(self,listenote,dictonnaire,choix_utilisateur):
+        
         self.listeecoles=[]
         for cle in dictonnaire:
             self.listeecoles=self.listeecoles+model.filtre(choix_utilisateur["Specialite"],choix_utilisateur["Region"],choix_utilisateur["Concours"],choix_utilisateur["Alternance"],cle,listenote[cle])
@@ -126,6 +129,7 @@ class ChoixEcole:
         textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get())+1,"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
+        
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
@@ -133,8 +137,7 @@ class ChoixEcole:
         """Pour éviter les erreurs dans la console python"""
         
         if "" in matiere : 
-            matiere=[20 for i in range (len(matiere))]
-         
+            matiere=[20]*7
         elif 0.0 in map(float,matiere) :
             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
             self.entry_ecole.configure(state="disabled")
@@ -144,6 +147,7 @@ class ChoixEcole:
         
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         noteccs,noteccp,bonificationccs,bonificationccp=self.renvoie_note_pointsdebonification(matiere) 
+        
         for cle in choix_utilisateur:
             if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==1:
                 choix_utilisateur[cle]=None
@@ -161,7 +165,6 @@ class ChoixEcole:
         else:
             self.listeecoles=list(set(self.Ecole(noteccp,self.ccp,choix_utilisateur)+self.Ecole(noteccs,self.ccs,choix_utilisateur)))
  
-            
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
