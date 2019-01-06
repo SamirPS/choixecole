@@ -5,15 +5,14 @@ Created on Sun Dec 30 19:59:28 2018
 
 @author: samir
 """
-from tkinter import Tk,StringVar, Label, Radiobutton,Entry,ttk
+from tkinter import Tk,StringVar, Label,Entry,ttk,filedialog,Menu
 import model
 import tkinter.scrolledtext as tkscrolled
-
 class ChoixEcole:
      
     def __init__(self):
         
-        """Initialise l'application et change le titre"""
+        """Initialise l'application et change le titre et la positionne """
   
         self.root = Tk()
         self.root.title("ChoixEcole")
@@ -23,8 +22,15 @@ class ChoixEcole:
         x_cordinate = int((screen_width/2) - (630/2))
         y_cordinate = int((screen_height/2) - (273/2))
         self.root.geometry("630x273+{}+{}".format( x_cordinate, y_cordinate))
-
-         
+        
+        """Ajoute un menu"""
+        menubar = Menu(self.root)
+        self.root.config(menu=menubar)
+        menufichier = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Fichier", menu=menufichier) 
+        menufichier.add_command(label="Enregistrer ",command=self.save_file)
+        menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
+        self.filename = ''
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         
         vcmd = (self.root.register(self.callback),  '%P')
@@ -72,6 +78,7 @@ class ChoixEcole:
             combo=ttk.Combobox(self.root,state="readonly",textvariable=self.var_affichage[i],values=self.information_desirer[i],height="4")
             combo.grid(row=i*2+1,column=2,sticky="w",padx=10)
             combo.bind("<<ComboboxSelected>>",self.AffichageEcole)
+
         
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
@@ -81,11 +88,28 @@ class ChoixEcole:
         for i, entry in enumerate(self.entries_matiere):
             entry.grid(row=i*2+1, column=1)
             
-        self.entry_ecole.grid(row=1,rowspan=8,column=16) 
-        Label(self.root,text='Ecole:').grid(row=0,column=16)
+        self.entry_ecole.grid(row=1,rowspan=8,column=3) 
+        Label(self.root,text='Ecole:').grid(row=0,column=3)
         
         self.root.mainloop()
- 
+    
+    def save_file(self, whatever = None):
+        if (self.filename == ''):
+            self.save_file_as()
+        else:
+            f = open(self.filename, 'w')
+            f.write(self.entry_ecole.get('1.0', 'end'))
+            f.close()
+
+    def save_file_as(self, whatever = None):
+        self.filename =filedialog.asksaveasfilename(defaultextension='.txt',
+                                                             filetypes = [
+        ('Text', '*.txt'),
+            ('All files', '*'),
+            ])
+        f = open(self.filename, 'w')
+        f.write(self.entry_ecole.get('1.0', 'end'))
+        f.close()
     def callback(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
