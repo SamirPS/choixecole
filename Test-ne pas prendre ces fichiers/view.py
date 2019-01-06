@@ -8,6 +8,7 @@ Created on Sun Dec 30 19:59:28 2018
 from tkinter import Tk,StringVar, Label,Entry,ttk,filedialog,Menu
 import model
 import tkinter.scrolledtext as tkscrolled
+from fpdf import FPDF
 class ChoixEcole:
      
     def __init__(self):
@@ -30,7 +31,7 @@ class ChoixEcole:
         menubar.add_cascade(label="Fichier", menu=menufichier) 
         menufichier.add_command(label="Enregistrer ",command=self.save_file)
         menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
-        self.filename = ''
+        self.filename =() 
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         
         vcmd = (self.root.register(self.callback),  '%P')
@@ -60,17 +61,17 @@ class ChoixEcole:
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.listeecoles=[]
         self.concours=model.renvoie_coefficient()    
-        textaffiche=""
+        self.textaffiche=""
         if self.concours!={}:
             for cle in self.concours:
                 for nom in self.concours[cle]:
                     self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
                     
             for texteaafficher in range(len(self.listeecoles)):
-                textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
+                self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
             
         """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
-        self.entry_ecole.insert(0.0,textaffiche)
+        self.entry_ecole.insert(0.0,self.textaffiche)
         self.entry_ecole.configure(state="disabled")
         """On affiche les combobox et on les lie a Affichage Ecole"""
         
@@ -93,23 +94,32 @@ class ChoixEcole:
         
         self.root.mainloop()
     
+    def convertpdf(self):
+        try:        
+            pdf=FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial",size=12)
+            for texteaafficher in range(len(self.listeecoles)):
+                pdf.cell(200,10,txt=self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]+"\n",ln=1,align="L")
+            print(self.listeecoles)
+            pdf.output(self.filename)
+        except TypeError:
+                return
     def save_file(self, whatever = None):
-        if (self.filename == ''):
+        if (self.filename ==()):
             self.save_file_as()
         else:
-            f = open(self.filename, 'w')
-            f.write(self.entry_ecole.get('1.0', 'end'))
-            f.close()
+            self.convertpdf()
 
     def save_file_as(self, whatever = None):
-        self.filename =filedialog.asksaveasfilename(defaultextension='.txt',
+        self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
                                                              filetypes = [
-        ('Text', '*.txt'),
-            ('All files', '*'),
+        ('PDF', '*.pdf'),
+
             ])
-        f = open(self.filename, 'w')
-        f.write(self.entry_ecole.get('1.0', 'end'))
-        f.close()
+   
+        self.convertpdf()
+      
     def callback(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
@@ -140,7 +150,7 @@ class ChoixEcole:
     def AffichageEcole(self,event):
         """Recuperer les variables entrée par l'utilisateur"""
         self.listeecoles=[]
-        textaffiche="" 
+        self.textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get())+1,"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
         
@@ -182,10 +192,10 @@ class ChoixEcole:
  
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
-            textaffiche=textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
+            self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
            
         """Affiche le texte et evite de pouvoir écrire par dessus"""  
-        self.entry_ecole.insert(0.0,textaffiche)
+        self.entry_ecole.insert(0.0,self.textaffiche)
         self.entry_ecole.configure(state="disabled")
          
 if __name__ == '__main__':
