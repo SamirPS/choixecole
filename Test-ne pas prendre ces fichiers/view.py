@@ -45,8 +45,6 @@ class ChoixEcole:
         self.var_affichage=[StringVar(self.root) for aff in range(len(self.affichage))]
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
         for i in range(0,4): self.var_affichage[i].set("Peu importe")
-        
-        """Les années de prepa"""
         self.var_affichage[4].set("3/2")
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
