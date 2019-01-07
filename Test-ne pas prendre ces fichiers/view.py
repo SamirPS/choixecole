@@ -94,14 +94,18 @@ class ChoixEcole:
         self.root.mainloop()
     
     def convertpdf(self):
-            """Converti en PDF """    
-            pdf=FPDF()
-            pdf.add_page()
-            pdf.set_font("Arial",size=12)
-            admission,listeecoles=self.returntext()
-            for texteaafficher in range(len(admission)):
-                pdf.cell(200,10,txt=listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
-            pdf.output(self.filename)
+            """Converti en PDF """   
+            try:
+                
+                pdf=FPDF()
+                pdf.add_page()
+                pdf.set_font("Arial",size=12)
+                admission,listeecoles=self.returntext()
+                for texteaafficher in range(len(admission)):
+                    pdf.cell(200,10,txt=listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
+                pdf.output(self.filename)
+            except TypeError:
+                return
         
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
