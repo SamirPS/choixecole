@@ -107,19 +107,15 @@ class ChoixEcole:
                 return
     def save_file(self, whatever = None):
         if (self.filename ==()):
-            self.save_file_as()
-        else:
-            self.convertpdf()
-
-    def save_file_as(self, whatever = None):
-        self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
+            self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
                                                              filetypes = [
         ('PDF', '*.pdf'),
 
             ])
-   
-        self.convertpdf()
-      
+            self.save_file()
+        else:
+            self.convertpdf()
+
     def callback(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
