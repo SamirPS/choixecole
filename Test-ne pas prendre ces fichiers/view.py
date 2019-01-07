@@ -61,10 +61,11 @@ class ChoixEcole:
         self.listeecoles=[]
         self.concours=model.renvoie_coefficient()    
         self.textaffiche=""
+        self.note=None
         if self.concours!={}:
             for cle in self.concours:
                 for nom in self.concours[cle]:
-                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
+                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,self.note)))
                     
             for texteaafficher in range(len(self.listeecoles)):
                 self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
@@ -109,12 +110,28 @@ class ChoixEcole:
         
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
-        listeecoles,admission=[],[]
+        listeecoles,ecoleamoi,admission=[],[],[]
+        choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
+        matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
+        
+        
+        if "" in matiere : 
+            matiere=[20]*7
+        elif 0.0 in map(float,matiere) :
+            matiere=[0]*7
+        else:
+            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
+        
+        """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
+        noteconcours=self.renvoie_note(matiere) 
+        for nom in noteconcours:
+                ecoleamoi+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
+            
         for cle in self.concours:
                 for nom in self.concours[cle]:
                     listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
         for i in range(len(listeecoles)):
-            if listeecoles[i] in self.listeecoles  :
+            if listeecoles[i] in ecoleamoi  :
                 admission.append("Admis")
             else:
                 admission.append("Refuse")
