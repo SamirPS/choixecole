@@ -99,12 +99,24 @@ class ChoixEcole:
             pdf=FPDF()
             pdf.add_page()
             pdf.set_font("Arial",size=12)
-            for texteaafficher in range(len(self.listeecoles)):
-                pdf.cell(200,10,txt=self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]+"\n",ln=1,align="L")
-            print(self.listeecoles)
+            admission=self.returntext()
+            for texteaafficher in range(len(admission)):
+                pdf.cell(200,10,txt=self.listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
             pdf.output(self.filename)
         except TypeError:
                 return
+    def returntext(self):
+        listeecoles,admission=[],[]
+        for cle in self.concours:
+                for nom in self.concours[cle]:
+                    listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
+        for i in range(len(listeecoles)):
+            if listeecoles[i] in self.listeecoles:
+                admission.append("Admis")
+            else:
+                admission.append("Refuse")
+        return admission
+        
     def save_file(self, whatever = None):
         if (self.filename ==()):
             self.save_file_as()
