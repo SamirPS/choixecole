@@ -1,0 +1,1 @@
+Le fichier .exe et la base de données doit être dans le même dossier
