@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 30 19:59:28 2018
-
 @author: samir
 """
 from tkinter import Tk,StringVar, Label,Entry,ttk,filedialog,Menu
@@ -95,27 +94,27 @@ class ChoixEcole:
         self.root.mainloop()
     
     def convertpdf(self):
-        try:        
+            """Converti en PDF """    
             pdf=FPDF()
             pdf.add_page()
             pdf.set_font("Arial",size=12)
-            admission=self.returntext()
+            admission,listeecoles=self.returntext()
             for texteaafficher in range(len(admission)):
-                pdf.cell(200,10,txt=self.listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
+                pdf.cell(200,10,txt=listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
             pdf.output(self.filename)
-        except TypeError:
-                return
+        
     def returntext(self):
+        """Affiche le nom de l'école et a cote Refuse ou admis"""
         listeecoles,admission=[],[]
         for cle in self.concours:
                 for nom in self.concours[cle]:
                     listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
         for i in range(len(listeecoles)):
-            if listeecoles[i] in self.listeecoles:
+            if listeecoles[i] in self.listeecoles  :
                 admission.append("Admis")
             else:
                 admission.append("Refuse")
-        return admission
+        return admission,listeecoles
         
     def save_file(self, whatever = None):
         if (self.filename ==()):
