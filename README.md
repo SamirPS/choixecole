@@ -2,7 +2,6 @@ Le projet ChoixEcole vous renvoie les écoles accessibles pour vous en fonction 
 
 les 3 fichiers doivent être dans le même dossier .
 
-
 !!!Si tout les champs groupe de EcoleS le programme affichera aucune école vous devez remplir ce champ en lisant la suite !!!
 
 1)Rentrer vos notes
@@ -27,6 +26,6 @@ Spécialité : Ajouter une nouvelle entrée et mettez le nom de votre spécialit
 
 Vous pouvez gérer la base de données grâce à Sqlite Browser,Vous avez des exemples dans la base de données au cas ou .
 
-Remarque que vous avez fait  :
+Remarque que vous avez fait :
 
 On peut maintenant mettre que des chiffres dans les entrys grâce à la fonction callback qui gère tout les types de note. La fonction filtre a été modifié et n'a plus de redondance ainsi que les fonctions renvoie_specialite,renvoie_alternance et autre qui ont été factorisés en une seule fonction car dans chaque fonction on récuperai juste le premier objet du tuple.J'ai aussi changer la table coeffccp et coeffccs dans la base de donnéées en coefficient afin de gérer grâce a des dictionnaire les différents concours,banque de note et points de bonification propre a chaque groupe.Pour les dossiers je suis en train de chercher les coefficient sur internet.Et on peut maintenant avoir plusieurs concours exemple des groupes de CCP,CCS,ATS ou autre .
