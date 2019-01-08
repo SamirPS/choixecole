@@ -184,8 +184,7 @@ class ChoixEcole:
         self.listeecoles=[]
         self.textaffiche="" 
         matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get())+1,"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
-        
+        choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get()),"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
@@ -204,7 +203,7 @@ class ChoixEcole:
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
         noteconcours=self.renvoie_note(matiere)  
         for cle in choix_utilisateur:
-            if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==1:
+            if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==0:
                 choix_utilisateur[cle]=None
         
         
