@@ -64,10 +64,7 @@ class ChoixEcole:
         self.textaffiche=""
         self.notematiere=[20]*(len(self.matieres)+1)
         self.noteconcours=self.renvoie_note()
-        for nom in self.noteconcours:
-                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
-        for texteaafficher in range(len(self.listeecoles)):
-                self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
+        self.AffichageEcole()
             
         """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.insert(0.0,self.textaffiche)
