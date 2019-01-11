@@ -62,13 +62,11 @@ class ChoixEcole:
         self.concours=model.renvoie_coefficient() 
         self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
         self.textaffiche=""
-        self.notematiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        if self.concours!={}:
-            for cle in self.concours:
-                for nom in self.concours[cle]:
-                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
-                    
-            for texteaafficher in range(len(self.listeecoles)):
+        self.notematiere=[20]*(len(self.matieres)+1)
+        self.noteconcours=self.renvoie_note()
+        for nom in self.noteconcours:
+                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+        for texteaafficher in range(len(self.listeecoles)):
                 self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
             
         """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
@@ -114,6 +112,7 @@ class ChoixEcole:
             
         else:
             self.notematiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
+        self.noteconcours=self.renvoie_note()
         self.AffichageEcole()
         
     def convertpdf(self):
@@ -134,9 +133,8 @@ class ChoixEcole:
         """Affiche le nom de l'école et a cote Refuse ou admis"""
         listeecoles,admission,ecoleamoi=[],[],[]
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteconcours=self.renvoie_note() 
-        for nom in noteconcours:
-                ecoleamoi+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+        for nom in self.noteconcours:
+                ecoleamoi+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
             
         for cle in self.concours:
                 for nom in self.concours[cle]:
@@ -151,8 +149,7 @@ class ChoixEcole:
     def save_file(self, whatever = None):
         if (self.filename ==()):
             self.save_file_as()
-        else:
-            self.convertpdf()
+        self.convertpdf()
 
     def save_file_as(self, whatever = None):
         self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
@@ -176,12 +173,12 @@ class ChoixEcole:
         return False
     
     def renvoie_note(self):
-        noteconcours={}
+        self.noteconcours={}
         for nom in self.concours:
-            noteconcours[nom]={}
+            self.noteconcours[nom]={}
             for cle in self.concours[nom]:
-                noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
-        return noteconcours 
+               self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
+        return self.noteconcours
     
     def Ecole(self,listenote,dictonnaire,choix_utilisateur):
         
@@ -197,19 +194,16 @@ class ChoixEcole:
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
      
-        """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteconcours=self.renvoie_note()  
-        
         if self.var_affichage[4]=="3/2":
-            for nom in noteconcours:
-                for cle in noteconcours[nom]:
-                    noteconcours[nom][cle]=noteconcours[nom][cle]+self.concours[nom][cle][-1]
+            for nom in self.noteconcours:
+                for cle in self.noteconcours[nom]:
+                    self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
                     
-        for nom in noteconcours:
+        for nom in self.noteconcours:
             if self.choix_utilisateur["Concours"]==None:
-                self.listeecoles+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
             elif self.choix_utilisateur["Concours"]==nom:
-                self.listeecoles=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+                self.listeecoles=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
                 break
                 
         """Permet de génerer le texte affiché"""
