@@ -119,29 +119,31 @@ class ChoixEcole:
                 for texteaafficher in range(len(admission)):
                     pdf.cell(200,10,txt=listeecoles[texteaafficher][0]+" "*15+admission[texteaafficher] ,ln=1,align="L")
                 pdf.output(self.filename)
-            except TypeError:
+            except  TypeError:
                 return
         
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
-        listeecoles,admission,ecoleamoi=[],[],[]
-        """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
+     
+        ecoleamoi=[]
         for nom in self.noteconcours:
                 ecoleamoi+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
-            
+        
+        listeecoles=[]
         for cle in self.concours:
                 for nom in self.concours[cle]:
                     listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
-        for i in range(len(listeecoles)):
-            if listeecoles[i] in ecoleamoi  :
-                admission.append("Admis")
-            else:
-                admission.append("Refuse")
-        return admission,listeecoles
         
+        admission=["Admis"]*len(listeecoles)
+        for i in range(len(listeecoles)):
+            if listeecoles[i] not in ecoleamoi  :
+                admission[i]="Refuse"
+        return admission,listeecoles
+      
     def save_file(self, whatever = None):
         if (self.filename ==()):
             self.save_file_as()
+            
         self.convertpdf()
 
     def save_file_as(self, whatever = None):
