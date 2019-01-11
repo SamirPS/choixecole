@@ -57,14 +57,11 @@ class ChoixEcole:
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.concours=model.renvoie_coefficient()
-        self.notematiere=[20]*7
+        self.notematiere=[20]*(len(self.matieres)+1)
         self.noteconcours=self.renvoie_note()
         self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
         self.AffichageEcole()
-
-        """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
-        self.entry_ecole.insert(0.0,self.textaffiche)
-        self.entry_ecole.configure(state="disabled")
+        
         """On affiche les combobox et on les lie a Affichage Ecole"""
         
         for i,combo in enumerate(self.affichage):
@@ -127,7 +124,7 @@ class ChoixEcole:
      
         ecoleamoi=[]
         for nom in self.noteconcours:
-                ecoleamoi+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+                ecoleamoi+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom])))
         
         listeecoles=[]
         for cle in self.concours:
@@ -175,11 +172,11 @@ class ChoixEcole:
                self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
         return self.noteconcours
     
-    def Ecole(self,listenote,dictonnaire,choix_utilisateur):
+    def Ecole(self,listenote,dictonnaire):
         
         self.listeecoles=[]
         for cle in dictonnaire:
-            self.listeecoles=self.listeecoles+model.filtre(choix_utilisateur["Specialite"],choix_utilisateur["Region"],choix_utilisateur["Concours"],choix_utilisateur["Alternance"],cle,listenote[cle])
+            self.listeecoles=self.listeecoles+model.filtre(self.choix_utilisateur["Specialite"],self.choix_utilisateur["Region"],self.choix_utilisateur["Concours"],self.choix_utilisateur["Alternance"],cle,listenote[cle])
         return self.listeecoles
         
     def AffichageEcole(self):
@@ -196,9 +193,9 @@ class ChoixEcole:
                     
         for nom in self.noteconcours:
             if self.choix_utilisateur["Concours"]==None:
-                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom])))
             elif self.choix_utilisateur["Concours"]==nom:
-                self.listeecoles=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+                self.listeecoles=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom])))
                 break
                 
         """Permet de génerer le texte affiché"""
