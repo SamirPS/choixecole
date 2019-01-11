@@ -55,17 +55,18 @@ class ChoixEcole:
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
         self.colonne_table=(("Nom","Specialite"),("Region","EcoleS"),("Admission","EcoleS"),("Alternance","EcoleSpe"))
-        self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]+[["3/2","5/2","7/2"]]
+        self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]+[["3/2","5/2"]]
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.listeecoles=[]
-        self.concours=model.renvoie_coefficient()    
+        self.concours=model.renvoie_coefficient() 
+        self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
         self.textaffiche=""
-        self.note=None
+        self.notematiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
         if self.concours!={}:
             for cle in self.concours:
                 for nom in self.concours[cle]:
-                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,self.note)))
+                    self.listeecoles+=list(set(model.filtre(None,None,None,None,nom,None)))
                     
             for texteaafficher in range(len(self.listeecoles)):
                 self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
@@ -78,7 +79,7 @@ class ChoixEcole:
         for i,combo in enumerate(self.affichage):
             combo=ttk.Combobox(self.root,state="readonly",textvariable=self.var_affichage[i],values=self.information_desirer[i],height="4")
             combo.grid(row=i*2+1,column=2,sticky="w",padx=10)
-            combo.bind("<<ComboboxSelected>>",self.AffichageEcole)
+            combo.bind("<<ComboboxSelected>>",self.choixuseur)
 
         
         """On place les élèments """
@@ -93,7 +94,28 @@ class ChoixEcole:
         Label(self.root,text='Ecole:').grid(row=0,column=3)
         
         self.root.mainloop()
-    
+    def choixuseur(self,event):
+        
+        self.choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get()),"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
+        for cle in self.choix_utilisateur:
+            if self.choix_utilisateur[cle]=="Peu importe" or self.choix_utilisateur[cle]==0:
+                self.choix_utilisateur[cle]=None
+        self.notematiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
+        
+        for i in range(len(self.notematiere)):
+            if "" in self.notematiere : 
+                self.matiere[i]=20
+        if 0.0 in map(float,self.notematiere) :
+             self.entry_ecole.configure(state="normal")
+             self.entry_ecole.delete(0.7,'end');
+             self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
+             self.entry_ecole.configure(state="disabled")
+             return 
+            
+        else:
+            self.notematiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
+        self.AffichageEcole()
+        
     def convertpdf(self):
             """Converti en PDF """   
             try:
@@ -110,22 +132,11 @@ class ChoixEcole:
         
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
-        listeecoles,ecoleamoi,admission=[],[],[]
-        choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
-        matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        
-        
-        if "" in matiere : 
-            matiere=[20]*7
-        elif 0.0 in map(float,matiere) :
-            matiere=[0]*7
-        else:
-            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
-        
+        listeecoles,admission,ecoleamoi=[],[],[]
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteconcours=self.renvoie_note(matiere) 
+        noteconcours=self.renvoie_note() 
         for nom in noteconcours:
-                ecoleamoi+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
+                ecoleamoi+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
             
         for cle in self.concours:
                 for nom in self.concours[cle]:
@@ -164,12 +175,12 @@ class ChoixEcole:
                 return True
         return False
     
-    def renvoie_note(self,matiere):
+    def renvoie_note(self):
         noteconcours={}
         for nom in self.concours:
             noteconcours[nom]={}
             for cle in self.concours[nom]:
-                noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],matiere)
+                noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
         return noteconcours 
     
     def Ecole(self,listenote,dictonnaire,choix_utilisateur):
@@ -179,33 +190,15 @@ class ChoixEcole:
             self.listeecoles=self.listeecoles+model.filtre(choix_utilisateur["Specialite"],choix_utilisateur["Region"],choix_utilisateur["Concours"],choix_utilisateur["Alternance"],cle,listenote[cle])
         return self.listeecoles
         
-    def AffichageEcole(self,event):
-        """Recuperer les variables entrée par l'utilisateur"""
+    def AffichageEcole(self):
         self.listeecoles=[]
         self.textaffiche="" 
-        matiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get()),"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
-        
-        """Pour éviter les erreurs dans la console python"""
-        
-        if "" in matiere : 
-            matiere=[20]*7
-        elif 0.0 in map(float,matiere) :
-            self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
-            self.entry_ecole.configure(state="disabled")
-            return 
-        else:
-            matiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
-        
+     
         """Boucles pour avoir les parametres choisi par l'utilisateur pour les mettres dans la fonction filtre """  
-        noteconcours=self.renvoie_note(matiere)  
-        for cle in choix_utilisateur:
-            if choix_utilisateur[cle]=="Peu importe" or choix_utilisateur[cle]==0:
-                choix_utilisateur[cle]=None
-        
+        noteconcours=self.renvoie_note()  
         
         if self.var_affichage[4]=="3/2":
             for nom in noteconcours:
@@ -213,14 +206,12 @@ class ChoixEcole:
                     noteconcours[nom][cle]=noteconcours[nom][cle]+self.concours[nom][cle][-1]
                     
         for nom in noteconcours:
-            if choix_utilisateur["Concours"]==None:
-                self.listeecoles+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
-            elif choix_utilisateur["Concours"]==nom:
-                self.listeecoles=list(set(self.Ecole(noteconcours[nom],self.concours[nom],choix_utilisateur)))
+            if self.choix_utilisateur["Concours"]==None:
+                self.listeecoles+=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
+            elif self.choix_utilisateur["Concours"]==nom:
+                self.listeecoles=list(set(self.Ecole(noteconcours[nom],self.concours[nom],self.choix_utilisateur)))
                 break
                 
-           
- 
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
