@@ -17,10 +17,8 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-        x_cordinate = int((screen_width/2) - (630/2))
-        y_cordinate = int((screen_height/2) - (273/2))
+        x_cordinate = int((self.root.winfo_screenwidth()/2) - (630/2))
+        y_cordinate = int((self.root.winfo_screenheight()/2) - (273/2))
         self.root.geometry("630x273+{}+{}".format( x_cordinate, y_cordinate))
         
         """Ajoute un menu"""
@@ -33,7 +31,7 @@ class ChoixEcole:
         self.filename =() 
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         
-        vcmd = (self.root.register(self.callback),  '%P')
+        vcmd = (self.root.register(self.valider),  '%P')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
          
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
@@ -58,14 +56,12 @@ class ChoixEcole:
         self.information_desirer=[model.renvoie_information(self.colonne_table[i][0],self.colonne_table[i][1]) for i in range(len(self.colonne_table))]+[["3/2","5/2"]]
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
-        self.listeecoles=[]
-        self.concours=model.renvoie_coefficient() 
-        self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
-        self.textaffiche=""
-        self.notematiere=[20]*(len(self.matieres)+1)
+        self.concours=model.renvoie_coefficient()
+        self.notematiere=[20]*7
         self.noteconcours=self.renvoie_note()
+        self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
         self.AffichageEcole()
-            
+
         """affiche le texte et pour eviter d'écrire dans le champs Ecole"""
         self.entry_ecole.insert(0.0,self.textaffiche)
         self.entry_ecole.configure(state="disabled")
@@ -75,8 +71,7 @@ class ChoixEcole:
             combo=ttk.Combobox(self.root,state="readonly",textvariable=self.var_affichage[i],values=self.information_desirer[i],height="4")
             combo.grid(row=i*2+1,column=2,sticky="w",padx=10)
             combo.bind("<<ComboboxSelected>>",self.choixuseur)
-
-        
+            
         """On place les élèments """
         for i, lab in enumerate(self.labels_matiere):
             lab.grid(row=i*2, column=1)
@@ -90,7 +85,6 @@ class ChoixEcole:
         
         self.root.mainloop()
     def choixuseur(self,event):
-        
         self.choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get()),"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
         for cle in self.choix_utilisateur:
             if self.choix_utilisateur[cle]=="Peu importe" or self.choix_utilisateur[cle]==0:
@@ -99,16 +93,18 @@ class ChoixEcole:
         
         for i in range(len(self.notematiere)):
             if "" in self.notematiere : 
-                self.matiere[i]=20
-        if 0.0 in map(float,self.notematiere) :
+                self.notematiere[i]=20
+            else:
+                self.notematiere[i]=float(self.notematiere[i])
+        self.notematiere[0]=(float(self.notematiere[1])+float(self.entries_matiere[3].get()))/2
+        
+        if 0.0 in self.notematiere :
              self.entry_ecole.configure(state="normal")
              self.entry_ecole.delete(0.7,'end');
              self.entry_ecole.insert(0.0,"Soit pas aussi pessimiste")
              self.entry_ecole.configure(state="disabled")
              return 
-            
-        else:
-            self.notematiere=[(float(self.entries_matiere[0].get())+float(self.entries_matiere[2].get()))/2]+[float(self.entries_matiere[i].get()) for i in range(len(self.entries_matiere))]
+         
         self.noteconcours=self.renvoie_note()
         self.AffichageEcole()
         
@@ -157,7 +153,7 @@ class ChoixEcole:
    
         self.convertpdf()
       
-    def callback(self, value_if_allowed):
+    def valider(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
             try :
