@@ -30,6 +30,8 @@ class ChoixEcole:
         
         vcmd = (self.root.register(self.valider),  '%P')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
+       
+        
          
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
         
@@ -55,7 +57,7 @@ class ChoixEcole:
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.concours=model.renvoie_coefficient()
         self.choixuseur("<<ComboboxSelected>>")
-        
+              
         """On affiche les combobox et on les lie a Affichage Ecole"""
         
         for i,combo in enumerate(self.affichage):
@@ -70,6 +72,8 @@ class ChoixEcole:
             lab.grid(row=i*2,column=2)
         for i, entry in enumerate(self.entries_matiere):
             entry.grid(row=i*2+1, column=1)
+            entry.bind("<KeyPress>",self.choixuseur)
+            entry.bind("<KeyRelease>",self.choixuseur)
             
         self.entry_ecole.grid(row=1,rowspan=8,column=3) 
         Label(self.root,text='Ecole:').grid(row=0,column=3)
@@ -141,6 +145,7 @@ class ChoixEcole:
       
     def valider(self, value_if_allowed):
         """Gerer tous les types de notes pour avoir le bon nombre de décimales dans les notes et entre 00.00 a 20.00 """
+        
         if value_if_allowed.replace(".", "", 1).isdecimal() and float(value_if_allowed)<=20.00 or value_if_allowed == "":
             try :
                 if value_if_allowed[2]=="." and len(value_if_allowed)<6 :
