@@ -117,7 +117,7 @@ class ChoixEcole:
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
         ecoleamoi=self.Ecole()
-        listeecoles=list(set(model.filtre({x:None for x in self.choix_utilisateur},None,None)))
+        listeecoles=list(set(model.filtre({choix:None for choix in self.choix_utilisateur},None,None)))
         
         admission=["Admis"]*len(listeecoles)
         for i in range(len(listeecoles)):
@@ -128,7 +128,6 @@ class ChoixEcole:
     def save_file(self, whatever = None):
         if (self.filename ==()):
             self.save_file_as()
-            
         self.convertpdf()
 
     def save_file_as(self, whatever = None):
@@ -153,9 +152,8 @@ class ChoixEcole:
         return False
     
     def renvoie_note(self):
-        self.noteconcours={}
-        for nom in self.concours:
-            self.noteconcours[nom]={}
+        self.noteconcours={{noteconcours:{} for noteconcours in self.concours}}
+        for nom in self.concours :
             for cle in self.concours[nom]:
                self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
         return self.noteconcours
