@@ -54,10 +54,7 @@ class ChoixEcole:
         
         """Permet d'afficher toutes les ecoles contenue dans la base de données"""
         self.concours=model.renvoie_coefficient()
-        self.notematiere=[20]*(len(self.matieres)+1)
-        self.noteconcours=self.renvoie_note()
-        self.choix_utilisateur={"Specialite":None,"Region":None,"Concours":None,"Alternance":None}
-        self.AffichageEcole()
+        self.choixuseur("<<ComboboxSelected>>")
         
         """On affiche les combobox et on les lie a Affichage Ecole"""
         
@@ -80,6 +77,7 @@ class ChoixEcole:
         self.root.mainloop()
     def choixuseur(self,event):
         self.choix_utilisateur={"Specialite":self.information_desirer[0].index(self.var_affichage[0].get()),"Region":self.var_affichage[1].get(),"Concours":self.var_affichage[2].get(),"Alternance":self.var_affichage[3].get()}
+        
         for cle in self.choix_utilisateur:
             if self.choix_utilisateur[cle]=="Peu importe" or self.choix_utilisateur[cle]==0:
                 self.choix_utilisateur[cle]=None

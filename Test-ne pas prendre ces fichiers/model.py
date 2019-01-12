@@ -66,6 +66,7 @@ def filtre(choix_utilisateur,groupe,note):
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
-        requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "    
+        requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
+        
     ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
     return ecoles
