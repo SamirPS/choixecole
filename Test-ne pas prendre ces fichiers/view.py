@@ -117,8 +117,7 @@ class ChoixEcole:
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
         ecoleamoi=self.Ecole()
-        choixdebase= {x:None for x in self.choix_utilisateur}
-        listeecoles=list(set(model.filtre(choixdebase,None,None)))
+        listeecoles=list(set(model.filtre({x:None for x in self.choix_utilisateur},None,None)))
         
         admission=["Admis"]*len(listeecoles)
         for i in range(len(listeecoles)):
