@@ -152,7 +152,7 @@ class ChoixEcole:
         return False
     
     def renvoie_note(self):
-        self.noteconcours={{noteconcours:{} for noteconcours in self.concours}}
+        self.noteconcours={noteconcours:{} for noteconcours in self.concours}
         for nom in self.concours :
             for cle in self.concours[nom]:
                self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
@@ -178,12 +178,9 @@ class ChoixEcole:
                 for cle in self.noteconcours[nom]:
                     self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
         
-        if self.choix_utilisateur["Concours"]==None:
-            self.listeecoles=self.Ecole()
-        else :
-            self.listeecoles=self.Ecole()
-                
-                
+      
+        self.listeecoles=self.Ecole()
+
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
             self.textaffiche=self.textaffiche+"\n"+self.listeecoles[texteaafficher][0]+" "+self.listeecoles[texteaafficher][1]+" "+self.listeecoles[texteaafficher][2]
