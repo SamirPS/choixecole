@@ -167,7 +167,6 @@ class ChoixEcole:
         return list(set(self.listeecoles))
         
     def AffichageEcole(self):
-        self.listeecoles=[]
         self.textaffiche="" 
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
