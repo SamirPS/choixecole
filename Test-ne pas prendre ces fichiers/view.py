@@ -13,7 +13,6 @@ class ChoixEcole:
     def __init__(self):
         
         """Initialise l'application et change le titre et la positionne """
-  
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
