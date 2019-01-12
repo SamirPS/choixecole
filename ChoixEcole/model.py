@@ -41,33 +41,37 @@ def renvoie_coefficient():
 
 def NoteCoefficient(coefficient,matiere):
     """Renvoie la note coefficiente"""
-    note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere)))]
-    return note[0] 
+    note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere))) ]
+    return note[0]
 
-def filtre(specialiteid,choix_region,concoursid,alternanceid,groupe,note):
-    
+def filtre(choix_utilisateur,groupe,note):
+
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
     conditions=[]
-    
     if note!=None:
         conditions.append(("Points","<=",note))
     if groupe!=None:
         conditions.append(("Groupe","=",groupe))
-    if specialiteid!=None:
-        conditions.append(("Idspe","=",specialiteid))
-    if alternanceid!=None:
-        conditions.append(("Alternance","=",alternanceid))
-    if concoursid!=None :
-        conditions.append(("Admission","=",concoursid))
-    if choix_region!=None:
-        conditions.append(("Region","=",choix_region))
+    if choix_utilisateur["Specialite"]!=None:
+        conditions.append(("Idspe","=",choix_utilisateur["Specialite"]))
+    if choix_utilisateur["Alternance"]!=None:
+        conditions.append(("Alternance","=",choix_utilisateur["Alternance"]))
+    if choix_utilisateur["Concours"]!=None :
+        conditions.append(("Admission","=",choix_utilisateur["Concours"]))
+    if choix_utilisateur["Region"]!=None:
+        conditions.append(("Region","=",choix_utilisateur["Region"]))
     
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
         requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
+    
+    if conditions==[]:
+        requete=requete[0:len(requete)-6]
+    else :
+        requete=requete[0:len(requete)-4]
         
-    ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
+    ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
