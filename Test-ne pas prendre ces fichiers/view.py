@@ -17,9 +17,6 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
-        x_cordinate = int((self.root.winfo_screenwidth()/2) - (630/2))
-        y_cordinate = int((self.root.winfo_screenheight()/2) - (273/2))
-        self.root.geometry("630x273+{}+{}".format( x_cordinate, y_cordinate))
         
         """Ajoute un menu"""
         menubar = Menu(self.root)
