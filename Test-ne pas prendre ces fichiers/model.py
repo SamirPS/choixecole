@@ -67,6 +67,11 @@ def filtre(choix_utilisateur,groupe,note):
     variables=tuple(conditions[i][2] for i in  range (len(conditions)))
     for i in range(len(conditions)):
         requete=requete+conditions[i][0]+conditions[i][1]+"? "+" AND "
+    
+    if conditions==[]:
+        requete=requete[0:len(requete)-6]
+    else :
+        requete=requete[0:len(requete)-4]
         
-    ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
+    ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
