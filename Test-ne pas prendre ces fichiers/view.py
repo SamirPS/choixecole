@@ -172,12 +172,13 @@ class ChoixEcole:
                self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
         return self.noteconcours
     
-    def Ecole(self,listenote,dictonnaire):
+    def Ecole(self):
         
         self.listeecoles=[]
-        for cle in dictonnaire:
-            self.listeecoles=self.listeecoles+model.filtre(self.choix_utilisateur["Specialite"],self.choix_utilisateur["Region"],self.choix_utilisateur["Concours"],self.choix_utilisateur["Alternance"],cle,listenote[cle])
-        return self.listeecoles
+        for nom in self.noteconcours:
+            for cle in self.noteconcours[nom]:
+                self.listeecoles+=model.filtre(self.choix_utilisateur,cle,self.noteconcours[nom][cle])
+        return list(set(self.listeecoles))
         
     def AffichageEcole(self):
         self.listeecoles=[]
@@ -190,13 +191,12 @@ class ChoixEcole:
             for nom in self.noteconcours:
                 for cle in self.noteconcours[nom]:
                     self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
-                    
-        for nom in self.noteconcours:
-            if self.choix_utilisateur["Concours"]==None:
-                self.listeecoles+=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom])))
-            elif self.choix_utilisateur["Concours"]==nom:
-                self.listeecoles=list(set(self.Ecole(self.noteconcours[nom],self.concours[nom])))
-                break
+        
+        if self.choix_utilisateur["Concours"]==None:
+            self.listeecoles=self.Ecole()
+        else :
+            self.listeecoles=self.Ecole()
+                
                 
         """Permet de génerer le texte affiché"""
         for texteaafficher in range(len(self.listeecoles)):
