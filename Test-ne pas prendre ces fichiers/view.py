@@ -31,8 +31,6 @@ class ChoixEcole:
         vcmd = (self.root.register(self.valider),  '%P')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
        
-        
-         
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
         
         self.matieres = ('de maths', 'de physique', 'de si', "d'informatique", 'de francais',"d'anglais")
