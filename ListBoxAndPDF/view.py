@@ -62,10 +62,10 @@ class ChoixEcole:
                 
         """On place les élèments et on affecte une scrollbar a la listbox """
         for i,listbox in enumerate(self.listbox_affichage):
-            listbox.grid(row=1,column=i+2,padx=20)
+            listbox.grid(row=1,column=i+2,padx=20,rowspan=10)
             listbox.bind("<<ListboxSelect>>",self.choixuseur)
             self.scrollbar[i].config(command=listbox.yview)
-            self.scrollbar[i].grid(row=1,column=i+2,sticky='e')
+            self.scrollbar[i].grid(row=1,column=i+2,rowspan=10,sticky='e')
             listbox.config(yscrollcommand=self.scrollbar[i].set)
         for i, lab in enumerate(self.labels_matiere):
             lab.grid(row=i*2, column=0)
@@ -76,7 +76,7 @@ class ChoixEcole:
             entry.bind("<KeyPress>",self.choixuseur)
             entry.bind("<KeyRelease>",self.choixuseur)
             
-        self.entry_ecole.grid(row=1,column=10) 
+        self.entry_ecole.grid(row=1,column=10,rowspan=10) 
         Label(self.root,text='Ecole:').grid(row=0,column=10)
         
         self.root.mainloop()
