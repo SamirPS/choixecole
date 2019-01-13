@@ -165,7 +165,6 @@ class ChoixEcole:
                     self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)+self.concours[nom][cle][-1]
                 else :
                      self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
-                     
         return self.noteconcours
     
     def Ecole(self,choixutilisateur):

@@ -67,6 +67,7 @@ def filtre(choix_utilisateur,groupe,note):
     
     variables=tuple(conditions[i][2] for i in  range (len(conditions)) if conditions[i][1]!="IN")
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
+    
     for i in range(len(conditions)):
         if conditions[i][1]=="IN":
             if len(conditions[i][2])==1:
