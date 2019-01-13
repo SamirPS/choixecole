@@ -60,7 +60,7 @@ class ChoixEcole:
             for donnees in self.information_desirer[i]:
                 self.listbox_affichage[i].insert("end",donnees)
                 
-        """On place les élèments """
+        """On place les élèments et on affecte une scrollbar a la listbox """
         for i,listbox in enumerate(self.listbox_affichage):
             listbox.grid(row=1,column=i+2,padx=20)
             listbox.bind("<<ListboxSelect>>",self.choixuseur)
@@ -103,14 +103,11 @@ class ChoixEcole:
              return 
          
         self.noteconcours=self.renvoie_note()
-        
-       
         self.AffichageEcole()
         
     def convertpdf(self):
             """Converti en PDF """   
             try:
-                
                 pdf=FPDF()
                 pdf.add_page()
                 pdf.set_font("Arial",size=12)
@@ -123,17 +120,13 @@ class ChoixEcole:
         
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
-        ecoleamoi=[]
         ecoleamoi=self.Ecole({choix:None for choix in self.choix_utilisateur})
         listeecoles=list(set(model.filtre({choix:None for choix in self.choix_utilisateur},None,None)))
-      
         admission=["Admis"]*len(listeecoles)
         for i in range(len(listeecoles)):
-            self.choix_utilisateur
             if listeecoles[i] not in ecoleamoi  :
                 admission[i]="Refuse"
         return admission,listeecoles
-    
       
     def save_file(self, whatever = None):
         if (self.filename ==()):
