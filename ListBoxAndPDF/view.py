@@ -26,13 +26,12 @@ class ChoixEcole:
         menufichier.add_command(label="Enregistrer ",command=self.save_file)
         menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
         self.filename =() 
+        
         """Initialise  entry et vcmd est une fonction qui verifie si l'utilisateur entre les bonnes informations"""
         
         vcmd = (self.root.register(self.valider),  '%P')
         self.entry_ecole=tkscrolled.ScrolledText(self.root, width=30, height=10,)
        
-        
-         
         """ Initialise les variables et les entrys et label pour afficher les moyennes et met 20 par défaut"""
         
         self.matieres = ('de maths', 'de physique', 'de si', "d'informatique", 'de francais',"d'anglais")
@@ -41,9 +40,8 @@ class ChoixEcole:
         for var in self.var_matieres: var.set(20) 
         self.entries_matiere = [ Entry(self.root, textvariable=var, validate='key', validatecommand = vcmd) for var in self.var_matieres ]
  
-        """Initialise les variables et les entrys et label pour afficher Specialite,Commune,Concours,Alternane 
-           Et les elements 
-                                                                         """
+        """Initialise les variables et listebox des informations contenu dans self.affichage """
+                                                                        
         self.affichage=('Specialité','Region','Concours','Alternance','Année')
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
         self.listbox_affichage=[Listbox(self.root,selectmode='extended',exportselection=0, width=20, height=10) for aff in range(len(self.affichage)-1)]+[Listbox(self.root,exportselection=0, width=20, height=10)]
@@ -57,7 +55,7 @@ class ChoixEcole:
         self.concours=model.renvoie_coefficient()
         self.choixuseur("<<ListboxSelect>>")
               
-        """On affiche les combobox et on les lie a Affichage Ecole"""
+        """On affiche les ListeBoxs et on y  ajoute les données"""
         for i in range(len(self.listbox_affichage)):
             for donnees in self.information_desirer[i]:
                 self.listbox_affichage[i].insert("end",donnees)
@@ -83,8 +81,8 @@ class ChoixEcole:
         
         self.root.mainloop()
     def choixuseur(self,event):
-        self.choix_utilisateur={"Specialite":(self.listbox_affichage[0].curselection()),"Region":tuple(self.listbox_affichage[1].get(0,"end")[i] for i in self.listbox_affichage[1].curselection()),"Concours":tuple(self.listbox_affichage[2].get(i) for i in self.listbox_affichage[2].curselection()),"Alternance":tuple(self.listbox_affichage[3].get(i) for i in self.listbox_affichage[3].curselection())}
-    
+        """Met a jour les variables en fonction des clics de l'utilisateur"""
+        self.choix_utilisateur={"Specialite":self.listbox_affichage[0].curselection(),"Region":tuple(self.listbox_affichage[1].get(0,"end")[i] for i in self.listbox_affichage[1].curselection()),"Concours":tuple(self.listbox_affichage[2].get(i) for i in self.listbox_affichage[2].curselection()),"Alternance":tuple(self.listbox_affichage[3].get(i) for i in self.listbox_affichage[3].curselection())}
         for cle in self.choix_utilisateur:
                 if "Peu importe" in self.choix_utilisateur[cle] or 0 in self.choix_utilisateur[cle] or self.choix_utilisateur[cle]==() :
                     self.choix_utilisateur[cle]=None           
@@ -163,6 +161,8 @@ class ChoixEcole:
         return False
     
     def renvoie_note(self):
+        """Renvoie la note en forme de point pour tout les groupes"""
+        
         self.noteconcours={noteconcours:{} for noteconcours in self.concours}
         for nom in self.concours :
             for cle in self.concours[nom]:
@@ -170,7 +170,7 @@ class ChoixEcole:
         return self.noteconcours
     
     def Ecole(self,choixutilisateur):
-        
+        """Retourne la liste des ecoles"""
         self.listeecoles=[]
         for nom in self.noteconcours:
             for cle in self.noteconcours[nom]:
@@ -182,12 +182,12 @@ class ChoixEcole:
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
-     
+
         if  "3/2" in [self.listbox_affichage[4].get(i) for i in self.listbox_affichage[4].curselection()]:
             for nom in self.noteconcours:
                 for cle in self.noteconcours[nom]:
                     self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
-        
+       
       
         self.listeecoles=self.Ecole(self.choix_utilisateur)
 
