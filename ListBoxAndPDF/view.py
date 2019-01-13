@@ -103,6 +103,8 @@ class ChoixEcole:
              return 
          
         self.noteconcours=self.renvoie_note()
+        
+       
         self.AffichageEcole()
         
     def convertpdf(self):
@@ -167,6 +169,12 @@ class ChoixEcole:
         for nom in self.concours :
             for cle in self.concours[nom]:
                self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
+                      
+        if  "3/2" in [self.listbox_affichage[4].get(i) for i in self.listbox_affichage[4].curselection()]:
+            for nom in self.noteconcours:
+                for cle in self.noteconcours[nom]:
+                    self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
+        
         return self.noteconcours
     
     def Ecole(self,choixutilisateur):
@@ -183,12 +191,6 @@ class ChoixEcole:
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
 
-        if  "3/2" in [self.listbox_affichage[4].get(i) for i in self.listbox_affichage[4].curselection()]:
-            for nom in self.noteconcours:
-                for cle in self.noteconcours[nom]:
-                    self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
-       
-      
         self.listeecoles=self.Ecole(self.choix_utilisateur)
 
         """Permet de génerer le texte affiché"""
