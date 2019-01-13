@@ -44,7 +44,7 @@ class ChoixEcole:
                                                                         
         self.affichage=('Specialité','Region','Concours','Alternance','Année')
         self.labels_affichage= [ Label(self.root, text=aff) for aff in self.affichage ] 
-        self.listbox_affichage=[Listbox(self.root,selectmode='extended',exportselection=0, width=20, height=10) for aff in range(len(self.affichage)-1)]+[Listbox(self.root,exportselection=0, width=20, height=10)]
+        self.listbox_affichage=[Listbox(self.root,selectmode='multiple',exportselection=0, width=20, height=10) for aff in range(len(self.affichage)-1)]+[Listbox(self.root,exportselection=0, width=20, height=10)]
         self.scrollbar =[Scrollbar(self.root, orient="vertical") for aff in self.affichage]
         
         """Initalise les listes en utilisant les fonction du fichier model.py"""
@@ -87,7 +87,6 @@ class ChoixEcole:
                 if "Peu importe" in self.choix_utilisateur[cle] or 0 in self.choix_utilisateur[cle] or self.choix_utilisateur[cle]==() :
                     self.choix_utilisateur[cle]=None           
         self.notematiere=[self.entries_matiere[0].get()+self.entries_matiere[2].get()]+[self.entries_matiere[i].get() for i in range(len(self.entries_matiere))]
-        
         for i in range(len(self.notematiere)):
             if "" in self.notematiere : 
                 self.notematiere[i]=20
