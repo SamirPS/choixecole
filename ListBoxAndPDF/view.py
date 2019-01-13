@@ -168,13 +168,11 @@ class ChoixEcole:
         self.noteconcours={noteconcours:{} for noteconcours in self.concours}
         for nom in self.concours :
             for cle in self.concours[nom]:
-               self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
-                      
-        if  "3/2" in [self.listbox_affichage[4].get(i) for i in self.listbox_affichage[4].curselection()]:
-            for nom in self.noteconcours:
-                for cle in self.noteconcours[nom]:
-                    self.noteconcours[nom][cle]=self.noteconcours[nom][cle]+self.concours[nom][cle][-1]
-        
+                if  0 in self.listbox_affichage[4].curselection():
+                    self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)+self.concours[nom][cle][-1]
+                else :
+                     self.noteconcours[nom][cle]=model.NoteCoefficient(self.concours[nom][cle],self.notematiere)
+                     
         return self.noteconcours
     
     def Ecole(self,choixutilisateur):
@@ -190,7 +188,6 @@ class ChoixEcole:
         """Active le champs Ecole et supprime ce qu'il y avait écrit avant"""
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end');
-
         self.listeecoles=self.Ecole(self.choix_utilisateur)
 
         """Permet de génerer le texte affiché"""
