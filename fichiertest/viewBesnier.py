@@ -46,7 +46,7 @@ class ChoixEcole:
         ########################################################################
         #                        CHOIX                                         #
         ########################################################################
-        # Même idée que plus haut.
+        # On crée un dictonnaire modifié a chaque clique sur la ListeBox.
         
         self.choix = {
             "Region": None,
@@ -225,6 +225,12 @@ class ChoixEcole:
             self.notes = None
 
     def maj_choix(self):
+        ########################################################################
+        #                        NOTES                                         #
+        ########################################################################
+        # On récuperer l'index de la spécialite et les autres variables
+        # Et en fonction de certains cas on dit que self.choix=None
+        
         self.choix={"Specialite":self.specialite.curselection(),
                     "Region":tuple(self.Region.get(i) for i in self.Region.curselection()),
                     "Concours":tuple(self.Concours.get(i) for i in self.Concours.curselection()),
@@ -239,7 +245,6 @@ class ChoixEcole:
     def update(self, *inutile):
         self.valide_maj_notes()
         self.maj_choix()
-        self.groupe=model.renvoie_coefficient()
         self.affichage()
 
         
@@ -256,8 +261,8 @@ class ChoixEcole:
         else:
             
             notecoefficient=model.NoteCoefficient(self.notes,self.choix["Année"])
-            for nom in self.groupe:
-                for cle in self.groupe[nom]:
+            for nom in notecoefficient:
+                for cle in notecoefficient[nom]:
                     ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
                     for ecole in ecoles:
                         text_affiche += (
