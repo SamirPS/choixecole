@@ -25,10 +25,9 @@ def renvoie_information(colonne,table):
     return informationvoulue
 
 def renvoie_coefficient():
-    """Donne la liste des concours et par la suite des dossier(pas implante encore) et donne les groupes et coefficient grâce a un 
-       dictonnaire """
+    """Donne la liste des concours  et donne les groupes et coefficient grâce a un dictonnaire """
        
-    colonne="Groupe,Modelisation,Maths,Physique,SI,Informatique,Anglais,Francais,Bonification "
+    colonne="Groupe,Maths,Physique,SI,Informatique,Anglais,Francais,Modelisation,Bonification "
     liste_concours=list(set(renvoie_information("Concours","Coefficient")))
     concours={}
     for nom in liste_concours:
@@ -39,10 +38,27 @@ def renvoie_coefficient():
     return concours
 
 
-def NoteCoefficient(coefficient,matiere):
-    """Renvoie la note coefficiente"""
-    note=[sum(coefficient[coeff]*matiere[coeff] for coeff in range (len(matiere))) ]
-    return note[0]
+def NoteCoefficient(matiere,variable):
+    coefficient=renvoie_coefficient()
+    dictnoteconcours={note:{} for note in coefficient}
+    for nom in coefficient:
+        for cle in coefficient[nom]:
+            ss={
+            "maths": coefficient[nom][cle][0],
+            "physique": coefficient[nom][cle][1],
+            "si":coefficient[nom][cle][2],
+            "informatique":coefficient[nom][cle][3],
+            "anglais":coefficient[nom][cle][4],
+            "francais":coefficient[nom][cle][5],
+            "modelisation":coefficient[nom][cle][6],
+            }
+            if variable==("3/2",):
+                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]]
+                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])
+            else :
+                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss]
+                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])   
+    return dictnoteconcours
 
 def filtre(choix_utilisateur,groupe,note):
 

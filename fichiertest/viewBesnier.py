@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar,IntVar, Label,Entry,Listbox
+from tkinter import Tk,StringVar, Label,Entry,Listbox
 import model
 import tkinter.scrolledtext as tkscrolled
 
@@ -28,19 +28,20 @@ class ChoixEcole:
 
         self.notes_vars = {
             "maths": StringVar(self.root),
-            "francais": StringVar(self.root),
-            "SI":StringVar(self.root),
-            "Informatique":StringVar(self.root),
-            "Anglais":StringVar(self.root),
-            "Francais":StringVar(self.root)
-        }
+            "physique": StringVar(self.root),
+            "si":StringVar(self.root),
+            "informatique":StringVar(self.root),
+            "anglais":StringVar(self.root),
+            "francais":StringVar(self.root)
+            }
+       
         for var in self.notes_vars.values():
             var.trace('w', self.update)
 
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
-
+       
 
         ########################################################################
         #                        CHOIX                                         #
@@ -71,11 +72,11 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en français"
+            text="Moyenne en Physique"
         ).grid(row=3, column=1)
         Entry(
             self.root,
-            textvariable=self.notes_vars["francais"]
+            textvariable=self.notes_vars["physique"]
         ).grid(row=4, column=1)
         
         Label(
@@ -84,7 +85,7 @@ class ChoixEcole:
         ).grid(row=5, column=1)
         Entry(
             self.root,
-            textvariable=self.notes_vars["SI"]
+            textvariable=self.notes_vars["si"]
         ).grid(row=6, column=1)
         
         Label(
@@ -93,7 +94,7 @@ class ChoixEcole:
         ).grid(row=7, column=1)
         Entry(
             self.root,
-            textvariable=self.notes_vars["Informatique"]
+            textvariable=self.notes_vars["informatique"]
         ).grid(row=8, column=1)
         
         Label(
@@ -102,7 +103,7 @@ class ChoixEcole:
         ).grid(row=9, column=1)
         Entry(
             self.root,
-            textvariable=self.notes_vars["Anglais"]
+            textvariable=self.notes_vars["anglais"]
         ).grid(row=10, column=1)
         
         Label(
@@ -111,7 +112,7 @@ class ChoixEcole:
         ).grid(row=11, column=1)
         Entry(
             self.root,
-            textvariable=self.notes_vars["Francais"]
+            textvariable=self.notes_vars["francais"]
         ).grid(row=12, column=1)
        
          ########################################################################
@@ -191,6 +192,16 @@ class ChoixEcole:
         for annee in ["3/2","5/2"]:
              self.Année.insert("end",annee)
         
+         ########################################################################
+        #                 On bind les ListBox                            #
+        ########################################################################
+        self.specialite.bind("<<ListboxSelect>>",self.update)
+        self.Region.bind("<<ListboxSelect>>",self.update)
+        self.Alternance.bind("<<ListboxSelect>>",self.update)
+        self.Concours.bind("<<ListboxSelect>>",self.update)
+        self.Année.bind("<<ListboxSelect>>",self.update)
+        
+
 
         self.entry_ecole.grid(row=1,column=20,rowspan=10) 
         
@@ -206,6 +217,7 @@ class ChoixEcole:
                     raise ValueError()
 
                 notes[nom_matiere] = note_float
+            notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
 
         except ValueError:
@@ -217,13 +229,12 @@ class ChoixEcole:
                     "Region":tuple(self.Region.get(i) for i in self.Region.curselection()),
                     "Concours":tuple(self.Concours.get(i) for i in self.Concours.curselection()),
                     "Alternance":tuple(self.Alternance.get(i) for i in self.Alternance.curselection()),
-                    "Année":self.Année.curselection()}
+                    "Année":tuple(self.Année.get(i) for i in self.Année.curselection())}
         
         for cle in self.choix:
-            if self.choix[cle]==():
+            if self.choix[cle]==() or 0 in self.choix[cle] or "Peu importe" in self.choix[cle]:
                 self.choix[cle]=None
-                
-            
+                   
         
     def update(self, *inutile):
         self.valide_maj_notes()
@@ -236,15 +247,18 @@ class ChoixEcole:
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end')
-     
         text_affiche = "" 
+        
         
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
+            
         else:
+            
+            notecoefficient=model.NoteCoefficient(self.notes,self.choix["Année"])
             for nom in self.groupe:
                 for cle in self.groupe[nom]:
-                    ecoles = model.filtre(self.choix, cle, calculer_moyenne(self.notes))
+                    ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
                     for ecole in ecoles:
                         text_affiche += (
                             "\n" 
@@ -256,11 +270,6 @@ class ChoixEcole:
 
         self.entry_ecole.insert(0.7, text_affiche)
         self.entry_ecole.configure(state="disabled")
-         
-
-def calculer_moyenne(notes):
-    """Fonction fictive de calcul de moyenne (devrait être dans model.py)."""
-    return notes["maths"] * 50 + notes["francais"] * 10
 
 
 if __name__ == '__main__':
