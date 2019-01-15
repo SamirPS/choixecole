@@ -228,6 +228,7 @@ class ChoixEcole:
     def update(self, *inutile):
         self.valide_maj_notes()
         self.maj_choix()
+        self.groupe=model.renvoie_coefficient()
         self.affichage()
 
         
@@ -240,16 +241,18 @@ class ChoixEcole:
         
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
-        else:       
-            ecoles = model.filtre(self.choix, None, calculer_moyenne(self.notes))
-            for ecole in ecoles:
-                text_affiche += (
-                    "\n" 
-                    + ecole[0] + " "
-                    + ecole[1] + " "
-                    + ecole[2]
-                )
-        
+        else:
+            for nom in self.groupe:
+                for cle in self.groupe[nom]:
+                    ecoles = model.filtre(self.choix, cle, calculer_moyenne(self.notes))
+                    for ecole in ecoles:
+                        text_affiche += (
+                            "\n" 
+                            + ecole[0] + " "
+                            + ecole[1] + " "
+                            + ecole[2]
+                        )
+                   
 
         self.entry_ecole.insert(0.7, text_affiche)
         self.entry_ecole.configure(state="disabled")
