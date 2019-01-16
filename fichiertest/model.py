@@ -53,11 +53,9 @@ def NoteCoefficient(matiere,variable):
             "modelisation":coefficient[nom][cle][6],
             }
             if variable==("3/2",):
-                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]]
-                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])
+                dictnoteconcours[nom][cle]=sum([(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]])
             else :
-                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss]
-                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])   
+                dictnoteconcours[nom][cle]=sum([(ss[key]*matiere[key]) for key in ss])
     return dictnoteconcours
 
 def filtre(choix_utilisateur,groupe,note):
