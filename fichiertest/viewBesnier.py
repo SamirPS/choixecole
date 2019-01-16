@@ -211,16 +211,17 @@ class ChoixEcole:
             notes = {}
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
-                if note_float > 20.00 or note_float < 0:
+                if note_float > 20 or note_float < 0:
                     raise ValueError()
                 
                 else:
-                    if len(note_var.get())==1 :
+                    if len(note_var.get())==1 or len(note_var.get())==2 :
                         pass
                     elif note_var.get()[2]=="." and len(note_var.get())<6:
                         pass
                     elif note_var.get()[1]=="." and len(note_var.get())<5:
                         pass
+                    
                     else :
                         raise ValueError()
                         
