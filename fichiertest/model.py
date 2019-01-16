@@ -65,37 +65,35 @@ def filtre(choix_utilisateur,groupe,note):
     """
     
     conditions=[]
-    if note!=None:
-        conditions.append(("Points","<=",note))
-    if groupe!=None:
-        conditions.append(("Groupe","=",groupe))
-    if choix_utilisateur["Specialite"]!=None:
-        conditions.append(("Idspe","IN",choix_utilisateur["Specialite"]))
-    if choix_utilisateur["Alternance"]!=None:
-        conditions.append(("Alternance","IN",choix_utilisateur["Alternance"]))
-    if choix_utilisateur["Concours"]!=None :
-        conditions.append(("Admission","IN",choix_utilisateur["Concours"]))
-    if choix_utilisateur["Region"]!=None:
-        conditions.append(("Region","IN",choix_utilisateur["Region"]))
+    ConditionsVariable={"note":("Points","<=",note),
+                        "groupe":("groupe","=",groupe),
+                        choix_utilisateur["Specialite"]:("Idspe","IN",choix_utilisateur["Specialite"]),
+                        choix_utilisateur["Alternance"]:("Idspe","IN",choix_utilisateur["Specialite"]),
+                        choix_utilisateur["Concours"]:("Admission","IN",choix_utilisateur["Concours"]),
+                        choix_utilisateur["Region"]:("Region","IN",choix_utilisateur["Region"])
+                        }
     
-    
+    for cle in ConditionsVariable:
+        if ConditionsVariable[cle][2]!=None:
+            conditions.append(ConditionsVariable[cle])
+            
     variables=tuple(conditions[i][2] for i in  range (len(conditions)) if conditions[i][1]!="IN")
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     
     for i in range(len(conditions)):
         if conditions[i][1]=="IN":
             if len(conditions[i][2])==1:
-                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])[0:-2]+")"+" AND "
+                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])[:-2]+")"+" AND "
             else: 
                 requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])+" AND "
                 
         else:
             requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
     
-    if conditions==[]:
-        requete=requete[0:len(requete)-6]
+    if conditions:
+        requete=requete[:-6]
     else :
-        requete=requete[0:len(requete)-4]
+        requete=requete[:-4]
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
