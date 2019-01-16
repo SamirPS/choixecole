@@ -200,8 +200,6 @@ class ChoixEcole:
         self.Alternance.bind("<<ListboxSelect>>",self.update)
         self.Concours.bind("<<ListboxSelect>>",self.update)
         self.Année.bind("<<ListboxSelect>>",self.update)
-        
-
 
         self.entry_ecole.grid(row=1,column=20,rowspan=10) 
         
@@ -213,13 +211,25 @@ class ChoixEcole:
             notes = {}
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
-                if note_float > 20 or note_float < 0:
+                if note_float > 20.00 or note_float < 0:
                     raise ValueError()
-
+                
+                else:
+                    if len(note_var.get())==1 :
+                        pass
+                    elif note_var.get()[2]=="." and len(note_var.get())<6:
+                        pass
+                    elif note_var.get()[1]=="." and len(note_var.get())<5:
+                        pass
+                    else :
+                        raise ValueError()
+                        
+                    
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
-
+        except IndexError:
+            pass
         except ValueError:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
