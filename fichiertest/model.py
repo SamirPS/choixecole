@@ -41,6 +41,7 @@ def renvoie_coefficient():
 def NoteCoefficient(matiere,variable):
     coefficient=renvoie_coefficient()
     dictnoteconcours={note:{} for note in coefficient}
+    
     for nom in coefficient:
         for cle in coefficient[nom]:
             ss={
@@ -53,9 +54,11 @@ def NoteCoefficient(matiere,variable):
             "modelisation":coefficient[nom][cle][6],
             }
             if variable==("3/2",):
-                dictnoteconcours[nom][cle]=sum([(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]])
+                dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)+coefficient[nom][cle][7]
             else :
-                dictnoteconcours[nom][cle]=sum([(ss[key]*matiere[key]) for key in ss])
+                dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)
+    print(dictnoteconcours)
+    
     return dictnoteconcours
 
 def filtre(choix_utilisateur,groupe,note):
