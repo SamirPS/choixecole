@@ -124,29 +124,53 @@ class ChoixEcole:
                 exportselection=0, 
                 width=20, 
                 height=10)
+        Label(
+            self.root,
+            text="Specialite"
+        ).grid(row=0, column=6)
+        
         self.Region=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
+        Label(
+            self.root,
+            text="Region"
+        ).grid(row=0, column=7)
+        
         self.Alternance=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
+        Label(
+            self.root,
+            text="Alternance"
+        ).grid(row=0, column=8)
+        
         self.Concours=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
+        Label(
+            self.root,
+            text="Admission"
+        ).grid(row=0, column=9)
+        
         self.Année=Listbox(
                 self.root,
                 exportselection=0, 
                 width=20, 
                 height=10)
+        Label(
+            self.root,
+            text="Année"
+        ).grid(row=0, column=10)
         
         self.specialite.grid(
                 row=1,
@@ -215,7 +239,7 @@ class ChoixEcole:
                     raise ValueError()
                 
                 else:
-                    if len(note_var.get())==1 or len(note_var.get())==2 :
+                    if len(note_var.get()) in (1,2) :
                         pass
                     elif note_var.get()[2]=="." and len(note_var.get())<6:
                         pass
@@ -250,7 +274,7 @@ class ChoixEcole:
                     "Année":tuple(self.Année.get(i) for i in self.Année.curselection())}
         
         for cle in self.choix:
-            if not self.choix[cle] or 0 in self.choix[cle] or "Peu importe" in self.choix[cle]:
+            if not self.choix[cle] or 0 in  self.choix[cle]  or "Peu importe" in self.choix[cle]:
                 self.choix[cle]=None
                    
         

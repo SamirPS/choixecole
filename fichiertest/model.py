@@ -71,7 +71,7 @@ def filtre(choix_utilisateur,groupe,note):
     ConditionsVariable={"note":("Points","<=",note),
                         "groupe":("groupe","=",groupe),
                         choix_utilisateur["Specialite"]:("Idspe","IN",choix_utilisateur["Specialite"]),
-                        choix_utilisateur["Alternance"]:("Idspe","IN",choix_utilisateur["Specialite"]),
+                        choix_utilisateur["Alternance"]:("Alternance","IN",choix_utilisateur["Alternance"]),
                         choix_utilisateur["Concours"]:("Admission","IN",choix_utilisateur["Concours"]),
                         choix_utilisateur["Region"]:("Region","IN",choix_utilisateur["Region"])
                         }
@@ -93,7 +93,7 @@ def filtre(choix_utilisateur,groupe,note):
         else:
             requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
     
-    if conditions==[]:
+    if not conditions:
         requete=requete[0:len(requete)-6]
     else :
         requete=requete[0:len(requete)-4]
