@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -57,7 +58,6 @@ def NoteCoefficient(matiere,variable):
                 dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)+coefficient[nom][cle][7]
             else :
                 dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)
-    print(dictnoteconcours)
     
     return dictnoteconcours
 
@@ -86,17 +86,17 @@ def filtre(choix_utilisateur,groupe,note):
     for i in range(len(conditions)):
         if conditions[i][1]=="IN":
             if len(conditions[i][2])==1:
-                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])[:-2]+")"+" AND "
+                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])[0:-2]+")"+" AND "
             else: 
                 requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])+" AND "
                 
         else:
             requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
     
-    if conditions:
-        requete=requete[:-6]
+    if conditions==[]:
+        requete=requete[0:len(requete)-6]
     else :
-        requete=requete[:-4]
+        requete=requete[0:len(requete)-4]
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles

@@ -229,6 +229,7 @@ class ChoixEcole:
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
+       
         except IndexError:
             pass
         except ValueError:
@@ -271,10 +272,10 @@ class ChoixEcole:
             
         else:
             
-            notecoefficient=model.NoteCoefficient(self.notes,self.choix["Année"])
-            for nom in notecoefficient:
-                for cle in notecoefficient[nom]:
-                    ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
+            note=model.NoteCoefficient(self.notes,self.choix["Année"])
+            for nom in note:
+                for cle in note[nom]:
+                    ecoles = model.filtre(self.choix, cle, note[nom][cle])
                     for ecole in ecoles:
                         text_affiche += (
                             "\n" 
