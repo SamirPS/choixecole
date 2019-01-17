@@ -274,7 +274,7 @@ class ChoixEcole:
                     "Année":tuple(self.Année.get(i) for i in self.Année.curselection())}
         
         for cle in self.choix:
-            if not self.choix[cle] or 0 in  self.choix[cle] or "Peu importe" in self.choix[cle]:
+            if not self.choix[cle] or {0,"Peu importe"} & set(self.choix[cle]):
                 self.choix[cle]=None
                    
         

@@ -97,7 +97,7 @@ def filtre(choix_utilisateur,groupe,note):
         requete=requete[0:len(requete)-6]
     else :
         requete=requete[0:len(requete)-4]
-    print(requete)
+        
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
