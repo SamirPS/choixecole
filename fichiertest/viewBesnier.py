@@ -124,93 +124,45 @@ class ChoixEcole:
                 exportselection=0, 
                 width=20, 
                 height=10)
-        Label(
-            self.root,
-            text="Specialite"
-        ).grid(row=0, column=6)
-        
+        self.specialite.grid(row=1,column=3,rowspan=10)
         self.Region=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
-        Label(
-            self.root,
-            text="Region"
-        ).grid(row=0, column=7)
-        
         self.Alternance=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
-        Label(
-            self.root,
-            text="Alternance"
-        ).grid(row=0, column=8)
-        
         self.Concours=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
                 width=20, 
                 height=10)
-        Label(
-            self.root,
-            text="Admission"
-        ).grid(row=0, column=9)
-        
         self.Année=Listbox(
                 self.root,
                 exportselection=0, 
                 width=20, 
                 height=10)
-        Label(
-            self.root,
-            text="Année"
-        ).grid(row=0, column=10)
         
-        self.specialite.grid(
-                row=1,
-                column=6,
-                rowspan=10,
-                padx=10)
-        self.Region.grid(
-                row=1,
-                column=7,
-                rowspan=10,
-                padx=10)
-        self.Alternance.grid(
-                row=1,
-                column=8,
-                rowspan=10,
-                padx=10)
-        self.Concours.grid(
-                row=1,
-                column=9,
-                rowspan=10,
-                padx=10)
-        self.Année.grid(
-                row=1,
-                column=10,
-                rowspan=10,
-                padx=10)
         
          ########################################################################
         #                 Insertion des données                               #
         ########################################################################
-        for specialite in model.renvoie_information("Nom","Specialite"):
+        for specialite in model.renvoie_specialites():
                 self.specialite.insert("end",specialite)
         
-        for Region in model.renvoie_information("Region","EcoleS"):
+        for Region in model.renvoie_regions():
             self.Region.insert("end",Region)
         
-        for Alternance in model.renvoie_information("Alternance","EcoleSpe"):
+        for Alternance in ["Peu importe","Oui","Non"]:
              self.Alternance.insert("end",Alternance)
         
-        for Concours in model.renvoie_information("Admission","EcoleS"):
+        for Concours in model.renvoie_admission():
             self.Concours.insert("end",Concours)
         
         for annee in ["3/2","5/2"]:
@@ -224,6 +176,8 @@ class ChoixEcole:
         self.Alternance.bind("<<ListboxSelect>>",self.update)
         self.Concours.bind("<<ListboxSelect>>",self.update)
         self.Année.bind("<<ListboxSelect>>",self.update)
+        
+
 
         self.entry_ecole.grid(row=1,column=20,rowspan=10) 
         
@@ -237,25 +191,20 @@ class ChoixEcole:
                 note_float = float(note_var.get())
                 if note_float > 20 or note_float < 0:
                     raise ValueError()
-                
                 else:
-                    if len(note_var.get()) in (1,2)  :
-                        pass
-                    elif note_var.get()[2]=="." and len(note_var.get())<6:
-                        pass
-                    elif note_var.get()[1]=="." and len(note_var.get())<5:
-                        pass
-                    
-                    else :
-                        raise ValueError()
-                        
-                    
+                	if len(str(note_float))>1:
+                		if str(note_float)[2]=="." and len(str(note_float))<6:
+                			pass
+                		elif str(note_float)[1]=="." and len(str(note_float))<5:
+                			pass
+                		else:
+                			raise ValueError()
+
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
-       
         except IndexError:
-            pass
+        	pass
         except ValueError:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
@@ -274,7 +223,7 @@ class ChoixEcole:
                     "Année":tuple(self.Année.get(i) for i in self.Année.curselection())}
         
         for cle in self.choix:
-            if not self.choix[cle] or {0,"Peu importe"} & set(self.choix[cle]):
+            if self.choix[cle]==() or 0 in self.choix[cle] or "Peu importe" in self.choix[cle]:
                 self.choix[cle]=None
                    
         
@@ -296,10 +245,10 @@ class ChoixEcole:
             
         else:
             
-            note=model.NoteCoefficient(self.notes,self.choix["Année"])
-            for nom in note:
-                for cle in note[nom]:
-                    ecoles = model.filtre(self.choix, cle, note[nom][cle])
+            notecoefficient=model.NoteCoefficient(self.notes,self.choix["Année"])
+            for nom in notecoefficient:
+                for cle in notecoefficient[nom]:
+                    ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
                     for ecole in ecoles:
                         text_affiche += (
                             "\n" 

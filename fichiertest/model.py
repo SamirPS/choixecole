@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -11,19 +10,14 @@ import sqlite3
 connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
 
-def renvoie_information(colonne,table):
-    """
-       LA fonction prend en variable la colonne et de la table de la base de donnée qui doivent être des str,
-       Elle renvoie les information contenue dans la base de donnée dans la liste Informationvoulue
-       Ex:renvoie_information("Nom","Specialite") renvoie les spécialites dans la liste Informationvoulue
-                                                                                                            """
-    colonne_peuimporte=("Region","Admission","Alternance")
-    informationvoulue=[resultat[0] for resultat in curseur.execute("SELECT "+colonne+" FROM "+table) ]
-    if colonne=="Nom":
-         informationvoulue=["Peu importe"]+informationvoulue
-    if colonne in colonne_peuimporte :
-        informationvoulue=["Peu importe"]+list(set(informationvoulue))
-    return informationvoulue
+def renvoie_admission():
+    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Admission FROM EcoleS") ]))
+ 
+def renvoie_specialites():
+    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Nom FROM Specialite") ]))
+def renvoie_regions():
+    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Region FROM EcoleS") ]))
+ 
 
 def renvoie_coefficient():
     """Donne la liste des concours  et donne les groupes et coefficient grâce a un dictonnaire """
@@ -42,7 +36,6 @@ def renvoie_coefficient():
 def NoteCoefficient(matiere,variable):
     coefficient=renvoie_coefficient()
     dictnoteconcours={note:{} for note in coefficient}
-    
     for nom in coefficient:
         for cle in coefficient[nom]:
             ss={
@@ -55,10 +48,11 @@ def NoteCoefficient(matiere,variable):
             "modelisation":coefficient[nom][cle][6],
             }
             if variable==("3/2",):
-                dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)+coefficient[nom][cle][7]
+                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]]
+                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])
             else :
-                dictnoteconcours[nom][cle]=sum(ss[key]*matiere[key] for key in ss)
-    
+                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss]
+                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])   
     return dictnoteconcours
 
 def filtre(choix_utilisateur,groupe,note):
@@ -68,18 +62,20 @@ def filtre(choix_utilisateur,groupe,note):
     """
     
     conditions=[]
-    ConditionsVariable={"note":("Points","<=",note),
-                        "groupe":("groupe","=",groupe),
-                        choix_utilisateur["Specialite"]:("Idspe","IN",choix_utilisateur["Specialite"]),
-                        choix_utilisateur["Alternance"]:("Alternance","IN",choix_utilisateur["Alternance"]),
-                        choix_utilisateur["Concours"]:("Admission","IN",choix_utilisateur["Concours"]),
-                        choix_utilisateur["Region"]:("Region","IN",choix_utilisateur["Region"])
-                        }
+    if note!=None:
+        conditions.append(("Points","<=",note))
+    if groupe!=None:
+        conditions.append(("Groupe","=",groupe))
+    if choix_utilisateur["Specialite"]!=None:
+        conditions.append(("Idspe","IN",choix_utilisateur["Specialite"]))
+    if choix_utilisateur["Alternance"]!=None:
+        conditions.append(("Alternance","IN",choix_utilisateur["Alternance"]))
+    if choix_utilisateur["Concours"]!=None :
+        conditions.append(("Admission","IN",choix_utilisateur["Concours"]))
+    if choix_utilisateur["Region"]!=None:
+        conditions.append(("Region","IN",choix_utilisateur["Region"]))
     
-    for cle in ConditionsVariable:
-        if ConditionsVariable[cle][2]!=None:
-            conditions.append(ConditionsVariable[cle])
-            
+    
     variables=tuple(conditions[i][2] for i in  range (len(conditions)) if conditions[i][1]!="IN")
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     
@@ -93,11 +89,10 @@ def filtre(choix_utilisateur,groupe,note):
         else:
             requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
     
-    if not conditions:
+    if conditions==[]:
         requete=requete[0:len(requete)-6]
     else :
         requete=requete[0:len(requete)-4]
-        
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
