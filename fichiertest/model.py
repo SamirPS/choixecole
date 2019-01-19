@@ -25,10 +25,9 @@ def renvoie_regions():
 
 def renvoie_idspe(choix):
     choix=tuple(choix)
-    Liste=[]
     for i in range(len(choix)):
-        Liste+=[resultat[0] for resultat in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+choix[i]+"'")]
-    return tuple(set(Liste))
+        choix+=tuple(resultat[0] for resultat in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+choix[i]+"'"))
+    return choix
         
 
 def renvoie_coefficient():

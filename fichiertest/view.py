@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label,Entry,Listbox,Menu,filedialog
+from tkinter import Tk,StringVar, Label,Entry,Listbox,Menu,filedialog,Button
 from fpdf import FPDF
 import model
 import tkinter.scrolledtext as tkscrolled
@@ -17,17 +17,6 @@ class ChoixEcole:
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
         
-        #Ajoute un Menu pour sauvegarder les fichiers 
-        
-        menubar = Menu(self.root)
-        self.root.config(menu=menubar)
-        menufichier = Menu(menubar,tearoff=0)
-        menubar.add_cascade(label="Fichier", menu=menufichier) 
-        menufichier.add_command(label="Enregistrer ",command=self.save_file)
-        menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
-        self.filename =() 
-        
-        self.ecolepdf=[]
         # Initialise le widget de rendu
         self.entry_ecole = tkscrolled.ScrolledText(self.root, width=30, height=10,)
        
@@ -61,11 +50,11 @@ class ChoixEcole:
         # On crée un dictonnaire modifié a chaque clique sur la ListeBox.
         
         self.choix = {
-            "Region": None,
-            "Specialite": None,
-            "Alternance": None,
-            "Concours": None,
-            "Année":None
+            "regions": None,
+            "specialites": None,
+            "alternance": None,
+            "concours": None,
+            "annee":None
         }
         
         
@@ -127,6 +116,7 @@ class ChoixEcole:
             textvariable=self.notes_vars["francais"]
         ).grid(row=12, column=1)
        
+         
          ########################################################################
         #                 RENDU FORMULAIRE choix                               #
         ########################################################################
@@ -224,7 +214,7 @@ class ChoixEcole:
         for Region in model.renvoie_regions():
             self.Region.insert("end",Region)
         
-        for Alternance in ["Peu importe","Oui","Non"]:
+        for Alternance in ["Oui","Non"]:
              self.Alternance.insert("end",Alternance)
         
         for Concours in model.renvoie_admission():
@@ -285,14 +275,15 @@ class ChoixEcole:
         # On récupere l'index de la spécialite et le texte coché pour les autres variables
         # Et en fonction de certains cas on dit que self.choix=None
         
-        self.choix={"Specialite":self.specialite.curselection(),
-                    "Region":tuple(self.Region.get(i) for i in self.Region.curselection()),
-                    "Concours":tuple(self.Concours.get(i) for i in self.Concours.curselection()),
-                    "Alternance":tuple(self.Alternance.get(i) for i in self.Alternance.curselection()),
-                    "Année":tuple(self.Annee.get(i) for i in self.Annee.curselection())}
+        self.choix={"specialites":model.renvoie_idspe(self.specialite.get(i) for i in self.specialite.curselection()),
+                    "regions":tuple(self.Region.get(i) for i in self.Region.curselection()),
+                    "concours":tuple(self.Concours.get(i) for i in self.Concours.curselection()),
+                    "alternance":tuple(self.Alternance.get(i) for i in self.Alternance.curselection()),
+                    "annee":tuple(self.Annee.get(i) for i in self.Annee.curselection())}
+        
         
         for cle in self.choix:
-            if not self.choix[cle] or {0,"Peu importe"} & set(self.choix[cle]):
+            if not self.choix[cle] :
                 self.choix[cle]=None
                    
         
@@ -302,48 +293,6 @@ class ChoixEcole:
         self.affichage()
     
     
-    def convertpdf(self):
-            """Converti en PDF """   
-            try:
-                pdf=FPDF()
-                pdf.add_page()
-                pdf.set_font("Arial",size=12)
-                admission,listeecoles=self.returntext()
-                for texteaafficher in range(len(admission)):
-                    pdf.cell(100,10,txt=listeecoles[texteaafficher][0] )
-                    pdf.cell(100,10,txt=admission[texteaafficher],ln=1)
-                    pdf.cell(100,ln=1)
-                    
-                pdf.output(self.filename)
-            except TypeError:
-                return
-        
-    def returntext(self):
-        """Affiche le nom de l'école et a cote Refuse ou admis"""
-        listeecoles=list(set(model.filtre({choix:None for choix in self.choix},None,None)))
-        
-        admission=["Admis"]*len(listeecoles)
-        
-        for i in range(len(listeecoles)):
-            if listeecoles[i] not in self.ecolepdf  :
-                admission[i]="Refuse"
-                
-        return admission,listeecoles
-      
-    def save_file(self, whatever = None):
-        if (self.filename ==()):
-            self.save_file_as()
-        self.convertpdf()
-
-    def save_file_as(self, whatever = None):
-        self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
-                                                             filetypes = [
-        ('PDF', '*.pdf'),
-
-            ])
-   
-        self.convertpdf()
-        
     def affichage(self):
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
         self.entry_ecole.configure(state="normal")
@@ -357,7 +306,7 @@ class ChoixEcole:
             
         else:
             
-            notecoefficient=model.NoteCoefficient(self.notes,self.choix["Année"])
+            notecoefficient=model.NoteCoefficient(self.notes,self.choix["annee"])
             for nom in notecoefficient:
                 for cle in notecoefficient[nom]:
                     ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
