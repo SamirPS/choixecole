@@ -23,7 +23,7 @@ def renvoie_coefficient():
     """Donne la liste des concours  et donne les groupes et coefficient grâce a un dictonnaire """
        
     colonne="Groupe,Maths,Physique,SI,Informatique,Anglais,Francais,Modelisation,Bonification "
-    liste_concours=list(set(renvoie_information("Concours","Coefficient")))
+    liste_concours=list(set([resultat[0] for resultat in curseur.execute("SELECT Concours FROM Coefficient")]))
     concours={}
     for nom in liste_concours:
         concours[nom]={}
