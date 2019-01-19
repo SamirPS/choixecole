@@ -4,8 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label,Entry,Listbox,Menu,filedialog,Button
-from fpdf import FPDF
+from tkinter import Tk,StringVar, Label,Entry,Listbox,Checkbutton,IntVar
 import model
 import tkinter.scrolledtext as tkscrolled
 
@@ -56,6 +55,13 @@ class ChoixEcole:
             "concours": None,
             "annee":None
         }
+        
+        self.varsButton={"specialites":IntVar(self.root),
+                       "regions":IntVar(self.root),
+                       "concours":IntVar(self.root),
+                       "alternance":IntVar(self.root)
+                       }
+        
         
         
         ########################################################################
@@ -120,7 +126,7 @@ class ChoixEcole:
          ########################################################################
         #                 RENDU FORMULAIRE choix                               #
         ########################################################################
-        self.specialite=Listbox(
+        self.specialites=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
@@ -131,7 +137,7 @@ class ChoixEcole:
             text="Specialite"
         ).grid(row=0, column=6)
         
-        self.Region=Listbox(
+        self.regions=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
@@ -142,7 +148,7 @@ class ChoixEcole:
             text="Region"
         ).grid(row=0, column=7)
         
-        self.Alternance=Listbox(
+        self.alternance=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
@@ -153,7 +159,7 @@ class ChoixEcole:
             text="Alternance"
         ).grid(row=0, column=8)
         
-        self.Concours=Listbox(
+        self.concours=Listbox(
                 self.root,
                 selectmode='multiple',
                 exportselection=0, 
@@ -164,7 +170,7 @@ class ChoixEcole:
             text="Admission"
         ).grid(row=0, column=9)
         
-        self.Annee=Listbox(
+        self.annee=Listbox(
                 self.root,
                 exportselection=0, 
                 width=20, 
@@ -174,68 +180,94 @@ class ChoixEcole:
             text="Année"
         ).grid(row=0, column=10)
         
-        self.specialite.grid(
-                row=1,
+        self.specialites.grid(
+                row=2,
                 column=6,
                 rowspan=10,
                 padx=10)
         
-        self.Region.grid(
-                row=1,
+        self.regions.grid(
+                row=2,
                 column=7,
                 rowspan=10,
                 padx=10)
         
-        self.Alternance.grid(
-                row=1,
+        self.alternance.grid(
+                row=2,
                 column=8,
                 rowspan=10,
                 padx=10)
         
-        self.Concours.grid(
-                row=1,
+        self.concours.grid(
+                row=2,
                 column=9,
                 rowspan=10,
                 padx=10)
         
-        self.Annee.grid(
-                row=1,
+        self.annee.grid(
+                row=2,
                 column=10,
                 rowspan=10,
                 padx=10)
+        ########################################################################
+        #                 Insertion des Bouton Peu importe                     #
+        ########################################################################
         
+        Checkbutton(self.root,
+                    variable=self.varsButton["specialites"],
+                    text="Peu importe", 
+                    command=self.update).grid(row=1, 
+                                       column=6)
+                     
+        Checkbutton(self.root,
+                     variable=self.varsButton["regions"],
+                     text="Peu importe", 
+                     command=self.update).grid(row=1, 
+                                   column=7)
+        Checkbutton(self.root,
+                    variable=self.varsButton["alternance"],
+                    text="Peu importe",
+                    command=self.update).grid(row=1, 
+                                   column=8)
         
+        Checkbutton(self.root,
+                    variable=self.varsButton["concours"],
+                    text="Peu importe", 
+                    command=self.update).grid(row=1, 
+                                   column=9)
+        
+           
          ########################################################################
         #                 Insertion des données                               #
         ########################################################################
         for specialite in model.renvoie_specialites():
-            self.specialite.insert("end",specialite)
+            self.specialites.insert("end",specialite)
         
-        for Region in model.renvoie_regions():
-            self.Region.insert("end",Region)
+        for region in model.renvoie_regions():
+            self.regions.insert("end",region)
         
-        for Alternance in ["Oui","Non"]:
-             self.Alternance.insert("end",Alternance)
+        for alternance in ["Oui","Non"]:
+             self.alternance.insert("end",alternance)
         
-        for Concours in model.renvoie_admission():
-            self.Concours.insert("end",Concours)
+        for concours in model.renvoie_admission():
+            self.concours.insert("end",concours)
         
         for annee in ["3/2","5/2"]:
-             self.Annee.insert("end",annee)
+             self.annee.insert("end",annee)
         
          ########################################################################
         #                 On bind les ListBox                            #
         ########################################################################
        
-        self.specialite.bind("<<ListboxSelect>>",self.update)
-        self.Region.bind("<<ListboxSelect>>",self.update)
-        self.Alternance.bind("<<ListboxSelect>>",self.update)
-        self.Concours.bind("<<ListboxSelect>>",self.update)
-        self.Annee.bind("<<ListboxSelect>>",self.update)
+        self.specialites.bind("<<ListboxSelect>>",self.update)
+        self.regions.bind("<<ListboxSelect>>",self.update)
+        self.alternance.bind("<<ListboxSelect>>",self.update)
+        self.concours.bind("<<ListboxSelect>>",self.update)
+        self.annee.bind("<<ListboxSelect>>",self.update)
         
 
 
-        self.entry_ecole.grid(row=1,column=20,rowspan=10) 
+        self.entry_ecole.grid(row=2,column=20,rowspan=10) 
         
         self.update()
         self.root.mainloop()
@@ -275,11 +307,11 @@ class ChoixEcole:
         # On récupere l'index de la spécialite et le texte coché pour les autres variables
         # Et en fonction de certains cas on dit que self.choix=None
         
-        self.choix={"specialites":model.renvoie_idspe(self.specialite.get(i) for i in self.specialite.curselection()),
-                    "regions":tuple(self.Region.get(i) for i in self.Region.curselection()),
-                    "concours":tuple(self.Concours.get(i) for i in self.Concours.curselection()),
-                    "alternance":tuple(self.Alternance.get(i) for i in self.Alternance.curselection()),
-                    "annee":tuple(self.Annee.get(i) for i in self.Annee.curselection())}
+        self.choix={"specialites":model.renvoie_idspe(self.specialites.get(i) for i in self.specialites.curselection()),
+                    "regions":tuple(self.regions.get(i) for i in self.regions.curselection()),
+                    "concours":tuple(self.concours.get(i) for i in self.concours.curselection()),
+                    "alternance":tuple(self.alternance.get(i) for i in self.alternance.curselection()),
+                    "annee":tuple(self.annee.get(i) for i in self.annee.curselection())}
         
         
         for cle in self.choix:
@@ -290,9 +322,27 @@ class ChoixEcole:
     def update(self, *inutile):
         self.valide_maj_notes()
         self.maj_choix()
+        self.peutimportechoix()
         self.affichage()
     
-    
+    def peutimportechoix(self):
+        if self.varsButton["specialites"].get()==1:
+            self.specialites.selection_clear(0,"end")
+            self.choix["specialites"]=None
+            
+        if self.varsButton["regions"].get()==1:
+            self.regions.selection_clear(0,"end")
+            self.choix["regions"]=None
+            
+        if self.varsButton["concours"].get()==1:
+            self.concours.selection_clear(0,"end")
+            self.choix["concours"]=None
+            
+        if self.varsButton["alternance"].get()==1:
+            self.alternance.selection_clear(0,"end")
+            self.choix["alternance"]=None
+            
+            
     def affichage(self):
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
         self.entry_ecole.configure(state="normal")
