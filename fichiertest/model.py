@@ -7,16 +7,21 @@ Created on Sat Oct 20 19:41:49 2018
 
 """On ouvre la base de données Sqlite3 et on s'y connecte """
 import sqlite3
+
 connexion = sqlite3.connect("choixecole.db")
 curseur = connexion.cursor()
 
 def renvoie_admission():
+    
     return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Admission FROM EcoleS") ]))
  
 def renvoie_specialites():
-    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Nom FROM Specialite") ]))
+    
+    return ["Peu importe"]+[resultat[0] for resultat in curseur.execute("SELECT Nom FROM Specialite") ]
+
 def renvoie_regions():
-    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Region FROM EcoleS") ]))
+    
+    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Region FROM EcoleS")]))
  
 
 def renvoie_coefficient():
@@ -36,9 +41,10 @@ def renvoie_coefficient():
 def NoteCoefficient(matiere,variable):
     coefficient=renvoie_coefficient()
     dictnoteconcours={note:{} for note in coefficient}
+    
     for nom in coefficient:
         for cle in coefficient[nom]:
-            ss={
+            coeff={
             "maths": coefficient[nom][cle][0],
             "physique": coefficient[nom][cle][1],
             "si":coefficient[nom][cle][2],
@@ -48,11 +54,10 @@ def NoteCoefficient(matiere,variable):
             "modelisation":coefficient[nom][cle][6],
             }
             if variable==("3/2",):
-                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss ]+[coefficient[nom][cle][7]]
-                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])
+                dictnoteconcours[nom][cle]=sum(coeff[key]*matiere[key] for key in coeff)+coefficient[nom][cle][7]
             else :
-                dictnoteconcours[nom][cle]=[(ss[key]*matiere[key]) for key in ss]
-                dictnoteconcours[nom][cle]=sum(dictnoteconcours[nom][cle])   
+                dictnoteconcours[nom][cle]=sum(coeff[key]*matiere[key] for key in coeff)
+    
     return dictnoteconcours
 
 def filtre(choix_utilisateur,groupe,note):
@@ -62,20 +67,18 @@ def filtre(choix_utilisateur,groupe,note):
     """
     
     conditions=[]
-    if note!=None:
-        conditions.append(("Points","<=",note))
-    if groupe!=None:
-        conditions.append(("Groupe","=",groupe))
-    if choix_utilisateur["Specialite"]!=None:
-        conditions.append(("Idspe","IN",choix_utilisateur["Specialite"]))
-    if choix_utilisateur["Alternance"]!=None:
-        conditions.append(("Alternance","IN",choix_utilisateur["Alternance"]))
-    if choix_utilisateur["Concours"]!=None :
-        conditions.append(("Admission","IN",choix_utilisateur["Concours"]))
-    if choix_utilisateur["Region"]!=None:
-        conditions.append(("Region","IN",choix_utilisateur["Region"]))
+    ConditionsVariable={"note":("Points","<=",note),
+                        "groupe":("groupe","=",groupe),
+                        choix_utilisateur["Specialite"]:("Idspe","IN",choix_utilisateur["Specialite"]),
+                        choix_utilisateur["Alternance"]:("Alternance","IN",choix_utilisateur["Alternance"]),
+                        choix_utilisateur["Concours"]:("Admission","IN",choix_utilisateur["Concours"]),
+                        choix_utilisateur["Region"]:("Region","IN",choix_utilisateur["Region"])
+                        }
     
-    
+    for cle in ConditionsVariable:
+        if ConditionsVariable[cle][2]!=None:
+            conditions.append(ConditionsVariable[cle])
+            
     variables=tuple(conditions[i][2] for i in  range (len(conditions)) if conditions[i][1]!="IN")
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
     
@@ -89,10 +92,11 @@ def filtre(choix_utilisateur,groupe,note):
         else:
             requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
     
-    if conditions==[]:
+    if not conditions:
         requete=requete[0:len(requete)-6]
     else :
         requete=requete[0:len(requete)-4]
+        
         
     ecoles=[ecole for ecole in curseur.execute(requete,variables)]
     return ecoles
