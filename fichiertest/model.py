@@ -13,16 +13,23 @@ curseur = connexion.cursor()
 
 def renvoie_admission():
     
-    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Admission FROM EcoleS") ]))
+    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS") ]
  
 def renvoie_specialites():
     
-    return ["Peu importe"]+[resultat[0] for resultat in curseur.execute("SELECT Nom FROM Specialite") ]
+    return [resultat[0] for resultat in curseur.execute("SELECT  DISTINCT Nom FROM Specialite") ]
 
 def renvoie_regions():
     
-    return ["Peu importe"]+list(set([resultat[0] for resultat in curseur.execute("SELECT Region FROM EcoleS")]))
- 
+    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
+
+def renvoie_idspe(choix):
+    choix=tuple(choix)
+    Liste=[]
+    for i in range(len(choix)):
+        Liste+=[resultat[0] for resultat in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+choix[i]+"'")]
+    return tuple(set(Liste))
+        
 
 def renvoie_coefficient():
     """Donne la liste des concours  et donne les groupes et coefficient grâce a un dictonnaire """
@@ -65,14 +72,13 @@ def filtre(choix_utilisateur,groupe,note):
     """
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
-    
     conditions=[]
     ConditionsVariable={"note":("Points","<=",note),
                         "groupe":("groupe","=",groupe),
-                        choix_utilisateur["Specialite"]:("Idspe","IN",choix_utilisateur["Specialite"]),
-                        choix_utilisateur["Alternance"]:("Alternance","IN",choix_utilisateur["Alternance"]),
-                        choix_utilisateur["Concours"]:("Admission","IN",choix_utilisateur["Concours"]),
-                        choix_utilisateur["Region"]:("Region","IN",choix_utilisateur["Region"])
+                        choix_utilisateur["specialites"]:("Idspe","IN",choix_utilisateur["specialites"]),
+                        choix_utilisateur["alternance"]:("Alternance","IN",choix_utilisateur["alternance"]),
+                        choix_utilisateur["concours"]:("Admission","IN",choix_utilisateur["concours"]),
+                        choix_utilisateur["regions"]:("Region","IN",choix_utilisateur["regions"])
                         }
     
     for cle in ConditionsVariable:
