@@ -297,8 +297,6 @@ class ChoixEcole:
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
        
-        except IndexError:
-            pass
         except ValueError:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
