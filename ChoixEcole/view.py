@@ -64,7 +64,6 @@ class ChoixEcole:
                 }
         
         
-        
         ########################################################################
         #                 RENDU FORMULAIRE NOTES                               #
         ########################################################################
@@ -210,6 +209,7 @@ class ChoixEcole:
                 column=10,
                 rowspan=10,
                 padx=10)
+        
         ########################################################################
         #                 Insertion des Bouton Peu importe                     #
         ########################################################################
@@ -266,8 +266,7 @@ class ChoixEcole:
         self.concours.bind("<<ListboxSelect>>",self.update)
         self.annee.bind("<<ListboxSelect>>",self.update)
         
-
-
+        
         self.entry_ecole.grid(row=2,column=20,rowspan=10) 
         
         self.update()
@@ -291,8 +290,7 @@ class ChoixEcole:
                     
                     else :
                         raise ValueError()
-                        
-                    
+                   
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
             self.notes = notes
@@ -322,6 +320,7 @@ class ChoixEcole:
                    
      
     def peutimportechoix(self):
+        
         if self.varsbuttons["specialites"].get()==1:
             self.specialites.selection_clear(0,"end")
             self.choix["specialites"]=None
@@ -339,14 +338,13 @@ class ChoixEcole:
             self.choix["alternance"]=None
             
     def update(self, *inutile):
+        
         self.valide_maj_notes()
         self.maj_choix()
         self.peutimportechoix()
         self.affichage()
     
     
-            
-            
     def affichage(self):
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
         self.entry_ecole.configure(state="normal")
