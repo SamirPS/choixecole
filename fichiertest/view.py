@@ -360,7 +360,7 @@ class ChoixEcole:
             
         else:
             
-            notecoefficient=model.noteCoefficient(self.notes,self.choix["annee"])
+            notecoefficient=model.notecoefficient(self.notes,self.choix["annee"])
             for nom in notecoefficient:
                 for cle in notecoefficient[nom]:
                     ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])

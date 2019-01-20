@@ -46,7 +46,7 @@ def renvoie_coefficient():
     return concours
 
 
-def noteCoefficient(matiere,variable):
+def notecoefficient(matiere,variable):
     coefficient=renvoie_coefficient()
     dictnoteconcours={note:{} for note in coefficient}
     
@@ -74,7 +74,7 @@ def filtre(choix_utilisateur,groupe,note):
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
     conditions=[]
-    ConditionsVariable={"note":("Points","<=",note),
+    conditionsvariable={"note":("Points","<=",note),
                         "groupe":("groupe","=",groupe),
                         choix_utilisateur["specialites"]:("Idspe","IN",choix_utilisateur["specialites"]),
                         choix_utilisateur["alternance"]:("Alternance","IN",choix_utilisateur["alternance"]),
@@ -82,9 +82,9 @@ def filtre(choix_utilisateur,groupe,note):
                         choix_utilisateur["regions"]:("Region","IN",choix_utilisateur["regions"])
                         }
     
-    for cle in ConditionsVariable:
-        if ConditionsVariable[cle][2]!=None:
-            conditions.append(ConditionsVariable[cle])
+    for cle in conditionsvariable:
+        if conditionsvariable[cle][2]!=None:
+            conditions.append(conditionsvariable[cle])
             
     variables=tuple(conditions[i][2] for i in  range (len(conditions)) if conditions[i][1]!="IN")
     requete="SELECT Nom,Admission,Commune FROM EcoleSpe join EcoleS on EcoleSpe.IdEcole=EcoleS.id WHERE "
