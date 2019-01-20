@@ -361,10 +361,10 @@ class ChoixEcole:
         else:
             
             notecoefficient=model.notecoefficient(self.notes,self.choix["annee"])
+            
             for nom in notecoefficient:
                 for cle in notecoefficient[nom]:
                     ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])
-                    self.ecolepdf+=model.filtre({choix:None for choix in self.choix},cle,notecoefficient[nom][cle])
                     
                     for ecole in ecoles:
                         text_affiche += (
