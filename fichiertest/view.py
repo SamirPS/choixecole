@@ -322,13 +322,7 @@ class ChoixEcole:
             if not self.choix[cle] :
                 self.choix[cle]=None
                    
-        
-    def update(self, *inutile):
-        self.valide_maj_notes()
-        self.maj_choix()
-        self.peutimportechoix()
-        self.affichage()
-    
+     
     def peutimportechoix(self):
         if self.varsbuttons["specialites"].get()==1:
             self.specialites.selection_clear(0,"end")
@@ -345,6 +339,14 @@ class ChoixEcole:
         if self.varsbuttons["alternance"].get()==1:
             self.alternance.selection_clear(0,"end")
             self.choix["alternance"]=None
+            
+    def update(self, *inutile):
+        self.valide_maj_notes()
+        self.maj_choix()
+        self.peutimportechoix()
+        self.affichage()
+    
+    
             
             
     def affichage(self):
