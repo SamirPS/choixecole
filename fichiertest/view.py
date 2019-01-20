@@ -56,11 +56,12 @@ class ChoixEcole:
             "annee":None
         }
         
-        self.varsButton={"specialites":IntVar(self.root),
-                       "regions":IntVar(self.root),
-                       "concours":IntVar(self.root),
-                       "alternance":IntVar(self.root)
-                       }
+        self.varsbuttons={
+                "specialites":IntVar(self.root),
+                "regions":IntVar(self.root),
+                "concours":IntVar(self.root),
+                "alternance":IntVar(self.root)
+                }
         
         
         
@@ -214,24 +215,24 @@ class ChoixEcole:
         ########################################################################
         
         Checkbutton(self.root,
-                    variable=self.varsButton["specialites"],
+                    variable=self.varsbuttons["specialites"],
                     text="Peu importe", 
                     command=self.update).grid(row=1, 
                                        column=6)
                      
         Checkbutton(self.root,
-                     variable=self.varsButton["regions"],
+                     variable=self.varsbuttons["regions"],
                      text="Peu importe", 
                      command=self.update).grid(row=1, 
                                    column=7)
         Checkbutton(self.root,
-                    variable=self.varsButton["alternance"],
+                    variable=self.varsbuttons["alternance"],
                     text="Peu importe",
                     command=self.update).grid(row=1, 
                                    column=8)
         
         Checkbutton(self.root,
-                    variable=self.varsButton["concours"],
+                    variable=self.varsbuttons["concours"],
                     text="Peu importe", 
                     command=self.update).grid(row=1, 
                                    column=9)
@@ -326,19 +327,19 @@ class ChoixEcole:
         self.affichage()
     
     def peutimportechoix(self):
-        if self.varsButton["specialites"].get()==1:
+        if self.varsbuttons["specialites"].get()==1:
             self.specialites.selection_clear(0,"end")
             self.choix["specialites"]=None
             
-        if self.varsButton["regions"].get()==1:
+        if self.varsbuttons["regions"].get()==1:
             self.regions.selection_clear(0,"end")
             self.choix["regions"]=None
             
-        if self.varsButton["concours"].get()==1:
+        if self.varsbuttons["concours"].get()==1:
             self.concours.selection_clear(0,"end")
             self.choix["concours"]=None
             
-        if self.varsButton["alternance"].get()==1:
+        if self.varsbuttons["alternance"].get()==1:
             self.alternance.selection_clear(0,"end")
             self.choix["alternance"]=None
             
@@ -356,7 +357,7 @@ class ChoixEcole:
             
         else:
             
-            notecoefficient=model.NoteCoefficient(self.notes,self.choix["annee"])
+            notecoefficient=model.noteCoefficient(self.notes,self.choix["annee"])
             for nom in notecoefficient:
                 for cle in notecoefficient[nom]:
                     ecoles = model.filtre(self.choix, cle, notecoefficient[nom][cle])

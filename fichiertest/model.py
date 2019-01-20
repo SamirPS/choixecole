@@ -44,7 +44,7 @@ def renvoie_coefficient():
     return concours
 
 
-def NoteCoefficient(matiere,variable):
+def noteCoefficient(matiere,variable):
     coefficient=renvoie_coefficient()
     dictnoteconcours={note:{} for note in coefficient}
     
