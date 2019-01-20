@@ -276,30 +276,33 @@ class ChoixEcole:
     def valide_maj_notes(self):
         try:
             notes = {}
-            
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
                 if note_float > 20 or note_float < 0:
                     raise ValueError()
                 
                 else:
-                	if len(str(note_float))>1:
-                		if str(note_float)[2]=="." and len(str(note_float))<6:
-                			pass
-                		elif str(note_float)[1]=="." and len(str(note_float))<5:
-                			pass
-                		else:
-                			raise ValueError()
-
+                    if len(note_var.get()) in (1,2)  :
+                        pass
+                    elif note_var.get()[2]=="." and len(note_var.get())<6:
+                        pass
+                    elif note_var.get()[1]=="." and len(note_var.get())<5:
+                        pass
+                    
+                    else :
+                        raise ValueError()
+                        
+                    
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
-            
             self.notes = notes
+       
         except IndexError:
-        	pass
+            pass
         except ValueError:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
+
 
     def maj_choix(self):
         ########################################################################
