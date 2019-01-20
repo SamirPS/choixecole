@@ -24,6 +24,7 @@ def renvoie_regions():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
 
 def renvoie_idspe(choix):
+    
     choix=tuple(choix)
     for i in choix:
         choix+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
@@ -36,6 +37,7 @@ def renvoie_coefficient():
     colonne="Groupe,Maths,Physique,SI,Informatique,Anglais,Francais,Modelisation,Bonification "
     liste_concours=[resultat[0] for resultat in curseur.execute("SELECT DISTINCT Concours FROM Coefficient")]
     concours={}
+    
     for nom in liste_concours:
         concours[nom]={}
         curseur.execute("Select "+colonne+" From Coefficient WHERE Concours="+'"'+nom+'"')

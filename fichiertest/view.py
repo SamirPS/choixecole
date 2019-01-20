@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar, Label,Entry,Listbox,Checkbutton,IntVar
+from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
 import model
 import tkinter.scrolledtext as tkscrolled
 
