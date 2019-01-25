@@ -78,8 +78,8 @@ def filtre(choix_utilisateur, notes):
     for cond in conditions:
         variablein=""
         
-        for j in range(len(cond[2])):
-            variablein+="'"+str(cond[2][j])+"'"+", "
+        for longeurchoix in cond[2]:
+            variablein+="'"+str(longeurchoix)+"'"+", "
         
         requete+=cond[0]+" "+cond[1]+" ("+variablein[:-2]+") AND "
           
