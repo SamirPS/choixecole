@@ -26,9 +26,11 @@ def renvoie_regions():
 def renvoie_idspe(choix):
 
     choix=tuple(choix)
+    choixtexte=tuple()
     for i in choix:
-        choix+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
-    return choix
+        choixtexte+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
+        
+    return choixtexte
 
 
 
@@ -74,14 +76,12 @@ def filtre(choix_utilisateur, notes):
     )
 
     for cond in conditions:
+        variablein=""
         
-        requete+=cond[0]+" "+cond[1]+" "
+        for j in range(len(cond[2])):
+            variablein+="'"+str(cond[2][j])+"'"+", "
         
-        if len(cond[2])==1:
-            requete+=str(cond[2])[:-2]+")"+" AND "
-        else:
-            requete+=str(cond[2])+" AND "
-
-            
+        requete+=cond[0]+" "+cond[1]+" ("+variablein[:-2]+") AND "
+          
     ecoles=[ecole for ecole in curseur.execute(requete[:-4])]
     return ecoles
