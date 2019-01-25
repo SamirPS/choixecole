@@ -53,7 +53,6 @@ def filtre(choix_utilisateur, notes):
     else:
         bonif_str = "0"
 
-    variables=tuple(cond[2] for cond in conditions if cond[1]!="IN")
     
     
     requete=( """
@@ -81,12 +80,10 @@ def filtre(choix_utilisateur, notes):
         if cond[1]=="IN":
             
             if len(cond[2])==1:
-                requete+=str(cond[2])[0:-2]+")"+" AND "
+                requete+=str(cond[2])[:-2]+")"+" AND "
             else:
                 requete+=str(cond[2])+" AND "
 
-        else:
-            requete+="? "+" AND "
             
-    ecoles=[ecole for ecole in curseur.execute(requete[:-4],variables)]
+    ecoles=[ecole for ecole in curseur.execute(requete[:-4])]
     return ecoles
