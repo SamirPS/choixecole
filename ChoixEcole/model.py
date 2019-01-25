@@ -77,12 +77,10 @@ def filtre(choix_utilisateur, notes):
         
         requete+=cond[0]+" "+cond[1]+" "
         
-        if cond[1]=="IN":
-            
-            if len(cond[2])==1:
-                requete+=str(cond[2])[:-2]+")"+" AND "
-            else:
-                requete+=str(cond[2])+" AND "
+        if len(cond[2])==1:
+            requete+=str(cond[2])[:-2]+")"+" AND "
+        else:
+            requete+=str(cond[2])+" AND "
 
             
     ecoles=[ecole for ecole in curseur.execute(requete[:-4])]
