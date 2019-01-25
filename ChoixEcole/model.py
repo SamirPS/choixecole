@@ -38,6 +38,7 @@ def filtre(choix_utilisateur, notes):
     Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
     """
     conditions=[]
+    
     if choix_utilisateur["specialites"]!=None:
         conditions.append(["Idspe","IN",choix_utilisateur["specialites"]])
     if choix_utilisateur["alternance"]!=None:
@@ -53,33 +54,39 @@ def filtre(choix_utilisateur, notes):
         bonif_str = "0"
 
     variables=tuple(cond[2] for cond in conditions if cond[1]!="IN")
+    
+    
     requete=( """
         SELECT Nom,Admission,Commune
         FROM EcoleSpe
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe
         WHERE """
-        +  str(notes["maths"])+"""*Maths+"""
-        +  str(notes["physique"])+"""*Physique+"""
+        +  str(notes["maths"])+"*Maths+"
+        +  str(notes["physique"])+"*Physique+"
         +  str(notes["si"])+"""*SI+"""
-        +  str(notes["informatique"])+"""*Informatique+"""
-        +  str(notes["anglais"])+"""*Anglais+"""
-        +  str(notes["francais"])+"""*Francais+"""
-        +  str(notes["modelisation"])+"""*Modelisation+"""
+        +  str(notes["informatique"])+"*Informatique+"
+        +  str(notes["anglais"])+"*Anglais+"
+        +  str(notes["francais"])+"*Francais+"
+        +  str(notes["modelisation"])+"*Modelisation+"
         +  bonif_str
-        + """>= Points AND """
+        + ">= Points AND "
 
     )
 
-    for i in range(len(conditions)):
-        if conditions[i][1]=="IN":
-            if len(conditions[i][2])==1:
-                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])[0:-2]+")"+" AND "
+    for cond in conditions:
+        
+        requete+=cond[0]+" "+cond[1]+" "
+        
+        if cond[1]=="IN":
+            
+            if len(cond[2])==1:
+                requete+=str(cond[2])[0:-2]+")"+" AND "
             else:
-                requete+=conditions[i][0]+" "+conditions[i][1]+" "+str(conditions[i][2])+" AND "
+                requete+=str(cond[2])+" AND "
 
         else:
-            requete+=conditions[i][0]+conditions[i][1]+"? "+" AND "
-    print(requete)
-    ecoles=[ecole for ecole in curseur.execute(requete[0:len(requete)-4],variables)]
+            requete+="? "+" AND "
+            
+    ecoles=[ecole for ecole in curseur.execute(requete[:-4],variables)]
     return ecoles
