@@ -277,7 +277,7 @@ class ChoixEcole:
             notes = {}
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
-                if note_float > 20 or note_float < 0:
+                if note_float > 20 or note_float <= 0:
                     raise ValueError()
 
                 else:

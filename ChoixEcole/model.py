@@ -17,7 +17,7 @@ def renvoie_admission():
 
 def renvoie_specialites():
 
-    return [resultat[0] for resultat in curseur.execute("SELECT  DISTINCT Nom FROM Specialite") ]
+    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Nom FROM Specialite") ]
 
 def renvoie_regions():
 
