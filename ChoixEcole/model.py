@@ -80,9 +80,9 @@ def filtre(choix_utilisateur, notes):
         
         for longeurchoix in cond[2]:
             
-            variablein+="'"+str(longeurchoix)+"', "
+            variablein+="'"+str(longeurchoix)+"',"
         
-        requete+=cond[0]+" "+cond[1]+" ("+variablein[:-2]+") AND "
+        requete+=cond[0]+" "+cond[1]+" ("+variablein[:-1]+") AND "
           
     ecoles=[ecole for ecole in curseur.execute(requete[:-4])]
     return ecoles
