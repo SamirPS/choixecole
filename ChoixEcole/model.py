@@ -31,23 +31,22 @@ def renvoie_idspe(choix):
 
 def filtre(choix_utilisateur, notes):
 
-    conditions=[]
+    conds=[]
     
     if choix_utilisateur["specialites"]!=None:
-        conditions.append(["Idspe","IN",choix_utilisateur["specialites"]])
+        conds.append(["Idspe","IN",choix_utilisateur["specialites"]])
     if choix_utilisateur["alternance"]!=None:
-        conditions.append(["Alternance","IN",choix_utilisateur["alternance"]])
+        conds.append(["Alternance","IN",choix_utilisateur["alternance"]])
     if choix_utilisateur["concours"]!=None:
-        conditions.append(["Admission","IN",choix_utilisateur["concours"]])
+        conds.append(["Admission","IN",choix_utilisateur["concours"]])
     if choix_utilisateur["regions"]!=None:
-        conditions.append(["Region","IN",choix_utilisateur["regions"]])
+        conds.append(["Region","IN",choix_utilisateur["regions"]])
 
     if choix_utilisateur["annee"]==("3/2",):
         bonif_str = "Bonification"
     else:
         bonif_str = "0"
-
-
+    
     requete=( """
         SELECT Nom,Admission,Commune
         FROM EcoleSpe
@@ -66,12 +65,10 @@ def filtre(choix_utilisateur, notes):
 
     )
 
-    for cond in conditions:
+    for var in conds:
         variablein=""
-        for longeurchoix in cond[2]:
+        for longeurchoix in var[2]:
             variablein+="'"+str(longeurchoix)+"',"
-        
-        requete+=" AND "+cond[0]+" "+cond[1]+" ("+variablein[:-1]+")"
+        requete+=" AND "+var[0]+" "+var[1]+" ("+variablein[:-1]+")"
           
-    ecoles=[ecole for ecole in curseur.execute(requete)]
-    return ecoles
+    return list(curseur.execute(requete))
