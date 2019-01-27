@@ -5,7 +5,6 @@ Created on Sat Oct 20 19:41:49 2018
 @author: samir
 """
 
-"""On ouvre la base de données Sqlite3 et on s'y connecte """
 import sqlite3
 
 connexion = sqlite3.connect("choixecole.db")
@@ -29,16 +28,10 @@ def renvoie_idspe(choix):
     choixtexte=tuple()
     for i in choix:
         choixtexte+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
-        
     return choixtexte
-
-
 
 def filtre(choix_utilisateur, notes):
 
-    """
-    Construit la requete Sql et filtre les ecoles en fonction du choix de l'utilisateur
-    """
     conditions=[]
     
     if choix_utilisateur["specialites"]!=None:
@@ -55,8 +48,7 @@ def filtre(choix_utilisateur, notes):
     else:
         bonif_str = "0"
 
-    
-    
+
     requete=( """
         SELECT Nom,Admission,Commune
         FROM EcoleSpe
