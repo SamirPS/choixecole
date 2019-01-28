@@ -29,6 +29,14 @@ def renvoie_idspe(choix):
         idspe+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
     return idspe
 
+def creationtuple(liste):
+    variablein=""
+    
+    for i in range(len(liste)-1):
+        variablein+="'"+str(liste[i])+"',"
+        
+    return variablein+"'"+str(liste[-1])+"'"
+    
 def filtre(choix_utilisateur, notes):
 
     conds=[]
@@ -66,9 +74,8 @@ def filtre(choix_utilisateur, notes):
     )
 
     for var in conds:
-        variablein=""
-        for longeurchoix in var[2]:
-            variablein+="'"+str(longeurchoix)+"',"
-        requete+=" AND "+var[0]+" "+var[1]+" ("+variablein[:-1]+")"
-          
+        
+        variablein=creationtuple(var[2])
+        requete+=" AND "+var[0]+" "+var[1]+" ("+variablein+")"
+    
     return list(curseur.execute(requete))
