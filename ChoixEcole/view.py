@@ -355,7 +355,6 @@ class ChoixEcole:
             for j,ecoles in enumerate(model.filtre(self.choix,self.notes)) :
 
                 self.ecolesselect[j]={
-                    "var":IntVar(self.root),
                     "nom":ecoles[0],
                     "admission":ecoles[1],
                     "region":ecoles[2]
@@ -363,10 +362,17 @@ class ChoixEcole:
 
 
     def updateargent(self,event):
-        boursier,nonboursier=0,0
+        boursier,nonboursier,ecoledef=0,0,[]
+        
         if self.notes!=None:
-            ecoleselect=tuple(self.ecole.get(i) for i in self.ecole.curselection())
-            boursier,nonboursier=model.calculbugted(ecoleselect)
+            
+            ecoleselect=list(self.ecole.get(i) for i in self.ecole.curselection())
+            
+            for ecole  in self.ecolesselect.values():
+                if ecole["nom"]+" "+ecole["admission"]+" "+ecole["region"] in ecoleselect:
+                    ecoledef.append(ecole["nom"])
+                    
+            boursier,nonboursier=model.calculbugted(ecoledef)
         
         Label(
             self.root,
@@ -391,8 +397,7 @@ class ChoixEcole:
             for ecole  in self.ecolesselect.values():
             
                 text_affiche = (
-                    "\n"
-                    + ecole["nom"] + " "
+                    ecole["nom"] + " "
                     + ecole["admission"] + " "
                     + ecole["region"]
                 )
