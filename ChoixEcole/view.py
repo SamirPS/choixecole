@@ -376,11 +376,11 @@ class ChoixEcole:
         
         Label(
             self.root,
-            text="Boursier \n"+str(boursier)
+            text="Boursier \n"+str(boursier)+"€"
         ).grid(row=12, column=11)
         Label(
             self.root,
-            text="Non Boursier \n"+str(nonboursier)
+            text="Non Boursier \n"+str(nonboursier)+"€"
         ).grid(row=13, column=11)
 
         
