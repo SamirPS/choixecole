@@ -6,7 +6,7 @@ Created on Sun Dec 30 19:59:28 2018
 """
 from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
 import model
-import tkinter.scrolledtext as tkscrolled
+
 
 class ChoixEcole:
     def __init__(self):
@@ -17,7 +17,19 @@ class ChoixEcole:
         self.root.resizable(False, False)
 
         # Initialise le widget de rendu
-        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=30, height=10,)
+        self.ecole = Listbox(
+                self.root,
+                selectmode='multiple',
+                exportselection=0,
+                width=50,
+                height=10)
+        
+        self.ecole.grid(
+                        row=2,
+                        column=11,
+                        rowspan=10,
+                        padx=10)
+        self.ecolesselect={}
 
         ########################################################################
         #                        NOTES                                         #
@@ -60,7 +72,8 @@ class ChoixEcole:
                 "specialites":IntVar(self.root),
                 "regions":IntVar(self.root),
                 "concours":IntVar(self.root),
-                "alternance":IntVar(self.root)
+                "alternance":IntVar(self.root),
+                "annee":IntVar(self.root)
                 }
 
 
@@ -265,9 +278,8 @@ class ChoixEcole:
         self.alternance.bind("<<ListboxSelect>>",self.update)
         self.concours.bind("<<ListboxSelect>>",self.update)
         self.annee.bind("<<ListboxSelect>>",self.update)
+        self.ecole.bind("<<ListboxSelect>>",self.updateargent)
 
-
-        self.entry_ecole.grid(row=2,column=20,rowspan=10)
 
         self.update()
         self.root.mainloop()
@@ -277,7 +289,7 @@ class ChoixEcole:
             notes = {}
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
-                if note_float > 20 or note_float <= 0:
+                if note_float > 20 or note_float < 0:
                     raise ValueError()
 
                 else:
@@ -313,61 +325,84 @@ class ChoixEcole:
                     "alternance":tuple(self.alternance.get(i) for i in self.alternance.curselection()),
                     "annee":tuple(self.annee.get(i) for i in self.annee.curselection())}
 
+        if self.varsbuttons["specialites"].get()==1:
+            self.specialites.selection_clear(0,"end")
+        if self.varsbuttons["regions"].get()==1:
+            self.regions.selection_clear(0,"end")
+        if self.varsbuttons["concours"].get()==1:
+            self.concours.selection_clear(0,"end")
+        if self.varsbuttons["alternance"].get()==1:
+            self.alternance.selection_clear(0,"end")
 
         for cle in self.choix:
-            if not self.choix[cle] :
+            if not self.choix[cle] or self.varsbuttons[cle].get()==1:
                 self.choix[cle]=None
 
 
-    def peutimportechoix(self):
-
-        if self.varsbuttons["specialites"].get()==1:
-            self.specialites.selection_clear(0,"end")
-            self.choix["specialites"]=None
-
-        if self.varsbuttons["regions"].get()==1:
-            self.regions.selection_clear(0,"end")
-            self.choix["regions"]=None
-
-        if self.varsbuttons["concours"].get()==1:
-            self.concours.selection_clear(0,"end")
-            self.choix["concours"]=None
-
-        if self.varsbuttons["alternance"].get()==1:
-            self.alternance.selection_clear(0,"end")
-            self.choix["alternance"]=None
 
     def update(self, *inutile):
 
         self.valide_maj_notes()
         self.maj_choix()
-        self.peutimportechoix()
+        self.construit_ecoles()
+
         self.affichage()
 
+    def construit_ecoles(self):
+        self.ecolesselect={}
 
+        if self.notes!=None:
+            for j,ecoles in enumerate(model.filtre(self.choix,self.notes)) :
+
+                self.ecolesselect[j]={
+                    "var":IntVar(self.root),
+                    "nom":ecoles[0],
+                    "admission":ecoles[1],
+                    "region":ecoles[2]
+                }
+
+
+    def updateargent(self,event):
+        
+        boursier,nonboursier=0,0
+        if self.notes!=None:
+            prix1=tuple(self.ecole.get(i) for i in self.ecole.curselection())
+            for i in range(len(prix1)):
+                boursier+=50
+                nonboursier+=100
+        
+        Label(
+            self.root,
+            text="Boursier \n"+str(boursier)
+        ).grid(row=12, column=11)
+        Label(
+            self.root,
+            text="Non Boursier \n"+str(nonboursier)
+        ).grid(row=13, column=11)
+
+        
     def affichage(self):
+
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
-        self.entry_ecole.configure(state="normal")
-        self.entry_ecole.delete(0.7,'end')
+        self.ecole.delete(0,"end")
         text_affiche = ""
-
-
+        
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
-
+            self.ecole.insert("end",text_affiche)
         else:
-            ecoles = model.filtre(self.choix,self.notes)
-            for ecole in ecoles:
-                text_affiche += (
-                "\n"
-                + ecole[0] + " "
-                + ecole[1] + " "
-                + ecole[2]
+            for ecole  in self.ecolesselect.values():
+            
+                text_affiche = (
+                    "\n"
+                    + ecole["nom"] + " "
+                    + ecole["admission"] + " "
+                    + ecole["region"]
                 )
+                
+                self.ecole.insert("end",text_affiche)
+                
 
-
-        self.entry_ecole.insert(0.7, text_affiche)
-        self.entry_ecole.configure(state="disabled")
 
 
 if __name__ == '__main__':

@@ -78,4 +78,4 @@ def filtre(choix_utilisateur, notes):
         variablein=creationtuple(var[2])
         requete+=" AND "+var[0]+" "+var[1]+" ("+variablein+")"
     
-    return list(curseur.execute(requete))
+    return [ecole for ecole in curseur.execute(requete)]
