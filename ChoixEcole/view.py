@@ -363,13 +363,10 @@ class ChoixEcole:
 
 
     def updateargent(self,event):
-        
         boursier,nonboursier=0,0
         if self.notes!=None:
-            prix1=tuple(self.ecole.get(i) for i in self.ecole.curselection())
-            for i in range(len(prix1)):
-                boursier+=50
-                nonboursier+=100
+            ecoleselect=tuple(self.ecole.get(i) for i in self.ecole.curselection())
+            boursier,nonboursier=model.calculbugted(ecoleselect)
         
         Label(
             self.root,

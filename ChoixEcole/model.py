@@ -36,7 +36,14 @@ def creationtuple(liste):
         variablein+="'"+str(liste[i])+"',"
         
     return variablein+"'"+str(liste[-1])+"'"
-    
+
+def calculbugted(tupleecole):
+    prix,prix1=0,0
+    for i in tupleecole:
+        prix+=float(price[0] for price in curseur.execute("SELECT PrixB FROM EcoleS WHERE Nom="+"'"+i+"'"))
+        prix1+=float(price[0] for price in curseur.execute("SELECT PrixNB FROM EcoleS WHERE Nom="+"'"+i+"'"))
+    return prix,prix1
+
 def filtre(choix_utilisateur, notes):
 
     conds=[]
