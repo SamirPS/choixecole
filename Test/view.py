@@ -6,7 +6,7 @@ Created on Sun Dec 30 19:59:28 2018
 """
 from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
 import model
-
+import tkinter.scrolledtext as tkscrolled
 
 class ChoixEcole:
     def __init__(self):
@@ -20,6 +20,7 @@ class ChoixEcole:
 
         # Initialise le widget de rendu
         
+        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=30, height=10,)
         
         self.ecolesselect={}
 
@@ -274,7 +275,7 @@ class ChoixEcole:
         self.annee.bind("<<ListboxSelect>>",self.update)
         
         
-        
+        self.entry_ecole.grid(row=2,column=11,rowspan=10)
         self.update()
         self.root.mainloop()
 
@@ -344,7 +345,7 @@ class ChoixEcole:
     def construit_ecoles(self):
         self.ecolesselect={}
         
-
+        
         if self.notes!=None:
             for j,ecoles in enumerate(model.filtre(self.choix,self.notes)) :
 
@@ -381,38 +382,41 @@ class ChoixEcole:
     def affichage(self):
 
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
+        self.entry_ecole.configure(state="normal")
+        self.entry_ecole.delete(0.7,'end')
+        text_affiche=""
+         
         for i in range(len(self.buttonslist)):
             self.buttonslist[i].destroy()
-         
+
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
-            
-            notepasbon=Label(
-            self.root,
-            text=text_affiche)
-            notepasbon.grid(row=3, column=11)
-            
-            self.buttonslist.append(notepasbon)
              
         else:
+             
+            for j,ecole  in enumerate(self.ecolesselect.values()):
             
-            for j,ecole in enumerate(self.ecolesselect.values()) :
-                    text_affiche = (
-                        ecole["nom"] + " "
-                        + ecole["admission"] + " "
-                        + ecole["region"]
-                    )
+                text_affiche += (
+                    ecole["nom"] 
+                    + " "
+                    + ecole["admission"] 
+                    + " "
+                    + ecole["region"]
+                    +"\n"
+                )
+                button=Checkbutton(self.root,
+                    variable=self.ecolesselect[j]["var"],
+                    command=self.updateargent)
+                
+                button.grid(row=4+j,
+                        column=13,)
+                self.buttonslist.append(button)
                     
-                    button=Checkbutton(self.root,
-                        text=text_affiche,
-                        variable=self.ecolesselect[j]["var"],
-                        command=self.updateargent)
-                    
-                    button.grid(row=4+j,
-                            column=11,)
-                    self.buttonslist.append(button)
-                    
- 
+        
+       
+        self.entry_ecole.insert(0.7, text_affiche)
+        self.entry_ecole.configure(state="disabled")
+                
 
 
 
