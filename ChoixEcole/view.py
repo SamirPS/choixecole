@@ -380,8 +380,7 @@ class ChoixEcole:
         else :
             
             self.ecole.selection_clear(0,"end")
-            for ecole  in self.ecolesselect.values():
-                    ecoledef.append(ecole["nom"])
+            ecoledef=[ecole["nom"] for ecole  in self.ecolesselect.values()]
             
         boursier,nonboursier=model.calculbugted(ecoledef)
         
@@ -413,7 +412,7 @@ class ChoixEcole:
                     + ecole["region"]
                 )
                 
-            self.ecole.insert("end",text_affiche)
+                self.ecole.insert("end",text_affiche)
                 
 
 
