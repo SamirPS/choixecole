@@ -385,7 +385,10 @@ class ChoixEcole:
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end')
         text_affiche=""
-         
+        
+        
+        self.updateargent()
+        
         for i in range(len(self.buttonslist)):
             self.buttonslist[i].destroy()
 
