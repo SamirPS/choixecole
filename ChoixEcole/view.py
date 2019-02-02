@@ -73,7 +73,8 @@ class ChoixEcole:
                 "regions":IntVar(self.root),
                 "concours":IntVar(self.root),
                 "alternance":IntVar(self.root),
-                "annee":IntVar(self.root)
+                "annee":IntVar(self.root),
+                "ecole":IntVar(self.root)
                 }
 
 
@@ -249,7 +250,11 @@ class ChoixEcole:
                     text="Peu importe",
                     command=self.update).grid(row=1,
                                    column=9)
-
+        Checkbutton(self.root,
+                    variable=self.varsbuttons["ecole"],
+                    text="Selectionner tout ",
+                    command=self.updateargent).grid(row=1,
+                                   column=11)
 
          ########################################################################
         #                 Insertion des données                               #
@@ -361,18 +366,24 @@ class ChoixEcole:
                 }
 
 
-    def updateargent(self,event):
+    def updateargent(self,*inutile):
+        
         boursier,nonboursier,ecoledef=0,0,[]
         
-        if self.notes!=None:
+        if self.varsbuttons["ecole"].get()!=1:
             
             ecoleselect=list(self.ecole.get(i) for i in self.ecole.curselection())
             
             for ecole  in self.ecolesselect.values():
                 if ecole["nom"]+" "+ecole["admission"]+" "+ecole["region"] in ecoleselect:
                     ecoledef.append(ecole["nom"])
-                    
-            boursier,nonboursier=model.calculbugted(ecoledef)
+        else :
+            
+            self.ecole.selection_clear(0,"end")
+            for ecole  in self.ecolesselect.values():
+                    ecoledef.append(ecole["nom"])
+            
+        boursier,nonboursier=model.calculbugted(ecoledef)
         
         Label(
             self.root,
@@ -402,7 +413,7 @@ class ChoixEcole:
                     + ecole["region"]
                 )
                 
-                self.ecole.insert("end",text_affiche)
+            self.ecole.insert("end",text_affiche)
                 
 
 
