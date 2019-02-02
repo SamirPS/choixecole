@@ -398,7 +398,6 @@ class ChoixEcole:
 
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
         self.ecole.delete(0,"end")
-        text_affiche = ""
         
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
