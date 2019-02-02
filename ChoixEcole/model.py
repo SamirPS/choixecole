@@ -37,7 +37,7 @@ def creationtuple(liste):
         
     return variablein+"'"+str(liste[-1])+"'"
 
-def calculbugted(tupleecole):
+def calcul_prix(tupleecole):
     prix,prix1=[],[]
     for i in tupleecole:
         

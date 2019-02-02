@@ -49,6 +49,7 @@ class ChoixEcole:
 
         for var in self.notes_vars.values():
             var.trace('w', self.update)
+            
 
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
@@ -382,7 +383,7 @@ class ChoixEcole:
             self.ecole.selection_clear(0,"end")
             ecoledef=[ecole["nom"] for ecole  in self.ecolesselect.values()]
             
-        boursier,nonboursier=model.calculbugted(ecoledef)
+        boursier,nonboursier=model.calcul_prix(ecoledef)
         
         Label(
             self.root,
@@ -402,6 +403,7 @@ class ChoixEcole:
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
             self.ecole.insert("end",text_affiche)
+            
         else:
             for ecole  in self.ecolesselect.values():
             
