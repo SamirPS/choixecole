@@ -37,14 +37,18 @@ def creationtuple(liste):
         
     return variablein+"'"+str(liste[-1])+"'"
 
-def calcul_prix(tupleecole):
-    prix,prix1=[],[]
+def calcul_prixboursier(tupleecole):
+    prix=[]
     for i in tupleecole:
+        prix+=list(price[0] for price in curseur.execute("SELECT PrixB FROM EcoleS WHERE id="+"'"+str(i)+"'"))
+    return sum(prix)
+
+def calcul_prixnonboursier(tupleecole):
+    prix=[]
+    for i in tupleecole:
+        prix+=list(price[0] for price in curseur.execute("SELECT PrixNB FROM EcoleS WHERE id="+"'"+str(i)+"'"))
         
-        prix+=list(price[0] for price in curseur.execute("SELECT PrixB FROM EcoleS WHERE Nom="+"'"+i+"'"))
-        prix1+=list(price[0] for price in curseur.execute("SELECT PrixNB FROM EcoleS WHERE Nom="+"'"+i+"'"))
-        
-    return sum(prix),sum(prix1)
+    return sum(prix)
 
 def filtre(choix_utilisateur, notes):
 
@@ -65,7 +69,7 @@ def filtre(choix_utilisateur, notes):
         bonif_str = "0"
     
     requete=( """
-        SELECT Nom,Admission,Commune
+        SELECT Id,Nom,Admission,Commune
         FROM EcoleSpe
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe

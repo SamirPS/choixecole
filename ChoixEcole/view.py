@@ -6,7 +6,7 @@ Created on Sun Dec 30 19:59:28 2018
 """
 from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
 import model
-
+import tkinter.scrolledtext as tkscrolled
 
 class ChoixEcole:
     def __init__(self):
@@ -15,20 +15,13 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
+        self.buttonslist=[]
+        self.button=None
 
         # Initialise le widget de rendu
-        self.ecole = Listbox(
-                self.root,
-                selectmode='multiple',
-                exportselection=0,
-                width=50,
-                height=10)
         
-        self.ecole.grid(
-                        row=2,
-                        column=11,
-                        rowspan=10,
-                        padx=10)
+        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=30, height=10,)
+        
         self.ecolesselect={}
 
         ########################################################################
@@ -49,8 +42,9 @@ class ChoixEcole:
 
         for var in self.notes_vars.values():
             var.trace('w', self.update)
+          
             
-
+    
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
@@ -68,16 +62,15 @@ class ChoixEcole:
             "concours": None,
             "annee":None
         }
-
+        
         self.varsbuttons={
                 "specialites":IntVar(self.root),
                 "regions":IntVar(self.root),
                 "concours":IntVar(self.root),
                 "alternance":IntVar(self.root),
                 "annee":IntVar(self.root),
-                "ecole":IntVar(self.root)
                 }
-
+        
 
         ########################################################################
         #                 RENDU FORMULAIRE NOTES                               #
@@ -251,11 +244,7 @@ class ChoixEcole:
                     text="Peu importe",
                     command=self.update).grid(row=1,
                                    column=9)
-        Checkbutton(self.root,
-                    variable=self.varsbuttons["ecole"],
-                    text="Selectionner tout ",
-                    command=self.updateargent).grid(row=1,
-                                   column=11)
+       
 
          ########################################################################
         #                 Insertion des données                               #
@@ -284,9 +273,9 @@ class ChoixEcole:
         self.alternance.bind("<<ListboxSelect>>",self.update)
         self.concours.bind("<<ListboxSelect>>",self.update)
         self.annee.bind("<<ListboxSelect>>",self.update)
-        self.ecole.bind("<<ListboxSelect>>",self.updateargent)
-
-
+        
+        
+        self.entry_ecole.grid(row=2,column=11,rowspan=10)
         self.update()
         self.root.mainloop()
 
@@ -351,69 +340,95 @@ class ChoixEcole:
         self.valide_maj_notes()
         self.maj_choix()
         self.construit_ecoles()
-
         self.affichage()
 
     def construit_ecoles(self):
         self.ecolesselect={}
-
+        
+        
         if self.notes!=None:
             for j,ecoles in enumerate(model.filtre(self.choix,self.notes)) :
 
                 self.ecolesselect[j]={
-                    "nom":ecoles[0],
-                    "admission":ecoles[1],
-                    "region":ecoles[2]
+                    "id":ecoles[0],
+                    "var":IntVar(self.root),
+                    "nom":ecoles[1],
+                    "admission":ecoles[2],
+                    "region":ecoles[3]
                 }
-
+                
+                
 
     def updateargent(self,*inutile):
         
-        boursier,nonboursier,ecoledef=0,0,[]
+        ecoledef=[]
+        for  variables in self.ecolesselect.values():
+            if variables["var"].get()==1:
+                ecoledef.append(variables["id"])
+                
+        self.prixboursier(ecoledef)
+        self.prixnonboursier(ecoledef)
+    
+    def prixboursier(self,liste):
+         boursier=0
+         boursier=model.calcul_prixboursier(liste)
         
-        if self.varsbuttons["ecole"].get()!=1:
-            
-            ecoleselect=list(self.ecole.get(i) for i in self.ecole.curselection())
-            
-            for ecole  in self.ecolesselect.values():
-                if ecole["nom"]+" "+ecole["admission"]+" "+ecole["region"] in ecoleselect:
-                    ecoledef.append(ecole["nom"])
-        else :
-            
-            self.ecole.selection_clear(0,"end")
-            ecoledef=[ecole["nom"] for ecole  in self.ecolesselect.values()]
-            
-        boursier,nonboursier=model.calcul_prix(ecoledef)
-        
-        Label(
+         Label(
             self.root,
             text="Boursier \n"+str(boursier)+"€"
-        ).grid(row=12, column=11)
-        Label(
+         ).grid(row=12, column=11)
+    
+    def prixnonboursier(self,liste):
+        
+         nonboursier=0
+         nonboursier=model.calcul_prixnonboursier(liste)
+        
+         Label(
             self.root,
-            text="Non Boursier \n"+str(nonboursier)+"€"
-        ).grid(row=13, column=11)
-
+            text="Non boursier \n"+str(nonboursier)+"€"
+         ).grid(row=13, column=11)
+        
         
     def affichage(self):
 
         # Active le champs Ecole et supprime ce qu'il y avait écrit avant
-        self.ecole.delete(0,"end")
+        self.entry_ecole.configure(state="normal")
+        self.entry_ecole.delete(0.7,'end')
+        text_affiche=""
         
+        
+        self.updateargent()
+        
+        for i in range(len(self.buttonslist)):
+            self.buttonslist[i].destroy()
+
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
-            self.ecole.insert("end",text_affiche)
-            
+             
         else:
-            for ecole  in self.ecolesselect.values():
+             
+            for j,ecole  in enumerate(self.ecolesselect.values()):
             
-                text_affiche = (
-                    ecole["nom"] + " "
-                    + ecole["admission"] + " "
+                text_affiche += (
+                    ecole["nom"] 
+                    + " "
+                    + ecole["admission"] 
+                    + " "
                     + ecole["region"]
+                    +"\n"
                 )
+                button=Checkbutton(self.root,
+                    variable=self.ecolesselect[j]["var"],
+                    command=self.updateargent)
                 
-                self.ecole.insert("end",text_affiche)
+                button.grid(row=4+j,
+                        column=13,)
+                self.buttonslist.append(button)
+                    
+        
+       
+        self.entry_ecole.insert(0.7, text_affiche)
+        self.entry_ecole.configure(state="disabled")
                 
 
 
