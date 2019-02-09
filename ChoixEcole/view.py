@@ -6,7 +6,6 @@ Created on Sun Dec 30 19:59:28 2018
 """
 from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
 import model
-import tkinter.scrolledtext as tkscrolled
 
 class ChoixEcole:
     def __init__(self):
@@ -19,8 +18,6 @@ class ChoixEcole:
         self.button=None
 
         # Initialise le widget de rendu
-        
-        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=30, height=10,)
         
         self.ecolesselect={}
 
@@ -43,8 +40,6 @@ class ChoixEcole:
         for var in self.notes_vars.values():
             var.trace('w', self.update)
           
-            
-    
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
@@ -69,6 +64,7 @@ class ChoixEcole:
                 "concours":IntVar(self.root),
                 "alternance":IntVar(self.root),
                 "annee":IntVar(self.root),
+                "ecole":IntVar(self.root)
                 }
         
 
@@ -144,7 +140,29 @@ class ChoixEcole:
             self.root,
             text="Specialite"
         ).grid(row=0, column=6)
-
+        
+        self.ecoleslistbox=Listbox(
+                self.root,
+                selectmode='multiple',
+                exportselection=0,
+                width=50,
+                height=10)
+        
+        Label(
+            self.root,
+            text="Ecole"
+        ).grid(row=0, column=11)
+        
+        self.specialites=Listbox(
+                self.root,
+                selectmode='multiple',
+                exportselection=0,
+                width=20,
+                height=10)
+        Label(
+            self.root,
+            text="Specialite"
+        ).grid(row=0, column=6)
         self.regions=Listbox(
                 self.root,
                 selectmode='multiple',
@@ -193,7 +211,13 @@ class ChoixEcole:
                 column=6,
                 rowspan=10,
                 padx=10)
-
+        
+        self.ecoleslistbox.grid(
+                row=2,
+                column=11,
+                rowspan=10,
+                padx=10)
+        
         self.regions.grid(
                 row=2,
                 column=7,
@@ -244,6 +268,11 @@ class ChoixEcole:
                     text="Peu importe",
                     command=self.update).grid(row=1,
                                    column=9)
+        Checkbutton(self.root,
+                    variable=self.varsbuttons["ecole"],
+                    text="Peu importe",
+                    command=self.updateargent).grid(row=1,
+                                       column=11)
        
 
          ########################################################################
@@ -273,9 +302,8 @@ class ChoixEcole:
         self.alternance.bind("<<ListboxSelect>>",self.update)
         self.concours.bind("<<ListboxSelect>>",self.update)
         self.annee.bind("<<ListboxSelect>>",self.update)
+        self.ecoleslistbox.bind("<<ListboxSelect>>",self.updateargent)
         
-        
-        self.entry_ecole.grid(row=2,column=11,rowspan=10)
         self.update()
         self.root.mainloop()
 
@@ -351,21 +379,29 @@ class ChoixEcole:
 
                 self.ecolesselect[j]={
                     "id":ecoles[0],
-                    "var":IntVar(self.root),
                     "nom":ecoles[1],
                     "admission":ecoles[2],
                     "region":ecoles[3]
                 }
-                
+       
                 
 
     def updateargent(self,*inutile):
         
         ecoledef=[]
-        for  variables in self.ecolesselect.values():
-            if variables["var"].get()==1:
-                ecoledef.append(variables["id"])
-                
+        
+        if self.varsbuttons["ecole"].get()==1 and self.ecolesselect!={}:
+            
+            self.ecoleslistbox.selection_clear(0,"end")
+            ecolechoix=tuple(self.ecoleslistbox.get(0,"end"))
+            
+        else:
+            ecolechoix=tuple(self.ecoleslistbox.get(i) for i in self.ecoleslistbox.curselection())
+            
+        for ecole  in self.ecolesselect.values():
+            if ecole["nom"]+" "+ecole["admission"]+" "+ecole["region"] in ecolechoix:
+                ecoledef.append(ecole["id"])
+                    
         self.prixboursier(ecoledef)
         self.prixnonboursier(ecoledef)
     
@@ -389,41 +425,32 @@ class ChoixEcole:
         
     def affichage(self):
 
-        # Active le champs Ecole et supprime ce qu'il y avait écrit avant
-        self.entry_ecole.configure(state="normal")
-        self.entry_ecole.delete(0.7,'end')
-        text_affiche=""
-    
+        
+        self.ecoleslistbox.delete(0,"end")
         for i in range(len(self.buttonslist)):
             self.buttonslist[i].destroy()
 
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
+            self.ecoleslistbox.insert("end",text_affiche)
              
         else:
              
-            for j,ecole  in enumerate(self.ecolesselect.values()):
+            for ecole in  self.ecolesselect.values():
             
-                text_affiche += (
+                text_affiche = (
                     ecole["nom"] 
                     + " "
                     + ecole["admission"] 
                     + " "
                     + ecole["region"]
-                    +"\n"
                 )
-                button=Checkbutton(self.root,
-                    variable=self.ecolesselect[j]["var"],
-                    command=self.updateargent)
-                
-                button.grid(row=4+j,
-                        column=13,)
-                self.buttonslist.append(button)
+                self.ecoleslistbox.insert("end",text_affiche)
+           
                     
         
        
-        self.entry_ecole.insert(0.7, text_affiche)
-        self.entry_ecole.configure(state="disabled")
+        
                 
 
 

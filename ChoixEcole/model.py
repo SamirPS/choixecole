@@ -69,7 +69,7 @@ def filtre(choix_utilisateur, notes):
         bonif_str = "0"
     
     requete=( """
-        SELECT Id,Nom,Admission,Commune
+        SELECT id,Nom,Admission,Commune
         FROM EcoleSpe
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe
