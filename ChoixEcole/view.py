@@ -371,6 +371,7 @@ class ChoixEcole:
     
     def prixboursier(self,liste):
          boursier=0
+
          boursier=model.calcul_prixboursier(liste)
         
          Label(
@@ -379,15 +380,12 @@ class ChoixEcole:
          ).grid(row=12, column=11)
     
     def prixnonboursier(self,liste):
-        
          nonboursier=0
          nonboursier=model.calcul_prixnonboursier(liste)
-        
          Label(
             self.root,
             text="Non boursier \n"+str(nonboursier)+"€"
          ).grid(row=13, column=11)
-        
         
     def affichage(self):
 
@@ -395,10 +393,7 @@ class ChoixEcole:
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7,'end')
         text_affiche=""
-        
-        
-        self.updateargent()
-        
+    
         for i in range(len(self.buttonslist)):
             self.buttonslist[i].destroy()
 
