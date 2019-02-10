@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar,Label,Entry,Listbox,Checkbutton,IntVar
+from tkinter import Tk,StringVar,Label,Entry,Listbox,IntVar,Checkbutton
 import model
 
 class ChoixEcole:
@@ -14,11 +14,8 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
-        self.buttonslist=[]
-        self.button=None
-
-        # Initialise le widget de rendu
         
+
         self.ecolesselect={}
 
         ########################################################################
@@ -316,15 +313,12 @@ class ChoixEcole:
                     raise ValueError()
 
                 else:
-                    if len(note_var.get()) in (1,2)  :
+                    if len(note_var.get()) in (2,1)  :
                         pass
                     elif note_var.get()[2]=="." and len(note_var.get())<6:
                         pass
                     elif note_var.get()[1]=="." and len(note_var.get())<5:
                         pass
-
-                    else :
-                        raise ValueError()
 
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
@@ -333,6 +327,7 @@ class ChoixEcole:
         except ValueError:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
+        
 
 
     def maj_choix(self):
@@ -393,20 +388,20 @@ class ChoixEcole:
         if self.varsbuttons["ecole"].get()==1 and self.ecolesselect!={}:
             
             self.ecoleslistbox.selection_clear(0,"end")
+            
             ecolechoix=tuple(self.ecoleslistbox.get(0,"end"))
             
         else:
             ecolechoix=tuple(self.ecoleslistbox.get(i) for i in self.ecoleslistbox.curselection())
             
         for ecole  in self.ecolesselect.values():
-            if ecole["nom"]+" "+ecole["admission"]+" "+ecole["region"] in ecolechoix:
+            if ecole["nom"] in str(ecolechoix):
                 ecoledef.append(ecole["id"])
                     
         self.prixboursier(ecoledef)
         self.prixnonboursier(ecoledef)
     
     def prixboursier(self,liste):
-         boursier=0
 
          boursier=model.calcul_prixboursier(liste)
         
@@ -416,7 +411,7 @@ class ChoixEcole:
          ).grid(row=12, column=11)
     
     def prixnonboursier(self,liste):
-         nonboursier=0
+        
          nonboursier=model.calcul_prixnonboursier(liste)
          Label(
             self.root,
@@ -425,11 +420,8 @@ class ChoixEcole:
         
     def affichage(self):
 
-        
         self.ecoleslistbox.delete(0,"end")
-        for i in range(len(self.buttonslist)):
-            self.buttonslist[i].destroy()
-
+       
         if self.notes == None:
             text_affiche = "Erreur lors de la saisie des notes."
             self.ecoleslistbox.insert("end",text_affiche)
