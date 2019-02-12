@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk,StringVar,Label,Entry,Listbox,IntVar,Checkbutton
+from tkinter import Tk,StringVar,Label,Entry,Listbox,IntVar,Checkbutton,Button
 import model
 
 class ChoixEcole:
@@ -270,6 +270,9 @@ class ChoixEcole:
                     text="Peu importe",
                     command=self.updateargent).grid(row=1,
                                        column=11)
+        Button(self.root, 
+               text = "delete selection",
+               command=self.delete).grid(row=5,column=12)
        
 
          ########################################################################
@@ -301,6 +304,7 @@ class ChoixEcole:
         self.annee.bind("<<ListboxSelect>>",self.update)
         self.ecoleslistbox.bind("<<ListboxSelect>>",self.updateargent)
         
+        
         self.update()
         self.root.mainloop()
 
@@ -319,6 +323,8 @@ class ChoixEcole:
                         pass
                     elif note_var.get()[1]=="." and len(note_var.get())<5:
                         pass
+                    else :
+                        raise ValueError 
 
                 notes[nom_matiere] = note_float
             notes["modelisation"]=(notes["maths"]+notes["si"])/2
@@ -364,7 +370,10 @@ class ChoixEcole:
         self.maj_choix()
         self.construit_ecoles()
         self.affichage()
-
+    
+    
+                
+        
     def construit_ecoles(self):
         self.ecolesselect={}
         
@@ -413,11 +422,19 @@ class ChoixEcole:
     def prixnonboursier(self,liste):
         
          nonboursier=model.calcul_prixnonboursier(liste)
+         
          Label(
             self.root,
             text="Non boursier \n"+str(nonboursier)+"€"
          ).grid(row=13, column=11)
         
+    def delete(self):
+        
+        selection = self.ecoleslistbox.curselection()
+        if self.notes!=None:
+            for i in reversed(selection):
+                self.ecoleslistbox.delete(i)
+                
     def affichage(self):
 
         self.ecoleslistbox.delete(0,"end")
