@@ -16,7 +16,7 @@ def renvoie_admission():
 
 def renvoie_specialites():
 
-    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Nom FROM Specialite") ]
+    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT NomSpe FROM Specialite") ]
 
 def renvoie_regions():
 
@@ -26,7 +26,7 @@ def renvoie_idspe(choix):
 
     idspe=tuple()
     for i in tuple(choix):
-        idspe+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE Nom="+"'"+i+"'"))
+        idspe+=tuple(spe[0] for spe in curseur.execute("SELECT Id FROM Specialite WHERE NomSpe="+"'"+i+"'"))
     return idspe
 
 def creationtuple(liste):

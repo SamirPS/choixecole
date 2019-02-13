@@ -387,7 +387,7 @@ class ChoixEcole:
                     "admission":ecoles[2],
                     "region":ecoles[3]
                 }
-       
+        print(self.ecolesselect)
                 
 
     def updateargent(self,*inutile):
