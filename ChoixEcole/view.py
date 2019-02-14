@@ -370,10 +370,10 @@ class ChoixEcole:
         self.maj_choix()
         self.construit_ecoles()
         self.affichage()
+
     
-    
-                
-        
+
+
     def construit_ecoles(self):
         self.ecolesselect={}
         
@@ -387,7 +387,7 @@ class ChoixEcole:
                     "admission":ecoles[2],
                     "region":ecoles[3]
                 }
-        print(self.ecolesselect)
+        
                 
 
     def updateargent(self,*inutile):
