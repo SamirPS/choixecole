@@ -49,7 +49,7 @@ def alter():
             temp=sheet.cell(row=i,column=38).value
             temp2=sheet.cell(row=i, column=j).value
             if temp2=="OUI":
-                temp=temp[0]+temp[1::].lower()
+                temp=temp[0].upper()+temp[1::].lower()
                 curseur.execute("INSERT INTO EcoleSpe (Alternance,IdSpe,IdEcole) VALUES (?,?,?)",(temp,j-10,i-2))
     
        
