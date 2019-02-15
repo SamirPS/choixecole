@@ -42,12 +42,14 @@ def spe():
 def alter():
     curseur.execute("DROP TABLE EcoleSpe")
     connexion.commit()
-    curseur.execute("CREATE TABLE `EcoleSpe` (`IdEcole`	INTEGER,`IdSpe`	INTEGER,`Alternance`	TEXT,FOREIGN KEY(`IdEcole`) REFERENCES `EcoleS`(`Id`),UNIQUE(`IdEcole`,`IdSpe`,`Alternance`),FOREIGN KEY(`IdSpe`) REFERENCES `Specialite`(`Id`));")
+    curseur.execute("CREATE TABLE `EcoleSpe` (`IdEcole`	INTEGER,`IdSpe` INTEGER,`Alternance` TEXT,FOREIGN KEY(`IdEcole`) REFERENCES `EcoleS`(`Id`),UNIQUE(`IdEcole`,`IdSpe`,`Alternance`),FOREIGN KEY(`IdSpe`) REFERENCES `Specialite`(`Id`));")
+    
     for i in range(3,r):
         for j in range(11, 35):
             temp=sheet.cell(row=i,column=38).value
             temp2=sheet.cell(row=i, column=j).value
             if temp2=="OUI":
+                temp=temp[0]+temp[1::].lower()
                 curseur.execute("INSERT INTO EcoleSpe (Alternance,IdSpe,IdEcole) VALUES (?,?,?)",(temp,j-10,i-2))
     
        
