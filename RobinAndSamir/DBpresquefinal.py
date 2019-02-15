@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Feb 12 14:19:23 2019
-@author: robinchaussemy
+@author: robinchaussemy and SamirAkarioh
 """
 import openpyxl
 import sqlite3
