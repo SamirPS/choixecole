@@ -14,8 +14,7 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
-        
-
+     
         self.ecolesselect={}
 
         ########################################################################
@@ -40,8 +39,7 @@ class ChoixEcole:
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
-
-
+        
         ########################################################################
         #                        CHOIX                                         #
         ########################################################################
@@ -303,8 +301,7 @@ class ChoixEcole:
         self.concours.bind("<<ListboxSelect>>",self.update)
         self.annee.bind("<<ListboxSelect>>",self.update)
         self.ecoleslistbox.bind("<<ListboxSelect>>",self.updateargent)
-        
-        
+       
         self.update()
         self.root.mainloop()
 
@@ -334,8 +331,6 @@ class ChoixEcole:
             # Une erreur est survenue lors de la conversion des notes
             self.notes = None
         
-
-
     def maj_choix(self):
         ########################################################################
         #                        NOTES                                         #
@@ -362,8 +357,6 @@ class ChoixEcole:
             if not self.choix[cle] or self.varsbuttons[cle].get()==1:
                 self.choix[cle]=None
 
-
-
     def update(self, *inutile):
 
         self.valide_maj_notes()
@@ -371,13 +364,9 @@ class ChoixEcole:
         self.construit_ecoles()
         self.affichage()
 
-    
-
-
     def construit_ecoles(self):
         self.ecolesselect={}
-        
-        
+         
         if self.notes!=None:
             for j,ecoles in enumerate(model.filtre(self.choix,self.notes)) :
 
@@ -387,9 +376,7 @@ class ChoixEcole:
                     "admission":ecoles[2],
                     "region":ecoles[3]
                 }
-        
-                
-
+       
     def updateargent(self,*inutile):
         
         ecoledef=[]
@@ -455,14 +442,7 @@ class ChoixEcole:
                     + ecole["region"]
                 )
                 self.ecoleslistbox.insert("end",text_affiche)
-           
-                    
-        
-       
-        
                 
-
-
 
 if __name__ == '__main__':
     ChoixEcole()
