@@ -372,19 +372,22 @@ class ChoixEcole:
     def information(self):
 
         window = Toplevel(self.root)
-        info = tkscrolled.ScrolledText(window, width=90, height=10)
-        info.grid(row=2,column=10)
+        info = tkscrolled.ScrolledText(window, width=120, height=10)
+        info.pack(fill="both", expand="YES")
         text_affiche=""
 
-        for ecole in self.ecolesselect.values():
-            if ecole["var"].get()==1:
-                samir=ecole["nom"]+ " Alternance " +ecole[ "Alternance" ]
+        if self.choix["specialites"]==None:
+            ListeSpe=list(self.specialites.get(0,"end"))
+        else :
+            ListeSpe=[ self.specialites.get(i) for i in self.specialites.curselection() ]
 
-                if self.choix["specialites"]==None:
+        for i in  ListeSpe:
+            for ecole in self.ecolesselect.values():
+                if ecole["var"].get()==1:
+                    samir=ecole["nom"]+ecole[ "Alternance" ]+i
 
                     for ecolesinfo in self.ecolesselect.values():
-                        if samir==ecolesinfo["nom"]+" Alternance " +ecolesinfo[ "Alternance" ]:
-
+                        if samir==ecolesinfo["nom"]+ecolesinfo[ "Alternance" ]+ecolesinfo["Spe"]:
                             text_affiche+=(
                                     ecolesinfo["nom"]
                                     +" Admission : "
@@ -397,21 +400,8 @@ class ChoixEcole:
                                     +ecolesinfo["Spe"]
                                     +"\n"
                             )
-                else :
-                    text_affiche = (
-                            ecole[ "nom" ]
-                            + " Admission : "
-                            + ecole[ "admission" ]
-                            + " Region : "
-                            + ecole[ "region" ]
-                            + " Alternance : "
-                            + ecole[ "Alternance" ]
-                            + " Specialite : "
-                            + ecole[ "Spe" ]
-                            + "\n"
-                    )
 
-                info.insert(0.7, text_affiche)
+        info.insert(0.7, text_affiche)
         info.configure(state="disabled")
 
 
