@@ -19,7 +19,6 @@ class ChoixEcole:
 
 
         self.button=[]
-
         self.ecolesselect={}
 
         ########################################################################
@@ -141,8 +140,6 @@ class ChoixEcole:
             text="Specialite"
         ).grid(row=0, column=6)
 
-
-        
         self.specialites=Listbox(
                 self.root,
                 selectmode='multiple',
