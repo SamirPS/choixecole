@@ -21,7 +21,7 @@ c = sheet.max_column
 def ecole():
     curseur.execute("DROP TABLE EcoleS")
     connexion.commit()
-    curseur.execute("CREATE TABLE EcoleS(Id INTEGER PRIMARY KEY AUTOINCREMENT,Acronyme TEXT,Nom	 TEXT,Groupe TEXT,Commune TEXT,CommuneAnnexe TEXT,Region TEXT,Admission TEXT,Statut 	TEXT,Points 	INTEGER,PrixB	INTEGER,PrixNB INTEGER)")
+    curseur.execute("CREATE TABLE `EcoleS` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT,`Acronyme`	TEXT,`Nom`	TEXT,`Groupe`	TEXT,`Commune`	TEXT,`CommuneAnnexe`	TEXT,`Region`	TEXT,`Admission`	TEXT,`Statut`	TEXT,`Points`	INTEGER,`PrixB`	INTEGER,`PrixNB`	INTEGER)")
 
     for i in range(3,r):
         t2=[]
@@ -34,7 +34,7 @@ def ecole():
 def spe():
     curseur.execute("DROP TABLE Specialite")
     connexion.commit()
-    curseur.execute("CREATE TABLE Specialite(Id	 INTEGER PRIMARY KEY AUTOINCREMENT,NomSpe TEXT)")
+    curseur.execute("CREATE TABLE `Specialite` (`Idspecialite`	INTEGER PRIMARY KEY AUTOINCREMENT,`NomSpe`	TEXT)")
     for i in range(11,35):
         temp=sheet.cell(row=2,column=i).value
         curseur.execute("INSERT INTO Specialite (NomSpe) VALUES (?)",(temp,))
@@ -42,7 +42,7 @@ def spe():
 def alter():
     curseur.execute("DROP TABLE EcoleSpe")
     connexion.commit()
-    curseur.execute("CREATE TABLE `EcoleSpe` (`IdEcole`	INTEGER,`IdSpe` INTEGER,`Alternance` TEXT,FOREIGN KEY(`IdEcole`) REFERENCES `EcoleS`(`Id`),UNIQUE(`IdEcole`,`IdSpe`,`Alternance`),FOREIGN KEY(`IdSpe`) REFERENCES `Specialite`(`Id`));")
+    curseur.execute("CREATE TABLE `EcoleSpe` (`IdEcole`	INTEGER,`IdSpe`	INTEGER,`Alternance`	TEXT,FOREIGN KEY(`IdSpe`) REFERENCES `Specialite`(`Idspecialite`),FOREIGN KEY(`IdEcole`) REFERENCES `EcoleS`(`Id`),UNIQUE(`IdEcole`,`IdSpe`,`Alternance`))")
     
     for i in range(3,r):
         for j in range(11, 35):
