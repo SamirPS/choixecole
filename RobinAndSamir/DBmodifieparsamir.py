@@ -38,16 +38,16 @@ def ecole():
    
     while 1 :
         
-        nomdugroupe=input("Ecris le nom du groupe ")
-        
-        cdebut=int(input("Donne la colonne du début "))
-        cfin=int(input("Donne la colonne du fin "))
+        nomdugroupe=input(" Ecris le nom du groupe ")
+        cdebut=int(input(" Donne la colonne du début "))
+        cfin=int(input(" Donne la colonne du fin "))
         
         for i in range(cdebut,cfin+1):
+            
             temp=sheet2.cell(row=i, column=4).value
             curseur.execute("UPDATE EcoleS SET Groupe = "+"'"+nomdugroupe+"'"+" WHERE Acronyme LIKE (?)",('%'+temp,))
         
-        test=input("D'autres groupes a ajouter : ")
+        test=input(" D'autres groupes à ajouter ?  ")
         
         if test.capitalize()!="Oui":
             break
