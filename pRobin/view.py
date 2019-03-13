@@ -74,7 +74,7 @@ class ChoixEcole:
         #                 RENDU FORMULAIRE NOTES                               #
         ########################################################################
 
-         Label(
+        Label(
             self.root,
             text="Maths"
         ).grid(row=1, column=1)
