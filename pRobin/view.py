@@ -74,9 +74,9 @@ class ChoixEcole:
         #                 RENDU FORMULAIRE NOTES                               #
         ########################################################################
 
-        Label(
+         Label(
             self.root,
-            text="Moyenne en maths"
+            text="Maths"
         ).grid(row=1, column=1)
         Entry(
             self.root,
@@ -85,7 +85,7 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en Physique"
+            text="Physique"
         ).grid(row=3, column=1)
         Entry(
             self.root,
@@ -94,7 +94,7 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en Si"
+            text="Si"
         ).grid(row=5, column=1)
         Entry(
             self.root,
@@ -103,7 +103,7 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en Informatique"
+            text="Informatique"
         ).grid(row=7, column=1)
         Entry(
             self.root,
@@ -112,7 +112,7 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en Anglais"
+            text="Anglais"
         ).grid(row=9, column=1)
         Entry(
             self.root,
@@ -121,7 +121,7 @@ class ChoixEcole:
 
         Label(
             self.root,
-            text="Moyenne en Francais"
+            text="  Francais"
         ).grid(row=11, column=1)
         Entry(
             self.root,
@@ -160,6 +160,7 @@ class ChoixEcole:
             self.root,
             text="Specialite"
         ).grid(row=0, column=6)
+        
         self.regions = Listbox(
             self.root,
             selectmode='multiple',
@@ -173,14 +174,13 @@ class ChoixEcole:
 
         self.alternance = Listbox(
             self.root,
-            selectmode='multiple',
             exportselection=0,
-            width=20,
-            height=10)
+            width=6,
+            height=3)
         Label(
             self.root,
             text="Alternance"
-        ).grid(row=0, column=8)
+        ).grid(row=11, column=6)
 
         self.concours = Listbox(
             self.root,
@@ -196,12 +196,12 @@ class ChoixEcole:
         self.annee = Listbox(
             self.root,
             exportselection=0,
-            width=20,
-            height=10)
+            width=6,
+            height=3)
         Label(
             self.root,
             text="Année"
-        ).grid(row=0, column=10)
+        ).grid(row=11, column=7)
 
         self.specialites.grid(
             row=2,
@@ -216,8 +216,8 @@ class ChoixEcole:
             padx=10)
 
         self.alternance.grid(
-            row=2,
-            column=8,
+            row=13,
+            column=6,
             rowspan=10,
             padx=10)
 
@@ -228,8 +228,8 @@ class ChoixEcole:
             padx=10)
 
         self.annee.grid(
-            row=2,
-            column=10,
+            row=13,
+            column=7,
             rowspan=10,
             padx=10)
 
@@ -252,8 +252,8 @@ class ChoixEcole:
         Checkbutton(self.root,
                     variable=self.varsbuttons["alternance"],
                     text="Peu importe",
-                    command=self.update).grid(row=1,
-                                              column=8)
+                    command=self.update).grid(row=12,
+                                              column=6)
 
         Checkbutton(self.root,
                     variable=self.varsbuttons["concours"],
@@ -266,13 +266,12 @@ class ChoixEcole:
                command=self.information,width=15).grid(row=2,
                                               column=31)
         Button(self.root,
-               text="Note",
-               command=self.TEST,width=15).grid(row=3,column=31)
+               text="Note"
+               ,width=15).grid(row=3,column=31)
         Button(self.root,
-              text="Crée DB",
-              command=self.creenewDB,width=15).grid(row=4,
+              text="Crée DB"
+              ,width=15).grid(row=4,
                                       column=31)
-
 
         ########################################################################
         #                 Insertion des données                                #
