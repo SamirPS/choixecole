@@ -88,6 +88,6 @@ def filtre(choix_utilisateur, notes):
     for var in conds:
         variablein = creationtuple(var[2])
         requete += " AND " + var[0] + " " + var[1] + " (" + variablein + ")"
-    print(notes)
+    
 
     return [ecole for ecole in curseur.execute(requete)]
