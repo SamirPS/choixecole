@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel
+from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale
 import model
 import tkinter.scrolledtext as tkscrolled
 import DB
@@ -73,60 +73,64 @@ class ChoixEcole:
         ########################################################################
         #                 RENDU FORMULAIRE NOTES                               #
         ########################################################################
-
+        
+        self.scale=Scale(self.root, orient='horizontal', from_=0, to=100,
+                         resolution=1, tickinterval=25, length=100,
+                         label='Augmentation %',command=self.update)
+        
         Label(
             self.root,
             text="Maths"
-        ).grid(row=1, column=1)
+        ).grid(row=2, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["maths"]
-        ).grid(row=2, column=1)
+        ).grid(row=3, column=1)
 
         Label(
             self.root,
             text="Physique"
-        ).grid(row=3, column=1)
+        ).grid(row=4, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["physique"]
-        ).grid(row=4, column=1)
+        ).grid(row=5, column=1)
 
         Label(
             self.root,
             text="Si"
-        ).grid(row=5, column=1)
+        ).grid(row=6, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["si"]
-        ).grid(row=6, column=1)
+        ).grid(row=7, column=1)
 
         Label(
             self.root,
             text="Informatique"
-        ).grid(row=7, column=1)
+        ).grid(row=8, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["informatique"]
-        ).grid(row=8, column=1)
+        ).grid(row=9, column=1)
 
         Label(
             self.root,
             text="Anglais"
-        ).grid(row=9, column=1)
+        ).grid(row=10, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["anglais"]
-        ).grid(row=10, column=1)
+        ).grid(row=11, column=1)
 
         Label(
             self.root,
             text="  Francais"
-        ).grid(row=11, column=1)
+        ).grid(row=12, column=1)
         Entry(
             self.root,
             textvariable=self.notes_vars["francais"]
-        ).grid(row=12, column=1)
+        ).grid(row=13, column=1)
         Label(
             self.root,
             text="Nom"
@@ -295,6 +299,7 @@ class ChoixEcole:
         #                 On bind les ListBox                                  #
         ########################################################################
         self.entry_ecole.grid(row=2, column=20, rowspan=10)
+        self.scale.grid(row=0,column=1,rowspan=2)
 
         self.specialites.bind("<<ListboxSelect>>", self.update)
         self.regions.bind("<<ListboxSelect>>", self.update)
@@ -322,9 +327,18 @@ class ChoixEcole:
                         pass
                     else:
                         raise ValueError
-
-                notes[nom_matiere] = note_float
+                        
+                        
+                note_float=note_float+(self.scale.get()*note_float)/100
+                
+                if note_float>=20 :
+                    notes[nom_matiere] = 20
+                else :
+                    notes[nom_matiere] = note_float
+                    
             notes["modelisation"] = (notes["maths"] + notes["si"]) / 2
+            
+            
             self.notes = notes
 
         except ValueError:
