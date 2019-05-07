@@ -274,6 +274,11 @@ class ChoixEcole:
                command=self.recuperernote
                ,width=15).grid(row=3,column=31)
         
+        Button(self.root,
+               text="Prix",
+               command=self.calculprix,width=15).grid(row=2,
+                                              column=32)
+        
         ########################################################################
         #                 Insertion des données                                #
         ########################################################################
@@ -391,6 +396,7 @@ class ChoixEcole:
                     "Acronyme": ecoles[5],
                     "Spe": ecoles[6]
                 }
+       
 
     def information(self):
 
@@ -398,35 +404,98 @@ class ChoixEcole:
         info = tkscrolled.ScrolledText(window, width=120, height=10)
         info.pack(fill="both", expand="YES")
         text_affiche = ""
-
+        
+        
         if self.choix["specialites"] == None:
             ListeSpe = list(self.specialites.get(0, "end"))
         else:
             ListeSpe = [self.specialites.get(i) for i in self.specialites.curselection()]
+        
+        if self.choix["alternance"]!=None:
+                    alternance=self.choix["alternance"][0]
+                    for i in ListeSpe:
+                        for ecole in self.ecolesselect.values():
+                            if ecole["var"].get() == 1:
+                                samir = ecole["nom"] + alternance + i
 
-        for i in ListeSpe:
-            for ecole in self.ecolesselect.values():
-                if ecole["var"].get() == 1:
-                    samir = ecole["nom"] + ecole["Alternance"] + i
+                                for ecolesinfo in self.ecolesselect.values():
+                                    if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                        text_affiche += (
+                                                ecolesinfo["nom"]
+                                                + " Admission : "
+                                                + ecolesinfo["admission"]
+                                                + " Region : "
+                                                + ecolesinfo["region"]
+                                                + " Alternance : "
+                                                + ecolesinfo["Alternance"]
+                                                + " Specialite : "
+                                                + ecolesinfo["Spe"]
+                                                + "\n"
+                                        )
+                                        
+        elif  self.choix["alternance"]==None :
+            alternance="Oui"
+            for i in ListeSpe:
+                for ecole in self.ecolesselect.values():
+                    if ecole["var"].get() == 1:
+                        samir = ecole["nom"] + alternance + i
 
-                    for ecolesinfo in self.ecolesselect.values():
-                        if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                            text_affiche += (
-                                    ecolesinfo["nom"]
-                                    + " Admission : "
-                                    + ecolesinfo["admission"]
-                                    + " Region : "
-                                    + ecolesinfo["region"]
-                                    + " Alternance : "
-                                    + ecolesinfo["Alternance"]
-                                    + " Specialite : "
-                                    + ecolesinfo["Spe"]
-                                    + "\n"
-                            )
+                        for ecolesinfo in self.ecolesselect.values():
+                            if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                text_affiche += (
+                                        ecolesinfo["nom"]
+                                        + " Admission : "
+                                        + ecolesinfo["admission"]
+                                        + " Region : "
+                                        + ecolesinfo["region"]
+                                        + " Alternance : "
+                                        + ecolesinfo["Alternance"]
+                                        + " Specialite : "
+                                        + ecolesinfo["Spe"]
+                                        + "\n"
+                                )
+            alternance="Non"
+            for i in ListeSpe:
+                for ecole in self.ecolesselect.values():
+                    if ecole["var"].get() == 1:
+                        samir = ecole["nom"] + alternance + i
+
+                        for ecolesinfo in self.ecolesselect.values():
+                            if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                text_affiche += (
+                                        ecolesinfo["nom"]
+                                        + " Admission : "
+                                        + ecolesinfo["admission"]
+                                        + " Region : "
+                                        + ecolesinfo["region"]
+                                        + " Alternance : "
+                                        + ecolesinfo["Alternance"]
+                                        + " Specialite : "
+                                        + ecolesinfo["Spe"]
+                                        + "\n"
+                                )
 
         info.insert(0.7, text_affiche)
         info.configure(state="disabled")
-
+        
+    def calculprix(self):
+        ecoles=[]
+        for ecole in self.ecolesselect.values():
+                if ecole["var"].get() == 1:
+                    ecoles.append(ecole["admission"])
+                    
+        prixboursier=str(model.prix_boursier(ecoles))
+        prixnonboursier=str(model.prix_nonboursier(ecoles))
+        Label(
+            self.root,
+            text="Prix Boursier \n"+prixboursier
+        ).grid(row=3, column=32)
+        Label(
+            self.root,
+            text="Prix Non Boursier\n"+prixnonboursier
+        ).grid(row=4, column=32)
+                    
+        
     def affichage(self):
         for i in self.button:
             i.destroy()
@@ -439,8 +508,6 @@ class ChoixEcole:
             for ecole in self.ecolesselect.values():
                 text_affiche = (
                         ecole["Acronyme"]
-                        + " Alternance " +
-                        ecole["Alternance"]
                 )
                 if text_affiche not in textverification:
                     check = Checkbutton(text=text_affiche, variable=ecole["var"])

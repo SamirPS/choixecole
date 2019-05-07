@@ -35,6 +35,29 @@ def renvoie_regions():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
 
 
+def prix_boursier(ecoles): 
+    concoursenleve=[]
+    prix=0
+    for i in ecoles:
+        if i not in concoursenleve:
+            for resultat in curseur.execute("SELECT Boursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
+                prix+=resultat[0] 
+            concoursenleve.append(i)
+            
+    return prix
+            
+
+    
+def prix_nonboursier(ecoles):
+    concoursenleve=[]
+    prix=0
+    for i in ecoles:
+        if i not in concoursenleve:
+            for resultat in curseur.execute("SELECT NonBoursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
+                prix+=resultat[0] 
+            concoursenleve.append(i)
+            
+    return prix
 def renvoie_idspe(choix):
     idspe = tuple()
     for i in tuple(choix):
