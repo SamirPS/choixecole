@@ -12,7 +12,7 @@ import tkinter.scrolledtext as tkscrolled
 class ChoixEcole:
     def __init__(self):
 
-        # Initialise l'application et change le titre et la positionne
+        # Initialise l'application change le titre et la positionne
         self.root = Tk()
         self.root.title("ChoixEcole")
         self.root.resizable(False, False)
@@ -382,6 +382,7 @@ class ChoixEcole:
         self.affichage()
 
     def construit_ecoles(self):
+        """On récupere les écoles disponibles dans la bdd et on les stocke """
         self.ecolesselect = {}
 
         if self.notes != None:
@@ -416,10 +417,10 @@ class ChoixEcole:
                     for i in ListeSpe:
                         for ecole in self.ecolesselect.values():
                             if ecole["var"].get() == 1:
-                                samir = ecole["nom"] + alternance + i
+                                test = ecole["nom"] + alternance + i
 
                                 for ecolesinfo in self.ecolesselect.values():
-                                    if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                    if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
                                         text_affiche += (
                                                 ecolesinfo["nom"]
                                                 + " Admission : "
@@ -434,47 +435,28 @@ class ChoixEcole:
                                         )
                                         
         elif  self.choix["alternance"]==None :
-            alternance="Oui"
-            for i in ListeSpe:
-                for ecole in self.ecolesselect.values():
-                    if ecole["var"].get() == 1:
-                        samir = ecole["nom"] + alternance + i
-
-                        for ecolesinfo in self.ecolesselect.values():
-                            if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                text_affiche += (
-                                        ecolesinfo["nom"]
-                                        + " Admission : "
-                                        + ecolesinfo["admission"]
-                                        + " Region : "
-                                        + ecolesinfo["region"]
-                                        + " Alternance : "
-                                        + ecolesinfo["Alternance"]
-                                        + " Specialite : "
-                                        + ecolesinfo["Spe"]
-                                        + "\n"
-                                )
-            alternance="Non"
-            for i in ListeSpe:
-                for ecole in self.ecolesselect.values():
-                    if ecole["var"].get() == 1:
-                        samir = ecole["nom"] + alternance + i
-
-                        for ecolesinfo in self.ecolesselect.values():
-                            if samir == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                text_affiche += (
-                                        ecolesinfo["nom"]
-                                        + " Admission : "
-                                        + ecolesinfo["admission"]
-                                        + " Region : "
-                                        + ecolesinfo["region"]
-                                        + " Alternance : "
-                                        + ecolesinfo["Alternance"]
-                                        + " Specialite : "
-                                        + ecolesinfo["Spe"]
-                                        + "\n"
-                                )
-
+            alternance=["Oui","Non"]
+            for k in range(len(alternance)):
+                for i in ListeSpe:
+                    for ecole in self.ecolesselect.values():
+                        if ecole["var"].get() == 1:
+                            test = ecole["nom"] + alternance[k] + i
+    
+                            for ecolesinfo in self.ecolesselect.values():
+                                if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                    text_affiche += (
+                                            ecolesinfo["nom"]
+                                            + " Admission : "
+                                            + ecolesinfo["admission"]
+                                            + " Region : "
+                                            + ecolesinfo["region"]
+                                            + " Alternance : "
+                                            + ecolesinfo["Alternance"]
+                                            + " Specialite : "
+                                            + ecolesinfo["Spe"]
+                                            + "\n"
+                                    )
+    
         info.insert(0.7, text_affiche)
         info.configure(state="disabled")
         
@@ -497,6 +479,8 @@ class ChoixEcole:
                     
         
     def affichage(self):
+        """Affiche les écoles auquel on est admissible """
+        
         for i in self.button:
             i.destroy()
 

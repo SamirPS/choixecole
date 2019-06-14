@@ -12,12 +12,13 @@ curseur = connexion.cursor()
 
 
 """ Retourne la taille du fichier et les valeurs"""
-    
+
 book = openpyxl.load_workbook('BdDEcoles.xlsx')
 sheet = book.get_sheet_by_name('Ecoles')
 book2= openpyxl.load_workbook('sam.xlsx')
 sheet2 =book2.get_sheet_by_name('Feuille8')
 
+"""Connaitre le nombre de colonnes et de lignes des feuilles """
 r = sheet.max_row
 c = sheet.max_column
 r1 = sheet2.max_row
@@ -60,7 +61,7 @@ def alter():
                 temp = temp.capitalize()
                 curseur.execute("INSERT INTO EcoleSpe (Alternance,IdSpe,IdEcole) VALUES (?,?,?)", (temp, j - 10, i - 2))
 def creeDB():
-    
+
     ecole()
     spe()
     alter()

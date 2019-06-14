@@ -19,7 +19,8 @@ def renvoie_admission():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS")]
 
 def moyenneel(nom):
-    
+    """Récupere les notes du canditat si son prenom/nom est dans l'excel"""
+
     r = sheet.max_row
     for i in range(4,r):
         temp = sheet.cell(row=i, column=1).value
@@ -27,6 +28,8 @@ def moyenneel(nom):
             note=[sheet.cell(row=i, column=4).value,sheet.cell(row=i, column=5).value,sheet.cell(row=i, column=6).value,sheet.cell(row=i, column=7).value,sheet.cell(row=i, column=8).value,sheet.cell(row=i, column=9).value,sheet.cell(row=i, column=10).value]
             return note
     return [0,0,0,0,0,0]
+
+
 def renvoie_specialites():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT NomSpe FROM Specialite")]
 
@@ -35,29 +38,30 @@ def renvoie_regions():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
 
 
-def prix_boursier(ecoles): 
+def prix_boursier(ecoles):
     concoursenleve=[]
     prix=0
     for i in ecoles:
         if i not in concoursenleve:
             for resultat in curseur.execute("SELECT Boursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
-                prix+=resultat[0] 
+                prix+=resultat[0]
             concoursenleve.append(i)
-            
-    return prix
-            
 
-    
+    return prix
+
+
+
 def prix_nonboursier(ecoles):
     concoursenleve=[]
     prix=0
     for i in ecoles:
         if i not in concoursenleve:
             for resultat in curseur.execute("SELECT NonBoursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
-                prix+=resultat[0] 
+                prix+=resultat[0]
             concoursenleve.append(i)
-            
+
     return prix
+
 def renvoie_idspe(choix):
     idspe = tuple()
     for i in tuple(choix):
@@ -98,7 +102,7 @@ def filtre(choix_utilisateur, notes):
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Specialite on EcoleSpe.IdSpe=Specialite.idspecialite
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe
-        WHERE """
+        WHERE  """
                + str(notes["maths"]) + "*Maths+"
                + str(notes["physique"]) + "*Physique+"
                + str(notes["si"]) + """*SI+"""
@@ -107,12 +111,12 @@ def filtre(choix_utilisateur, notes):
                + str(notes["francais"]) + "*Francais+"
                + str(notes["modelisation"]) + "*Modelisation+"
                + bonif_str
-               + ">= Points  "
+               + ">= Points   "
 
                )
 
     for var in conds:
         variablein = creationtuple(var[2])
-        requete += " AND " + var[0] + " " + var[1] + " (" + variablein + ")"
-    
+        requete += " AND " + var[0] + "  " + var[1] + "  ( " + variablein + " ) "
+
     return [ecole for ecole in curseur.execute(requete)]
