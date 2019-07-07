@@ -11,10 +11,11 @@ import openpyxl
 book = openpyxl.load_workbook('sam.xlsx')
 sheet = book.get_sheet_by_name('S1')
 
-connexion = sqlite3.connect("choixecole.db")
-curseur = connexion.cursor()
+def connec(txt):
+    global connexion,curseur
 
-
+    connexion = sqlite3.connect(txt)
+    curseur = connexion.cursor()
 def renvoie_admission():
 
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS")]

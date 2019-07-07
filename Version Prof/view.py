@@ -4,7 +4,7 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale
+from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog
 import model
 import tkinter.scrolledtext as tkscrolled
 
@@ -15,6 +15,10 @@ class ChoixEcole:
         # Initialise l'application change le titre et la positionne
         self.root = Tk()
         self.root.title("ChoixEcole")
+        """Ouvre la base de données"""
+        
+        basededonne=filedialog.askopenfilename(title="Ouvrir un fichier",filetypes=[('db file','.db')]) 
+        model.connec(basededonne)
         self.root.resizable(False, False)
         self.entry_ecole = tkscrolled.ScrolledText(self.root, width=40, height=10, )
 

@@ -8,9 +8,13 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 import openpyxl
 
-connexion = sqlite3.connect("choixecole.db")
-curseur = connexion.cursor()
 
+
+def connec(txt):
+    global connexion,curseur
+
+    connexion = sqlite3.connect(txt)
+    curseur = connexion.cursor()
 
 def renvoie_admission():
 
