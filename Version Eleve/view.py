@@ -9,6 +9,8 @@ import model
 import tkinter.scrolledtext as tkscrolled
 
 
+
+
 class ChoixEcole:
     def __init__(self):
 
@@ -19,6 +21,10 @@ class ChoixEcole:
         
         basededonne=filedialog.askopenfilename(title="Ouvrir un fichier",filetypes=[('db file','.db')]) 
         model.connec(basededonne)
+        
+ 
+        """Ajoute un menu"""
+        
         
         
         self.root.resizable(False, False)
@@ -554,8 +560,8 @@ class ChoixEcole:
         ca.create_window(0, 0,  window=fr)
         fr.update_idletasks()
         ca.config(scrollregion=ca.bbox("all"))
-        
-        
+    
+
     def calculprix(self):
         ecoles=[]
         for ecole in self.ecolesselect.values():
