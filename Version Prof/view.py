@@ -618,15 +618,22 @@ class ChoixEcole:
         
         ecoleamoi=[]
         listeecoles=[]
-        for j, ecoles in enumerate(model.filtre(self.choix, self.notes)):
+        
+        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix}, self.notes)):
             ecoleamoi.append(ecoles[5])
-        for j, ecoles in enumerate(list(set(model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes})))):
+        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes})):
             listeecoles.append(ecoles[5])
-            
+        
+        ecoleamoi=list(set(ecoleamoi))
+        listeecoles=list(set(listeecoles))
+        
+        
         admission=["Admis"]*len(listeecoles)
+        
         for i in range(len(listeecoles)):
             if listeecoles[i] not in ecoleamoi  :
                 admission[i]="Refuse"
+                
         return admission,listeecoles
     
       
