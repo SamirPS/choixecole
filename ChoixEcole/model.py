@@ -16,10 +16,11 @@ curseur = connexion.cursor()
 
 
 def renvoie_admission():
+
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS")]
 
 def moyenneel(nom):
-    """Récupere les notes du canditat si son prenom/nom est dans l'excel"""
+    """Récupere les notes du canditat si son prenom/nom est dans l'excel sinon retourne des 0 partout """
 
     r = sheet.max_row
     for i in range(4,r):
@@ -82,6 +83,7 @@ def creationtuple(liste):
 def filtre(choix_utilisateur, notes):
     conds = []
 
+    """Le none correspond au fait que l'utilisateur n'as rien choisi"""
     if choix_utilisateur["specialites"] != None:
         conds.append(["Idspe", "IN", choix_utilisateur["specialites"]])
     if choix_utilisateur["alternance"] != None:
