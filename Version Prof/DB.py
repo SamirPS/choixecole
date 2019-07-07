@@ -36,6 +36,7 @@ def ecole():
 
     connexion.commit()
 
+
 def point():
 
     book2= openpyxl.load_workbook('sam.xlsx')

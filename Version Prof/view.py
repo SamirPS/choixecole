@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+1#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog
+from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog,Scrollbar,Canvas,Frame
 import model
 import tkinter.scrolledtext as tkscrolled
 
@@ -414,10 +414,45 @@ class ChoixEcole:
         ########################################################################
         # Renvoie les spécialite offerte par l'école en fonction du choix de l'utilisateur
 
+       
         window = Toplevel(self.root)
-        info = tkscrolled.ScrolledText(window, width=120, height=10)
-        info.pack(fill="both", expand="YES")
+        window.resizable(False, False)
+        window.geometry("700x150")
+        vsb = Scrollbar(window, orient="vertical")
+        vsb.grid(row=0, column=1, sticky="ns")
+        hsb = Scrollbar(window, orient="horizontal")
+        hsb.grid(row=1, column=0, sticky="ew")
+        ca = Canvas(window,yscrollcommand=vsb.set,xscrollcommand=hsb.set)
+        ca.grid(row=0, column=0, sticky="news")
+        vsb.config(command=ca.yview)
+        hsb.config(command=ca.xview)
+        window.grid_rowconfigure(0, weight=1)
+        window.grid_columnconfigure(0, weight=1)
+        fr = Frame(ca)
+        
+
+        
         text_affiche = ""
+        Label(
+            fr,
+            text="Nom"
+        ).grid(row=0, column=1)
+        Label(
+            fr,
+            text="Admission"
+        ).grid(row=0, column=3)
+        Label(
+            fr,
+            text="Region"
+        ).grid(row=0, column=5)
+        Label(
+            fr,
+            text="Alternance"
+        ).grid(row=0, column=7)
+        Label(
+            fr,
+            text="Specialite"
+        ).grid(row=0, column=9)
         
         
         if self.choix["specialites"] == None:
@@ -427,6 +462,7 @@ class ChoixEcole:
         
         if self.choix["alternance"]!=None:
                     alternance=self.choix["alternance"][0]
+                    ligne=1
                     for i in ListeSpe:
                         for ecole in self.ecolesselect.values():
                             if ecole["var"].get() == 1:
@@ -434,21 +470,48 @@ class ChoixEcole:
 
                                 for ecolesinfo in self.ecolesselect.values():
                                     if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                        text_affiche += (
-                                                ecolesinfo["nom"]
-                                                + " Admission : "
-                                                + ecolesinfo["admission"]
-                                                + " Region : "
-                                                + ecolesinfo["region"]
-                                                + " Alternance : "
-                                                + ecolesinfo["Alternance"]
-                                                + " Specialite : "
-                                                + ecolesinfo["Spe"]
-                                                + "\n"
+                                        a=Entry(
+                                            fr,
                                         )
+                                        a.grid(row=ligne, column=1)
+                                        a.insert(0, ecolesinfo["nom"])
+                                        b=Entry(
+                                            fr,
+                                            
+                                        )
+                                        b.grid(row=ligne, column=3)
+                                        b.insert(0,ecolesinfo["admission"])
+                                        c=Entry(
+                                           fr,
+                                           
+                                        )
+                                        c.insert(0, ecolesinfo["region"])
+                                        c.grid(row=ligne, column=5)
+                                        d=Entry(
+                                            fr,
+                                            
+                                        )
+                                        d.insert(0, ecolesinfo["Alternance"])
+                                        d.grid(row=ligne, column=7)
+                                        e=Entry(
+                                            fr,
+                                            
+                                        )
+                                        e.insert(0, ecolesinfo["Spe"])
+                                        e.grid(row=ligne, column=9)
+                                        a.config(state="disabled")
+                                        b.config(state="disabled")
+                                        c.config(state="disabled")
+                                        d.config(state="disabled")
+                                        e.config(state="disabled")
+                                        
+                                        
+                                        ligne+=1
+        
                                         
         elif  self.choix["alternance"]==None :
             alternance=["Oui","Non"]
+            ligne=1
             for k in range(len(alternance)):
                 for i in ListeSpe:
                     for ecole in self.ecolesselect.values():
@@ -457,21 +520,48 @@ class ChoixEcole:
     
                             for ecolesinfo in self.ecolesselect.values():
                                 if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                    text_affiche += (
-                                            ecolesinfo["nom"]
-                                            + " Admission : "
-                                            + ecolesinfo["admission"]
-                                            + " Region : "
-                                            + ecolesinfo["region"]
-                                            + " Alternance : "
-                                            + ecolesinfo["Alternance"]
-                                            + " Specialite : "
-                                            + ecolesinfo["Spe"]
-                                            + "\n"
-                                    )
-    
-        info.insert(0.7, text_affiche)
-        info.configure(state="disabled")
+                                        a=Entry(
+                                            fr,
+                                        )
+                                        a.grid(row=ligne, column=1)
+                                        a.insert(0, ecolesinfo["nom"])
+                                        b=Entry(
+                                            fr,
+                                            
+                                        )
+                                        b.grid(row=ligne, column=3)
+                                        b.insert(0,ecolesinfo["admission"])
+                                        c=Entry(
+                                           fr,
+                                           
+                                        )
+                                        c.insert(0, ecolesinfo["region"])
+                                        c.grid(row=ligne, column=5)
+                                        d=Entry(
+                                            fr,
+                                            
+                                        )
+                                        d.insert(0, ecolesinfo["Alternance"])
+                                        d.grid(row=ligne, column=7)
+                                        e=Entry(
+                                            fr,
+                                            
+                                        )
+                                        e.insert(0, ecolesinfo["Spe"])
+                                        e.grid(row=ligne, column=9)
+                                        a.config(state="disabled")
+                                        b.config(state="disabled")
+                                        c.config(state="disabled")
+                                        d.config(state="disabled")
+                                        e.config(state="disabled")
+                                        
+                                        
+                                        ligne+=1
+        
+        ca.create_window(0, 0,  window=fr)
+        fr.update_idletasks()
+        ca.config(scrollregion=ca.bbox("all"))
+        
         
     def calculprix(self):
         ecoles=[]
