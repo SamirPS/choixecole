@@ -4,9 +4,10 @@
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog,Scrollbar,Canvas,Frame
+from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog,Scrollbar,Canvas,Frame,Menu
 import model
 import tkinter.scrolledtext as tkscrolled
+from fpdf import FPDF
 
 
 
@@ -24,7 +25,13 @@ class ChoixEcole:
         
  
         """Ajoute un menu"""
-        
+        menubar = Menu(self.root)
+        self.root.config(menu=menubar)
+        menufichier = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Fichier", menu=menufichier) 
+        menufichier.add_command(label="Enregistrer ",command=self.save_file)
+        menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
+        self.filename =() 
         
         
         self.root.resizable(False, False)
@@ -579,7 +586,65 @@ class ChoixEcole:
             text="Prix Non Boursier\n"+prixnonboursier
         ).grid(row=4, column=32)
                     
+    
+    def convertpdf(self,spacing=2):
+            """Converti en PDF """ 
+  
+            pdf=FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial",size=12)
+            data=[["Nom","Résultat"]]
+            admission,listeecoles=self.returntext()
+            
+            for i in range(len(admission)):
+                data.append([listeecoles[i],admission[i]])
+            
+            col_width = pdf.w / 2.5
+            row_height = pdf.font_size
+            for row in data:
+                for item in row:
+                    pdf.cell(col_width, row_height*spacing,txt=item, border=1)
+                pdf.ln(row_height*spacing)
+            pdf.output(self.filename)
+           
         
+    def returntext(self):
+        """Affiche le nom de l'école et a cote Refuse ou admis"""
+        
+        ecoleamoi=[]
+        listeecoles=[]
+        
+        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix}, self.notes)):
+            ecoleamoi.append(ecoles[5])
+        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes})):
+            listeecoles.append(ecoles[5])
+        
+        ecoleamoi=list(set(ecoleamoi))
+        listeecoles=list(set(listeecoles))
+        
+        
+        admission=["Admis"]*len(listeecoles)
+        
+        for i in range(len(listeecoles)):
+            if listeecoles[i] not in ecoleamoi  :
+                admission[i]="Refuse"
+                
+        return admission,listeecoles
+    
+      
+    def save_file(self, whatever = None):
+        if (self.filename ==()):
+            self.save_file_as()
+        self.convertpdf()
+
+    def save_file_as(self, whatever = None):
+        self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
+                                                             filetypes = [
+        ('PDF', '*.pdf'),
+
+            ])
+   
+        self.convertpdf()    
     def affichage(self):
         """Affiche les écoles auquel on est admissible """
         
