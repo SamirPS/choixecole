@@ -10,14 +10,13 @@ import tkinter.scrolledtext as tkscrolled
 from fpdf import FPDF
 
 
-
-
 class ChoixEcole:
     def __init__(self):
 
         # Initialise l'application change le titre et la positionne
         self.root = Tk()
         self.root.title("ChoixEcole")
+
         """Ouvre la base de données"""
         
         basededonne=filedialog.askopenfilename(title="Ouvrir un fichier",filetypes=[('db file','.db')]) 
@@ -436,9 +435,6 @@ class ChoixEcole:
         window.grid_columnconfigure(0, weight=1)
         fr = Frame(ca)
         
-
-        
-        text_affiche = ""
         Label(
             fr,
             text="Nom"
@@ -575,8 +571,8 @@ class ChoixEcole:
                 if ecole["var"].get() == 1:
                     ecoles.append(ecole["admission"])
                     
-        prixboursier=str(model.prix_boursier(ecoles))
-        prixnonboursier=str(model.prix_nonboursier(ecoles))
+        prixboursier=str(model.prix_ecole(ecoles,"Boursier"))
+        prixnonboursier=str(model.prix_ecole(ecoles,"NonBoursier"))
         Label(
             self.root,
             text="Prix Boursier \n"+prixboursier
@@ -614,9 +610,9 @@ class ChoixEcole:
         ecoleamoi=[]
         listeecoles=[]
         
-        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix}, self.notes)):
+        for ecoles in model.filtre({choix:None for choix in self.choix}, self.notes):
             ecoleamoi.append(ecoles[5])
-        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes})):
+        for ecoles in model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes}):
             listeecoles.append(ecoles[5])
         
         ecoleamoi=list(set(ecoleamoi))
@@ -653,22 +649,20 @@ class ChoixEcole:
 
         self.entry_ecole.configure(state="normal")
         self.entry_ecole.delete(0.7, 'end')
-        textverification = ""
-
+        
+        
         if self.notes:
+            textverification =[]
             for ecole in self.ecolesselect.values():
-                text_affiche = (
-                        ecole["Acronyme"]
-                )
-                if text_affiche not in textverification:
-                    check = Checkbutton(text=text_affiche, variable=ecole["var"])
+                if ecole["Acronyme"] not in textverification:
+                    check = Checkbutton(text=ecole["Acronyme"], variable=ecole["var"])
                     self.entry_ecole.window_create(0.7, window=check)
                     self.entry_ecole.insert(0.7, "\n")
                     self.button.append(check)
-                    textverification += text_affiche
+                    textverification.append(ecole["Acronyme"])
         else:
-            text_affiche = "Erreur lors de la saisie des notes."
-            self.entry_ecole.insert(0.7, text_affiche)
+
+            self.entry_ecole.insert(0.7, "Erreur lors de la saisie des notes.")
 
         self.entry_ecole.configure(state="disabled")
     

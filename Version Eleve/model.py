@@ -8,8 +8,6 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 import openpyxl
 
-
-
 def connec(txt):
     global connexion,curseur
 
@@ -28,29 +26,18 @@ def renvoie_regions():
     return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
 
 
-def prix_boursier(ecoles):
+def prix_ecole(ecoles,filtre):
     concoursenleve=[]
     prix=0
     for i in ecoles:
         if i not in concoursenleve:
-            for resultat in curseur.execute("SELECT Boursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
+            for resultat in curseur.execute("SELECT "+filtre+" FROM Coefficient WHERE Groupe="+"'"+i+"'"):
                 prix+=resultat[0]
             concoursenleve.append(i)
 
     return prix
 
 
-
-def prix_nonboursier(ecoles):
-    concoursenleve=[]
-    prix=0
-    for i in ecoles:
-        if i not in concoursenleve:
-            for resultat in curseur.execute("SELECT NonBoursier  FROM Coefficient WHERE Groupe="+"'"+i+"'"):
-                prix+=resultat[0]
-            concoursenleve.append(i)
-
-    return prix
 
 def renvoie_idspe(choix):
     idspe = tuple()
@@ -61,13 +48,11 @@ def renvoie_idspe(choix):
 
 
 def creationtuple(liste):
-    variablein = ""
-
-    for i in range(len(liste) - 1):
-        variablein += "'" + str(liste[i]) + "',"
-
-    return variablein + "'" + str(liste[-1]) + "'"
-
+    
+    if len(liste)==1:
+        return "('" + str(liste[0]) + "')"
+    else:
+        return tuple(liste)
 
 def filtre(choix_utilisateur, notes):
     conds = []
@@ -107,7 +92,6 @@ def filtre(choix_utilisateur, notes):
                )
 
     for var in conds:
-        variablein = creationtuple(var[2])
-        requete += " AND " + var[0] + "  " + var[1] + "  ( " + variablein + " ) "
+        requete += " AND " + var[0] + "  " + var[1] + " " +creationtuple(var[2])
 
     return [ecole for ecole in curseur.execute(requete)]
