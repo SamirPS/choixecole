@@ -462,104 +462,61 @@ class ChoixEcole:
         else:
             ListeSpe = [self.specialites.get(i) for i in self.specialites.curselection()]
         
-        if self.choix["alternance"]!=None:
-                    alternance=self.choix["alternance"][0]
-                    ligne=1
-                    for i in ListeSpe:
-                        for ecole in self.ecolesselect.values():
-                            if ecole["var"].get() == 1:
-                                test = ecole["nom"] + alternance + i
-
-                                for ecolesinfo in self.ecolesselect.values():
-                                    if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                        a=Entry(
-                                            fr,
-                                        )
-                                        a.grid(row=ligne, column=1)
-                                        a.insert(0, ecolesinfo["nom"])
-                                        b=Entry(
-                                            fr,
-                                            
-                                        )
-                                        b.grid(row=ligne, column=3)
-                                        b.insert(0,ecolesinfo["admission"])
-                                        c=Entry(
-                                           fr,
-                                           
-                                        )
-                                        c.insert(0, ecolesinfo["region"])
-                                        c.grid(row=ligne, column=5)
-                                        d=Entry(
-                                            fr,
-                                            
-                                        )
-                                        d.insert(0, ecolesinfo["Alternance"])
-                                        d.grid(row=ligne, column=7)
-                                        e=Entry(
-                                            fr,
-                                            
-                                        )
-                                        e.insert(0, ecolesinfo["Spe"])
-                                        e.grid(row=ligne, column=9)
-                                        a.config(state="disabled")
-                                        b.config(state="disabled")
-                                        c.config(state="disabled")
-                                        d.config(state="disabled")
-                                        e.config(state="disabled")
-                                        
-                                        
-                                        ligne+=1
-        
-                                        
-        elif  self.choix["alternance"]==None :
+        if self.choix["alternance"]== None :
             alternance=["Oui","Non"]
-            ligne=1
-            for k in range(len(alternance)):
-                for i in ListeSpe:
-                    for ecole in self.ecolesselect.values():
-                        if ecole["var"].get() == 1:
-                            test = ecole["nom"] + alternance[k] + i
-    
-                            for ecolesinfo in self.ecolesselect.values():
-                                if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                        a=Entry(
-                                            fr,
-                                        )
-                                        a.grid(row=ligne, column=1)
-                                        a.insert(0, ecolesinfo["nom"])
-                                        b=Entry(
-                                            fr,
-                                            
-                                        )
-                                        b.grid(row=ligne, column=3)
-                                        b.insert(0,ecolesinfo["admission"])
-                                        c=Entry(
-                                           fr,
-                                           
-                                        )
-                                        c.insert(0, ecolesinfo["region"])
-                                        c.grid(row=ligne, column=5)
-                                        d=Entry(
-                                            fr,
-                                            
-                                        )
-                                        d.insert(0, ecolesinfo["Alternance"])
-                                        d.grid(row=ligne, column=7)
-                                        e=Entry(
-                                            fr,
-                                            
-                                        )
-                                        e.insert(0, ecolesinfo["Spe"])
-                                        e.grid(row=ligne, column=9)
-                                        a.config(state="disabled")
-                                        b.config(state="disabled")
-                                        c.config(state="disabled")
-                                        d.config(state="disabled")
-                                        e.config(state="disabled")
-                                        
-                                        
-                                        ligne+=1
         
+        else:
+            alternance=[self.choix["alternance"][0]]
+
+        ligne=1
+        
+        for alternanceval in alternance:
+            for spe in ListeSpe:
+                for ecole in self.ecolesselect.values():
+                   
+                   if ecole["var"].get() == 1:
+                        test = ecole["nom"] + alternanceval + spe
+
+                        for ecolesinfo in self.ecolesselect.values():
+                            if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
+                                    a=Entry(
+                                        fr,
+                                    )
+                                    a.grid(row=ligne, column=1)
+                                    a.insert(0, ecolesinfo["nom"])
+                                    b=Entry(
+                                        fr,
+                                        
+                                    )
+                                    b.grid(row=ligne, column=3)
+                                    b.insert(0,ecolesinfo["admission"])
+                                    c=Entry(
+                                        fr,
+                                        
+                                    )
+                                    c.insert(0, ecolesinfo["region"])
+                                    c.grid(row=ligne, column=5)
+                                    d=Entry(
+                                        fr,
+                                        
+                                    )
+                                    d.insert(0, ecolesinfo["Alternance"])
+                                    d.grid(row=ligne, column=7)
+                                    e=Entry(
+                                        fr,
+                                        
+                                    )
+                                    e.insert(0, ecolesinfo["Spe"])
+                                    e.grid(row=ligne, column=9)
+                                    a.config(state="disabled")
+                                    b.config(state="disabled")
+                                    c.config(state="disabled")
+                                    d.config(state="disabled")
+                                    e.config(state="disabled")
+                                    
+                                    
+                                    ligne+=1
+
         ca.create_window(0, 0,  window=fr)
         fr.update_idletasks()
         ca.config(scrollregion=ca.bbox("all"))
