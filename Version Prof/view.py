@@ -1,10 +1,26 @@
-1#!/usr/bin/env python3
+1  #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 30 19:59:28 2018
 @author: samir
 """
-from tkinter import Tk, StringVar, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel,Scale,filedialog,Scrollbar,Canvas,Frame,Menu
+from tkinter import (
+    Tk,
+    StringVar,
+    Label,
+    Entry,
+    Listbox,
+    IntVar,
+    Checkbutton,
+    Button,
+    Toplevel,
+    Scale,
+    filedialog,
+    Scrollbar,
+    Canvas,
+    Frame,
+    Menu,
+)
 import model
 import tkinter.scrolledtext as tkscrolled
 from fpdf import FPDF
@@ -17,21 +33,21 @@ class ChoixEcole:
         self.root = Tk()
         self.root.title("ChoixEcole")
         """Ouvre la base de données"""
-        
-        basededonne=filedialog.askopenfilename(title="Ouvrir un fichier",filetypes=[('db file','.db')]) 
+
+        basededonne = filedialog.askopenfilename(
+            title="Ouvrir un fichier", filetypes=[("db file", ".db")]
+        )
         model.connec(basededonne)
         self.root.resizable(False, False)
-        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=40, height=10, )
-        
+        self.entry_ecole = tkscrolled.ScrolledText(self.root, width=40, height=10,)
+
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
-        menufichier = Menu(menubar,tearoff=0)
-        menubar.add_cascade(label="Fichier", menu=menufichier) 
-        menufichier.add_command(label="Enregistrer ",command=self.save_file)
-        menufichier.add_command(label="Enregistrer sous",command=self.save_file_as)
-        self.filename =() 
-
-
+        menufichier = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Fichier", menu=menufichier)
+        menufichier.add_command(label="Enregistrer ", command=self.save_file)
+        menufichier.add_command(label="Enregistrer sous", command=self.save_file_as)
+        self.filename = ()
 
         self.button = []
         self.ecolesselect = {}
@@ -49,19 +65,17 @@ class ChoixEcole:
             "si": StringVar(self.root),
             "informatique": StringVar(self.root),
             "anglais": StringVar(self.root),
-            "francais": StringVar(self.root)
+            "francais": StringVar(self.root),
         }
 
         for var in self.notes_vars.values():
-            var.trace('w', self.update)
+            var.trace("w", self.update)
 
         # self.notes représente soit une erreur de saisie des notes (avec None)
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
 
-        self.nom ={
-            "nom":StringVar(self.root)
-        }
+        self.nom = {"nom": StringVar(self.root)}
 
         ########################################################################
         #                        CHOIX                                         #
@@ -73,7 +87,7 @@ class ChoixEcole:
             "specialites": None,
             "alternance": None,
             "concours": None,
-            "annee": None
+            "annee": None,
         }
 
         self.varsbuttons = {
@@ -82,218 +96,131 @@ class ChoixEcole:
             "concours": IntVar(self.root),
             "alternance": IntVar(self.root),
             "annee": IntVar(self.root),
-            "ecole": IntVar(self.root)
+            "ecole": IntVar(self.root),
         }
 
         ########################################################################
         #                 RENDU FORMULAIRE NOTES                               #
         ########################################################################
-        
-        self.scale=Scale(self.root, orient='horizontal', from_=0, to=100,
-                         resolution=1, tickinterval=25, length=100,
-                         label='Augmentation %',command=self.update)
-        
-        Label(
-            self.root,
-            text="Maths"
-        ).grid(row=2, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["maths"]
-        ).grid(row=3, column=1)
 
-        Label(
+        self.scale = Scale(
             self.root,
-            text="Physique"
-        ).grid(row=4, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["physique"]
-        ).grid(row=5, column=1)
+            orient="horizontal",
+            from_=0,
+            to=100,
+            resolution=1,
+            tickinterval=25,
+            length=100,
+            label="Augmentation %",
+            command=self.update,
+        )
 
-        Label(
-            self.root,
-            text="Si"
-        ).grid(row=6, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["si"]
-        ).grid(row=7, column=1)
+        Label(self.root, text="Maths").grid(row=2, column=1)
+        Entry(self.root, textvariable=self.notes_vars["maths"]).grid(row=3, column=1)
 
-        Label(
-            self.root,
-            text="Informatique"
-        ).grid(row=8, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["informatique"]
-        ).grid(row=9, column=1)
+        Label(self.root, text="Physique").grid(row=4, column=1)
+        Entry(self.root, textvariable=self.notes_vars["physique"]).grid(row=5, column=1)
 
-        Label(
-            self.root,
-            text="Anglais"
-        ).grid(row=10, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["anglais"]
-        ).grid(row=11, column=1)
+        Label(self.root, text="Si").grid(row=6, column=1)
+        Entry(self.root, textvariable=self.notes_vars["si"]).grid(row=7, column=1)
 
-        Label(
-            self.root,
-            text="  Francais"
-        ).grid(row=12, column=1)
-        Entry(
-            self.root,
-            textvariable=self.notes_vars["francais"]
-        ).grid(row=13, column=1)
-        Label(
-            self.root,
-            text="Nom"
-        ).grid(row=5, column=31)
-        Entry(
-            self.root,
-            textvariable=self.nom["nom"]
-        ).grid(row=6, column=31)
+        Label(self.root, text="Informatique").grid(row=8, column=1)
+        Entry(self.root, textvariable=self.notes_vars["informatique"]).grid(
+            row=9, column=1
+        )
+
+        Label(self.root, text="Anglais").grid(row=10, column=1)
+        Entry(self.root, textvariable=self.notes_vars["anglais"]).grid(row=11, column=1)
+
+        Label(self.root, text="  Francais").grid(row=12, column=1)
+        Entry(self.root, textvariable=self.notes_vars["francais"]).grid(
+            row=13, column=1
+        )
+        Label(self.root, text="Nom").grid(row=5, column=31)
+        Entry(self.root, textvariable=self.nom["nom"]).grid(row=6, column=31)
 
         ########################################################################
         #                 RENDU FORMULAIRE choix                               #
         ########################################################################
         self.specialites = Listbox(
-            self.root,
-            selectmode='multiple',
-            exportselection=0,
-            width=20,
-            height=10)
-        Label(
-            self.root,
-            text="Specialite"
-        ).grid(row=0, column=6)
+            self.root, selectmode="multiple", exportselection=0, width=20, height=10
+        )
+        Label(self.root, text="Specialite").grid(row=0, column=6)
 
         self.specialites = Listbox(
-            self.root,
-            selectmode='multiple',
-            exportselection=0,
-            width=20,
-            height=10)
-        Label(
-            self.root,
-            text="Specialite"
-        ).grid(row=0, column=6)
-        
-        self.regions = Listbox(
-            self.root,
-            selectmode='multiple',
-            exportselection=0,
-            width=20,
-            height=10)
-        Label(
-            self.root,
-            text="Region"
-        ).grid(row=0, column=7)
+            self.root, selectmode="multiple", exportselection=0, width=20, height=10
+        )
+        Label(self.root, text="Specialite").grid(row=0, column=6)
 
-        self.alternance = Listbox(
-            self.root,
-            exportselection=0,
-            width=6,
-            height=3)
-        Label(
-            self.root,
-            text="Alternance"
-        ).grid(row=11, column=6)
+        self.regions = Listbox(
+            self.root, selectmode="multiple", exportselection=0, width=20, height=10
+        )
+        Label(self.root, text="Region").grid(row=0, column=7)
+
+        self.alternance = Listbox(self.root, exportselection=0, width=6, height=3)
+        Label(self.root, text="Alternance").grid(row=11, column=6)
 
         self.concours = Listbox(
-            self.root,
-            selectmode='multiple',
-            exportselection=0,
-            width=20,
-            height=10)
-        Label(
-            self.root,
-            text="Admission"
-        ).grid(row=0, column=9)
+            self.root, selectmode="multiple", exportselection=0, width=20, height=10
+        )
+        Label(self.root, text="Admission").grid(row=0, column=9)
 
-        self.annee = Listbox(
-            self.root,
-            exportselection=0,
-            width=6,
-            height=3)
-        Label(
-            self.root,
-            text="Année"
-        ).grid(row=11, column=7)
+        self.annee = Listbox(self.root, exportselection=0, width=6, height=3)
+        Label(self.root, text="Année").grid(row=11, column=7)
 
-        self.specialites.grid(
-            row=2,
-            column=6,
-            rowspan=10,
-            padx=10)
+        self.specialites.grid(row=2, column=6, rowspan=10, padx=10)
 
-        self.regions.grid(
-            row=2,
-            column=7,
-            rowspan=10,
-            padx=10)
+        self.regions.grid(row=2, column=7, rowspan=10, padx=10)
 
-        self.alternance.grid(
-            row=13,
-            column=6,
-            rowspan=10,
-            padx=10)
+        self.alternance.grid(row=13, column=6, rowspan=10, padx=10)
 
-        self.concours.grid(
-            row=2,
-            column=9,
-            rowspan=10,
-            padx=10)
+        self.concours.grid(row=2, column=9, rowspan=10, padx=10)
 
-        self.annee.grid(
-            row=13,
-            column=7,
-            rowspan=10,
-            padx=10)
+        self.annee.grid(row=13, column=7, rowspan=10, padx=10)
 
         ########################################################################
         #                 Insertion des Bouton Peu importe                     #
         ########################################################################
 
-        Checkbutton(self.root,
-                    variable=self.varsbuttons["specialites"],
-                    text="Peu importe",
-                    command=self.update).grid(row=1,
-                                              column=6)
+        Checkbutton(
+            self.root,
+            variable=self.varsbuttons["specialites"],
+            text="Peu importe",
+            command=self.update,
+        ).grid(row=1, column=6)
 
-        Checkbutton(self.root,
-                    variable=self.varsbuttons["regions"],
-                    text="Peu importe",
-                    command=self.update).grid(row=1,
-                                              column=7)
+        Checkbutton(
+            self.root,
+            variable=self.varsbuttons["regions"],
+            text="Peu importe",
+            command=self.update,
+        ).grid(row=1, column=7)
 
-        Checkbutton(self.root,
-                    variable=self.varsbuttons["alternance"],
-                    text="Peu importe",
-                    command=self.update).grid(row=12,
-                                              column=6)
+        Checkbutton(
+            self.root,
+            variable=self.varsbuttons["alternance"],
+            text="Peu importe",
+            command=self.update,
+        ).grid(row=12, column=6)
 
-        Checkbutton(self.root,
-                    variable=self.varsbuttons["concours"],
-                    text="Peu importe",
-                    command=self.update).grid(row=1,
-                                              column=9)
+        Checkbutton(
+            self.root,
+            variable=self.varsbuttons["concours"],
+            text="Peu importe",
+            command=self.update,
+        ).grid(row=1, column=9)
 
-        Button(self.root,
-               text="Plus d'information",
-               command=self.information,width=15).grid(row=2,
-                                              column=31)
-        Button(self.root,
-               text="Note",
-               command=self.recuperernote
-               ,width=15).grid(row=3,column=31)
-        
-        Button(self.root,
-               text="Prix",
-               command=self.calculprix,width=15).grid(row=2,
-                                              column=32)
-        
+        Button(
+            self.root, text="Plus d'information", command=self.information, width=15
+        ).grid(row=2, column=31)
+        Button(self.root, text="Note", command=self.recuperernote, width=15).grid(
+            row=3, column=31
+        )
+
+        Button(self.root, text="Prix", command=self.calculprix, width=15).grid(
+            row=2, column=32
+        )
+
         ########################################################################
         #                 Insertion des données                                #
         ########################################################################
@@ -316,7 +243,7 @@ class ChoixEcole:
         #                 On bind les ListBox                                  #
         ########################################################################
         self.entry_ecole.grid(row=2, column=20, rowspan=10)
-        self.scale.grid(row=0,column=1,rowspan=2)
+        self.scale.grid(row=0, column=1, rowspan=2)
 
         self.specialites.bind("<<ListboxSelect>>", self.update)
         self.regions.bind("<<ListboxSelect>>", self.update)
@@ -331,8 +258,8 @@ class ChoixEcole:
         ########################################################################
         #                        NOTES                                         #
         ########################################################################
-        # On récupere la note entrée et on la vérifie 
-        
+        # On récupere la note entrée et on la vérifie
+
         try:
             notes = {}
             for nom_matiere, note_var in self.notes_vars.items():
@@ -349,18 +276,16 @@ class ChoixEcole:
                         pass
                     else:
                         raise ValueError
-                        
-                        
-                note_float=note_float+(self.scale.get()*note_float)/100
-                
-                if note_float>=20 :
+
+                note_float = note_float + (self.scale.get() * note_float) / 100
+
+                if note_float >= 20:
                     notes[nom_matiere] = 20
-                else :
+                else:
                     notes[nom_matiere] = note_float
-                    
+
             notes["modelisation"] = (notes["maths"] + notes["si"]) / 2
-            
-            
+
             self.notes = notes
 
         except ValueError:
@@ -375,11 +300,18 @@ class ChoixEcole:
         # Et en fonction de certains cas on dit que self.choix=None
 
         self.choix = {
-            "specialites": model.renvoie_idspe(self.specialites.get(i) for i in self.specialites.curselection()),
+            "specialites": model.renvoie_idspe(
+                self.specialites.get(i) for i in self.specialites.curselection()
+            ),
             "regions": tuple(self.regions.get(i) for i in self.regions.curselection()),
-            "concours": tuple(self.concours.get(i) for i in self.concours.curselection()),
-            "alternance": tuple(self.alternance.get(i) for i in self.alternance.curselection()),
-            "annee": tuple(self.annee.get(i) for i in self.annee.curselection())}
+            "concours": tuple(
+                self.concours.get(i) for i in self.concours.curselection()
+            ),
+            "alternance": tuple(
+                self.alternance.get(i) for i in self.alternance.curselection()
+            ),
+            "annee": tuple(self.annee.get(i) for i in self.annee.curselection()),
+        }
 
         if self.varsbuttons["specialites"].get() == 1:
             self.specialites.selection_clear(0, "end")
@@ -415,9 +347,8 @@ class ChoixEcole:
                     "region": ecoles[3],
                     "Alternance": ecoles[4],
                     "Acronyme": ecoles[5],
-                    "Spe": ecoles[6]
+                    "Spe": ecoles[6],
                 }
-       
 
     def information(self):
         ########################################################################
@@ -425,7 +356,6 @@ class ChoixEcole:
         ########################################################################
         # Renvoie les spécialite offerte par l'école en fonction du choix de l'utilisateur
 
-       
         window = Toplevel(self.root)
         window.resizable(False, False)
         window.geometry("700x150")
@@ -433,262 +363,188 @@ class ChoixEcole:
         vsb.grid(row=0, column=1, sticky="ns")
         hsb = Scrollbar(window, orient="horizontal")
         hsb.grid(row=1, column=0, sticky="ew")
-        ca = Canvas(window,yscrollcommand=vsb.set,xscrollcommand=hsb.set)
+        ca = Canvas(window, yscrollcommand=vsb.set, xscrollcommand=hsb.set)
         ca.grid(row=0, column=0, sticky="news")
         vsb.config(command=ca.yview)
         hsb.config(command=ca.xview)
         window.grid_rowconfigure(0, weight=1)
         window.grid_columnconfigure(0, weight=1)
         fr = Frame(ca)
-        
 
-        
-        text_affiche = ""
-        Label(
-            fr,
-            text="Nom"
-        ).grid(row=0, column=1)
-        Label(
-            fr,
-            text="Admission"
-        ).grid(row=0, column=3)
-        Label(
-            fr,
-            text="Region"
-        ).grid(row=0, column=5)
-        Label(
-            fr,
-            text="Alternance"
-        ).grid(row=0, column=7)
-        Label(
-            fr,
-            text="Specialite"
-        ).grid(row=0, column=9)
-        
-        
+        Label(fr, text="Nom").grid(row=0, column=1)
+        Label(fr, text="Admission").grid(row=0, column=3)
+        Label(fr, text="Region").grid(row=0, column=5)
+        Label(fr, text="Alternance").grid(row=0, column=7)
+        Label(fr, text="Specialite").grid(row=0, column=9)
+
         if self.choix["specialites"] == None:
             ListeSpe = list(self.specialites.get(0, "end"))
         else:
-            ListeSpe = [self.specialites.get(i) for i in self.specialites.curselection()]
-        
-        if self.choix["alternance"]!=None:
-                    alternance=self.choix["alternance"][0]
-                    ligne=1
-                    for i in ListeSpe:
-                        for ecole in self.ecolesselect.values():
-                            if ecole["var"].get() == 1:
-                                test = ecole["nom"] + alternance + i
+            ListeSpe = [
+                self.specialites.get(i) for i in self.specialites.curselection()
+            ]
 
-                                for ecolesinfo in self.ecolesselect.values():
-                                    if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                        a=Entry(
-                                            fr,
-                                        )
-                                        a.grid(row=ligne, column=1)
-                                        a.insert(0, ecolesinfo["nom"])
-                                        b=Entry(
-                                            fr,
-                                            
-                                        )
-                                        b.grid(row=ligne, column=3)
-                                        b.insert(0,ecolesinfo["admission"])
-                                        c=Entry(
-                                           fr,
-                                           
-                                        )
-                                        c.insert(0, ecolesinfo["region"])
-                                        c.grid(row=ligne, column=5)
-                                        d=Entry(
-                                            fr,
-                                            
-                                        )
-                                        d.insert(0, ecolesinfo["Alternance"])
-                                        d.grid(row=ligne, column=7)
-                                        e=Entry(
-                                            fr,
-                                            
-                                        )
-                                        e.insert(0, ecolesinfo["Spe"])
-                                        e.grid(row=ligne, column=9)
-                                        a.config(state="disabled")
-                                        b.config(state="disabled")
-                                        c.config(state="disabled")
-                                        d.config(state="disabled")
-                                        e.config(state="disabled")
-                                        
-                                        
-                                        ligne+=1
-        
-                                        
-        elif  self.choix["alternance"]==None :
-            alternance=["Oui","Non"]
-            ligne=1
-            for k in range(len(alternance)):
-                for i in ListeSpe:
-                    for ecole in self.ecolesselect.values():
-                        if ecole["var"].get() == 1:
-                            test = ecole["nom"] + alternance[k] + i
-    
-                            for ecolesinfo in self.ecolesselect.values():
-                                if test == ecolesinfo["nom"] + ecolesinfo["Alternance"] + ecolesinfo["Spe"]:
-                                        a=Entry(
-                                            fr,
-                                        )
-                                        a.grid(row=ligne, column=1)
-                                        a.insert(0, ecolesinfo["nom"])
-                                        b=Entry(
-                                            fr,
-                                            
-                                        )
-                                        b.grid(row=ligne, column=3)
-                                        b.insert(0,ecolesinfo["admission"])
-                                        c=Entry(
-                                           fr,
-                                           
-                                        )
-                                        c.insert(0, ecolesinfo["region"])
-                                        c.grid(row=ligne, column=5)
-                                        d=Entry(
-                                            fr,
-                                            
-                                        )
-                                        d.insert(0, ecolesinfo["Alternance"])
-                                        d.grid(row=ligne, column=7)
-                                        e=Entry(
-                                            fr,
-                                            
-                                        )
-                                        e.insert(0, ecolesinfo["Spe"])
-                                        e.grid(row=ligne, column=9)
-                                        a.config(state="disabled")
-                                        b.config(state="disabled")
-                                        c.config(state="disabled")
-                                        d.config(state="disabled")
-                                        e.config(state="disabled")
-                                        
-                                        
-                                        ligne+=1
-        
-        ca.create_window(0, 0,  window=fr)
+        if self.choix["alternance"] == None:
+            alternance = ["Oui", "Non"]
+
+        else:
+            alternance = [self.choix["alternance"][0]]
+
+        ligne = 1
+
+        for alternanceval in alternance:
+            for spe in ListeSpe:
+                for ecole in self.ecolesselect.values():
+
+                    if ecole["var"].get() == 1:
+                        test = ecole["nom"] + alternanceval + spe
+
+                        for ecolesinfo in self.ecolesselect.values():
+                            if (
+                                test
+                                == ecolesinfo["nom"]
+                                + ecolesinfo["Alternance"]
+                                + ecolesinfo["Spe"]
+                            ):
+                                a = Entry(fr,)
+                                a.grid(row=ligne, column=1)
+                                a.insert(0, ecolesinfo["nom"])
+                                b = Entry(fr,)
+                                b.grid(row=ligne, column=3)
+                                b.insert(0, ecolesinfo["admission"])
+                                c = Entry(fr,)
+                                c.insert(0, ecolesinfo["region"])
+                                c.grid(row=ligne, column=5)
+                                d = Entry(fr,)
+                                d.insert(0, ecolesinfo["Alternance"])
+                                d.grid(row=ligne, column=7)
+                                e = Entry(fr,)
+                                e.insert(0, ecolesinfo["Spe"])
+                                e.grid(row=ligne, column=9)
+                                a.config(state="disabled")
+                                b.config(state="disabled")
+                                c.config(state="disabled")
+                                d.config(state="disabled")
+                                e.config(state="disabled")
+
+                                ligne += 1
+
+        ca.create_window(0, 0, window=fr)
         fr.update_idletasks()
         ca.config(scrollregion=ca.bbox("all"))
-        
-        
+
     def calculprix(self):
-        ecoles=[]
+
+        ecoles = []
         for ecole in self.ecolesselect.values():
-                if ecole["var"].get() == 1:
-                    ecoles.append(ecole["admission"])
-                    
-        prixboursier=str(model.prix_boursier(ecoles))
-        prixnonboursier=str(model.prix_nonboursier(ecoles))
-        Label(
-            self.root,
-            text="Prix Boursier \n"+prixboursier
-        ).grid(row=3, column=32)
-        Label(
-            self.root,
-            text="Prix Non Boursier\n"+prixnonboursier
-        ).grid(row=4, column=32)
-                    
-        
-    def convertpdf(self,spacing=2):
-            """Converti en PDF """ 
-  
-            pdf=FPDF()
-            pdf.add_page()
-            pdf.set_font("Arial",size=12)
-            data=[["Nom","Résultat"]]
-            admission,listeecoles=self.returntext()
-            
-            for i in range(len(admission)):
-                data.append([listeecoles[i],admission[i]])
-            
-            col_width = pdf.w / 2.5
-            row_height = pdf.font_size
-            for row in data:
-                for item in row:
-                    pdf.cell(col_width, row_height*spacing,txt=item, border=1)
-                pdf.ln(row_height*spacing)
-            pdf.output(self.filename)
-           
-        
+            if ecole["var"].get() == 1:
+                ecoles.append(ecole["admission"])
+
+        prixboursier = str(model.prix_ecole(ecoles, "Boursier"))
+        prixnonboursier = str(model.prix_ecole(ecoles, "NonBoursier"))
+        Label(self.root, text="Prix Boursier \n" + prixboursier).grid(row=3, column=32)
+        Label(self.root, text="Prix Non Boursier\n" + prixnonboursier).grid(
+            row=4, column=32
+        )
+
+    def convertpdf(self, spacing=2):
+        """Converti en PDF """
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        data = [["Nom", "Résultat"]]
+        admission, listeecoles = self.returntext()
+
+        data += [[listeecoles[i], admission[i]] for i in range(len(admission))]
+
+        col_width = pdf.w / 2.5
+        row_height = pdf.font_size
+        for row in data:
+            for item in row:
+                pdf.cell(col_width, row_height * spacing, txt=item, border=1)
+            pdf.ln(row_height * spacing)
+        pdf.output(self.filename)
+
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
-        
-        ecoleamoi=[]
-        listeecoles=[]
-        
-        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix}, self.notes)):
-            ecoleamoi.append(ecoles[5])
-        for j, ecoles in enumerate(model.filtre({choix:None for choix in self.choix},{Note:20 for Note in self.notes})):
-            listeecoles.append(ecoles[5])
-        
-        ecoleamoi=list(set(ecoleamoi))
-        listeecoles=list(set(listeecoles))
-        
-        
-        admission=["Admis"]*len(listeecoles)
-        
+        ecoleamoi = list(
+            set(
+                [
+                    ecoles[5]
+                    for ecoles in model.filtre(
+                        {choix: None for choix in self.choix}, self.notes
+                    )
+                ]
+            )
+        )
+        listeecoles = list(
+            set(
+                [
+                    ecoles[5]
+                    for ecoles in model.filtre(
+                        {choix: None for choix in self.choix},
+                        {Note: 20 for Note in self.notes},
+                    )
+                ]
+            )
+        )
+
+        admission = ["Admis"] * len(listeecoles)
+
         for i in range(len(listeecoles)):
-            if listeecoles[i] not in ecoleamoi  :
-                admission[i]="Refuse"
-                
-        return admission,listeecoles
-    
-      
-    def save_file(self, whatever = None):
-        if (self.filename ==()):
+            if listeecoles[i] not in ecoleamoi:
+                admission[i] = "Refuse"
+
+        return admission, listeecoles
+
+    def save_file(self, whatever=None):
+        if self.filename == ():
             self.save_file_as()
         self.convertpdf()
 
-    def save_file_as(self, whatever = None):
-        self.filename =filedialog.asksaveasfilename(defaultextension='.pdf',
-                                                             filetypes = [
-        ('PDF', '*.pdf'),
+    def save_file_as(self, whatever=None):
+        self.filename = filedialog.asksaveasfilename(
+            defaultextension=".pdf", filetypes=[("PDF", "*.pdf"),]
+        )
 
-            ])
-   
-        self.convertpdf()    
+        self.convertpdf()
+
     def affichage(self):
         """Affiche les écoles auquel on est admissible """
-        
+
         for i in self.button:
             i.destroy()
 
         self.entry_ecole.configure(state="normal")
-        self.entry_ecole.delete(0.7, 'end')
-        textverification = ""
+        self.entry_ecole.delete(0.7, "end")
 
         if self.notes:
+            textverification = []
             for ecole in self.ecolesselect.values():
-                text_affiche = (
-                        ecole["Acronyme"]
-                )
-                if text_affiche not in textverification:
-                    check = Checkbutton(text=text_affiche, variable=ecole["var"])
+                if ecole["Acronyme"] not in textverification:
+                    check = Checkbutton(text=ecole["Acronyme"], variable=ecole["var"])
                     self.entry_ecole.window_create(0.7, window=check)
                     self.entry_ecole.insert(0.7, "\n")
                     self.button.append(check)
-                    textverification += text_affiche
+                    textverification.append(ecole["Acronyme"])
         else:
-            text_affiche = "Erreur lors de la saisie des notes."
-            self.entry_ecole.insert(0.7, text_affiche)
+
+            self.entry_ecole.insert(0.7, "Erreur lors de la saisie des notes.")
 
         self.entry_ecole.configure(state="disabled")
-    
-    def recuperernote(self):
-        
-        nom=self.nom["nom"].get()
-        noteeleve=model.moyenneel(nom)
 
-        self.notes_vars["maths"].set(noteeleve[1])
+    def recuperernote(self):
+
+        nom = self.nom["nom"].get()
+        noteeleve = model.moyenneel(nom)
+
         self.notes_vars["si"].set(noteeleve[0])
-        self.notes_vars["anglais"].set(noteeleve[5])
+        self.notes_vars["maths"].set(noteeleve[1])
+        self.notes_vars["physique"].set(noteeleve[2])
         self.notes_vars["informatique"].set(noteeleve[3])
         self.notes_vars["francais"].set(noteeleve[4])
-        self.notes_vars["physique"].set(noteeleve[2])
+        self.notes_vars["anglais"].set(noteeleve[5])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ChoixEcole()
