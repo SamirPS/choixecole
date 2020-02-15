@@ -39,7 +39,7 @@ def renvoie_regions():
 
 
 def prix_ecole(ecoles, filtre):
-   
+
     concoursenleve = []
     prix = 0
     for i in ecoles:

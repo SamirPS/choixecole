@@ -78,8 +78,6 @@ class ChoixEcole:
         # soit un dictionnaire "matière -> note(float)".
         self.notes = None
 
-        self.nom = {"nom": StringVar(self.root)}
-
         ########################################################################
         #                        CHOIX                                         #
         ########################################################################
@@ -260,6 +258,7 @@ class ChoixEcole:
 
         try:
             notes = {}
+
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
                 if note_float > 20 or note_float < 0:
@@ -432,6 +431,7 @@ class ChoixEcole:
         ca.config(scrollregion=ca.bbox("all"))
 
     def calculprix(self):
+
         ecoles = []
         for ecole in self.ecolesselect.values():
             if ecole["var"].get() == 1:
@@ -453,8 +453,7 @@ class ChoixEcole:
         data = [["Nom", "Résultat"]]
         admission, listeecoles = self.returntext()
 
-        for i in range(len(admission)):
-            data.append([listeecoles[i], admission[i]])
+        data += [[listeecoles[i], admission[i]] for i in range(len(admission))]
 
         col_width = pdf.w / 2.5
         row_height = pdf.font_size
@@ -467,18 +466,27 @@ class ChoixEcole:
     def returntext(self):
         """Affiche le nom de l'école et a cote Refuse ou admis"""
 
-        ecoleamoi = []
-        listeecoles = []
-
-        for ecoles in model.filtre({choix: None for choix in self.choix}, self.notes):
-            ecoleamoi.append(ecoles[5])
-        for ecoles in model.filtre(
-            {choix: None for choix in self.choix}, {Note: 20 for Note in self.notes}
-        ):
-            listeecoles.append(ecoles[5])
-
-        ecoleamoi = list(set(ecoleamoi))
-        listeecoles = list(set(listeecoles))
+        ecoleamoi = list(
+            set(
+                [
+                    ecoles[5]
+                    for ecoles in model.filtre(
+                        {choix: None for choix in self.choix}, self.notes
+                    )
+                ]
+            )
+        )
+        listeecoles = list(
+            set(
+                [
+                    ecoles[5]
+                    for ecoles in model.filtre(
+                        {choix: None for choix in self.choix},
+                        {Note: 20 for Note in self.notes},
+                    )
+                ]
+            )
+        )
 
         admission = ["Admis"] * len(listeecoles)
 
