@@ -8,51 +8,70 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 import openpyxl
 
+
 def connec(txt):
-    global connexion,curseur
+    global connexion, curseur
 
     connexion = sqlite3.connect(txt)
     curseur = connexion.cursor()
 
+
 def renvoie_admission():
 
-    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS")]
+    return [
+        resultat[0]
+        for resultat in curseur.execute("SELECT DISTINCT Admission FROM EcoleS")
+    ]
+
 
 def renvoie_specialites():
-    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT NomSpe FROM Specialite")]
+    return [
+        resultat[0]
+        for resultat in curseur.execute("SELECT DISTINCT NomSpe FROM Specialite")
+    ]
 
 
 def renvoie_regions():
-    return [resultat[0] for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")]
+    return [
+        resultat[0]
+        for resultat in curseur.execute("SELECT DISTINCT Region FROM EcoleS")
+    ]
 
 
-def prix_ecole(ecoles,filtre):
-    concoursenleve=[]
-    prix=0
+def prix_ecole(ecoles, filtre):
+   
+    concoursenleve = []
+    prix = 0
     for i in ecoles:
         if i not in concoursenleve:
-            for resultat in curseur.execute("SELECT "+filtre+" FROM Coefficient WHERE Groupe="+"'"+i+"'"):
-                prix+=resultat[0]
+            for resultat in curseur.execute(
+                "SELECT " + filtre + " FROM Coefficient WHERE Groupe=" + "'" + i + "'"
+            ):
+                prix += resultat[0]
             concoursenleve.append(i)
 
     return prix
-
 
 
 def renvoie_idspe(choix):
     idspe = tuple()
     for i in tuple(choix):
         idspe += tuple(
-            spe[0] for spe in curseur.execute("SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"))
+            spe[0]
+            for spe in curseur.execute(
+                "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
+            )
+        )
     return idspe
 
 
 def creationtuple(liste):
-    
-    if len(liste)==1:
+
+    if len(liste) == 1:
         return "('" + str(liste[0]) + "')"
     else:
         return tuple(liste)
+
 
 def filtre(choix_utilisateur, notes):
     conds = []
@@ -72,26 +91,33 @@ def filtre(choix_utilisateur, notes):
     else:
         bonif_str = "0"
 
-    requete = ("""
+    requete = (
+        """
         SELECT DISTINCT id,Nom,Admission,Commune,Alternance,Acronyme,NomSpe
         FROM EcoleSpe
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Specialite on EcoleSpe.IdSpe=Specialite.idspecialite
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe
         WHERE  """
-               + str(notes["maths"]) + "*Maths+"
-               + str(notes["physique"]) + "*Physique+"
-               + str(notes["si"]) + """*SI+"""
-               + str(notes["informatique"]) + "*Informatique+"
-               + str(notes["anglais"]) + "*Anglais+"
-               + str(notes["francais"]) + "*Francais+"
-               + str(notes["modelisation"]) + "*Modelisation+"
-               + bonif_str
-               + ">= Points   "
-
-               )
+        + str(notes["maths"])
+        + "*Maths+"
+        + str(notes["physique"])
+        + "*Physique+"
+        + str(notes["si"])
+        + """*SI+"""
+        + str(notes["informatique"])
+        + "*Informatique+"
+        + str(notes["anglais"])
+        + "*Anglais+"
+        + str(notes["francais"])
+        + "*Francais+"
+        + str(notes["modelisation"])
+        + "*Modelisation+"
+        + bonif_str
+        + ">= Points   "
+    )
 
     for var in conds:
-        requete += " AND " + var[0] + "  " + var[1] + " " +str(creationtuple(var[2]))
+        requete += " AND " + var[0] + "  " + var[1] + " " + str(creationtuple(var[2]))
 
     return [ecole for ecole in curseur.execute(requete)]
