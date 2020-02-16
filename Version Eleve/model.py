@@ -39,16 +39,13 @@ def renvoie_regions():
 
 
 def prix_ecole(ecoles, filtre):
-
-    concoursenleve = []
     prix = 0
-    for i in ecoles:
-        if i not in concoursenleve:
-            for resultat in curseur.execute(
-                "SELECT " + filtre + " FROM Coefficient WHERE Groupe=" + "'" + i + "'"
-            ):
-                prix += resultat[0]
-            concoursenleve.append(i)
+    for i in list(set(ecoles)):
+
+        for resultat in curseur.execute(
+            "SELECT " + filtre + " FROM Coefficient WHERE Groupe=" + "'" + i + "'"
+        ):
+            prix += resultat[0]
 
     return prix
 
