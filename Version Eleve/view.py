@@ -258,7 +258,7 @@ class ChoixEcole:
 
         try:
             notes = {}
-
+            
             for nom_matiere, note_var in self.notes_vars.items():
                 note_float = float(note_var.get())
                 if note_float > 20 or note_float < 0:
@@ -274,7 +274,7 @@ class ChoixEcole:
                     else:
                         raise ValueError
 
-                note_float = note_float + (self.scale.get() * note_float) / 100
+                note_float += (self.scale.get() * note_float) / 100
 
                 if note_float >= 20:
                     notes[nom_matiere] = 20
@@ -310,14 +310,10 @@ class ChoixEcole:
             "annee": tuple(self.annee.get(i) for i in self.annee.curselection()),
         }
 
-        if self.varsbuttons["specialites"].get() == 1:
-            self.specialites.selection_clear(0, "end")
-        if self.varsbuttons["regions"].get() == 1:
-            self.regions.selection_clear(0, "end")
-        if self.varsbuttons["concours"].get() == 1:
-            self.concours.selection_clear(0, "end")
-        if self.varsbuttons["alternance"].get() == 1:
-            self.alternance.selection_clear(0, "end")
+        for cle in self.varsbuttons:
+            if self.varsbuttons[cle].get() == 1:
+                eval('self.'+cle+'.selection_clear(0, "end")')
+               
 
         for cle in self.choix:
             if not self.choix[cle] or self.varsbuttons[cle].get() == 1:
@@ -368,12 +364,12 @@ class ChoixEcole:
         window.grid_columnconfigure(0, weight=1)
         fr = Frame(ca)
 
-        Label(fr, text="Nom").grid(row=0, column=1)
-        Label(fr, text="Admission").grid(row=0, column=3)
-        Label(fr, text="Region").grid(row=0, column=5)
-        Label(fr, text="Alternance").grid(row=0, column=7)
-        Label(fr, text="Specialite").grid(row=0, column=9)
+        i=1
+        for a in ["Nom","Admission","Region","Alternance","Specialite"]:
+            Label(fr, text=a).grid(row=0, column=i)
+            i+=2
 
+        textverification=[]
         if self.choix["specialites"] == None:
             ListeSpe = list(self.specialites.get(0, "end"))
         else:
@@ -394,35 +390,34 @@ class ChoixEcole:
                 for ecole in self.ecolesselect.values():
 
                     if ecole["var"].get() == 1:
-                        test = ecole["nom"] + alternanceval + spe
 
                         for ecolesinfo in self.ecolesselect.values():
                             if (
-                                test
+                                 ecole["nom"] +
+                                  alternanceval + 
+                                  spe
                                 == ecolesinfo["nom"]
                                 + ecolesinfo["Alternance"]
                                 + ecolesinfo["Spe"]
+
+                                and ecole["nom"] +
+                                  alternanceval + 
+                                  spe not in textverification
+
+
                             ):
-                                a = Entry(fr,)
-                                a.grid(row=ligne, column=1)
-                                a.insert(0, ecolesinfo["nom"])
-                                b = Entry(fr,)
-                                b.grid(row=ligne, column=3)
-                                b.insert(0, ecolesinfo["admission"])
-                                c = Entry(fr,)
-                                c.insert(0, ecolesinfo["region"])
-                                c.grid(row=ligne, column=5)
-                                d = Entry(fr,)
-                                d.insert(0, ecolesinfo["Alternance"])
-                                d.grid(row=ligne, column=7)
-                                e = Entry(fr,)
-                                e.insert(0, ecolesinfo["Spe"])
-                                e.grid(row=ligne, column=9)
-                                a.config(state="disabled")
-                                b.config(state="disabled")
-                                c.config(state="disabled")
-                                d.config(state="disabled")
-                                e.config(state="disabled")
+                                i=1
+                                for texte in [ecolesinfo["nom"],ecolesinfo["admission"],ecolesinfo["region"],ecolesinfo["Alternance"],ecolesinfo["Spe"]]:
+                                    a = Entry(fr,)
+                                    a.insert(0,texte)
+                                    a.grid(row=ligne, column=i)
+                                    i+=2
+                                    
+                                    
+                                    a.config(state="disabled")
+                                    textverification.append(ecole["nom"] +
+                                        alternanceval + 
+                                        spe )
 
                                 ligne += 1
 

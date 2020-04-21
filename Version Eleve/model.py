@@ -51,23 +51,22 @@ def prix_ecole(ecoles, filtre):
 
 
 def renvoie_idspe(choix):
-    idspe = tuple()
-    for i in tuple(choix):
-        idspe += tuple(
-            spe[0]
-            for spe in curseur.execute(
-                "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
-            )
+    
+    return tuple(
+        spe[0]
+        for i in tuple(choix)
+        for spe in curseur.execute(
+            "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
         )
-    return idspe
+    )
 
 
 def creationtuple(liste):
 
     if len(liste) == 1:
         return "('" + str(liste[0]) + "')"
-    else:
-        return tuple(liste)
+   
+    return tuple(liste)
 
 
 def filtre(choix_utilisateur, notes):
@@ -117,4 +116,5 @@ def filtre(choix_utilisateur, notes):
     for var in conds:
         requete += " AND " + var[0] + "  " + var[1] + " " + str(creationtuple(var[2]))
 
+ 
     return [ecole for ecole in curseur.execute(requete)]
