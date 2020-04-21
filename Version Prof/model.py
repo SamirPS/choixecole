@@ -8,9 +8,11 @@ Created on Sat Oct 20 19:41:49 2018
 import sqlite3
 import openpyxl
 
-book = openpyxl.load_workbook("sam.xlsx")
-sheet = book.get_sheet_by_name("S1")
 
+
+book = openpyxl.load_workbook("sam.xlsx")
+sheet = book["S1"]
+r = sheet.max_row
 
 def connec(txt):
     global connexion, curseur
@@ -30,7 +32,7 @@ def renvoie_admission():
 def moyenneel(nom):
     """Récupere les notes du canditat si son prenom/nom est dans l'excel sinon retourne des 0 partout """
 
-    r = sheet.max_row
+    
     for i in range(4, r):
         temp = sheet.cell(row=i, column=1).value
         if temp == nom:
@@ -74,23 +76,22 @@ def prix_ecole(ecoles, filtre):
 
 
 def renvoie_idspe(choix):
-    idspe = tuple()
-    for i in tuple(choix):
-        idspe += tuple(
-            spe[0]
-            for spe in curseur.execute(
-                "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
-            )
+    
+    return tuple(
+        spe[0]
+        for i in tuple(choix)
+        for spe in curseur.execute(
+            "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
         )
-    return idspe
+    )
 
 
 def creationtuple(liste):
 
     if len(liste) == 1:
         return "('" + str(liste[0]) + "')"
-    else:
-        return tuple(liste)
+   
+    return tuple(liste)
 
 
 def filtre(choix_utilisateur, notes):
@@ -140,4 +141,5 @@ def filtre(choix_utilisateur, notes):
     for var in conds:
         requete += " AND " + var[0] + "  " + var[1] + " " + str(creationtuple(var[2]))
 
+ 
     return [ecole for ecole in curseur.execute(requete)]
