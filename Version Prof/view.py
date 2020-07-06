@@ -352,7 +352,6 @@ class ChoixEcole:
         ########################################################################
         # Renvoie les spécialite offerte par l'école en fonction du choix de l'utilisateur
 
-        
         window = Toplevel(self.root)
         window.resizable(False, False)
         window.geometry("700x150")
@@ -372,9 +371,7 @@ class ChoixEcole:
         for a in ["Nom","Admission","Region","Alternance","Specialite"]:
             Label(fr, text=a).grid(row=0, column=i)
             i+=2
-        
 
-        textverification=[]
         if self.choix["specialites"] == None:
             ListeSpe = list(self.specialites.get(0, "end"))
         else:
@@ -390,41 +387,34 @@ class ChoixEcole:
 
         ligne = 1
 
-        for alternanceval in alternance:
-            for spe in ListeSpe:
-                for ecole in self.ecolesselect.values():
+        for ecole in self.ecolesselect.values():
 
-                    if ecole["var"].get() == 1:
+            if ecole["var"].get() == 1:
 
-                        for ecolesinfo in self.ecolesselect.values():
-                            if (
-                                 ecole["nom"] +
-                                  alternanceval + 
-                                  spe
-                                == ecolesinfo["nom"]
-                                + ecolesinfo["Alternance"]
-                                + ecolesinfo["Spe"]
+                for ecolesinfo in self.ecolesselect.values():
+                    if (
+                            ecole["nom"] 
+                        == ecolesinfo["nom"]
 
-                                and ecole["nom"] +
-                                  alternanceval + 
-                                  spe not in textverification
+                        and ecolesinfo["Alternance"] in alternance
+
+                        and ecolesinfo["Spe"] in ListeSpe
 
 
-                            ):
-                                i=1
-                                for texte in [ecolesinfo["nom"],ecolesinfo["admission"],ecolesinfo["region"],ecolesinfo["Alternance"],ecolesinfo["Spe"]]:
-                                    a = Entry(fr,)
-                                    a.insert(0,texte)
-                                    a.grid(row=ligne, column=i)
-                                    i+=2
-                                    
-                                    
-                                    a.config(state="disabled")
-                                    textverification.append(ecole["nom"] +
-                                        alternanceval + 
-                                        spe )
+                    ):
+                        i=1
+                        for texte in [ecolesinfo["nom"],ecolesinfo["admission"],ecolesinfo["region"],ecolesinfo["Alternance"],ecolesinfo["Spe"]] :
+                            a = Entry(fr,width=60)
+                            a.insert(0,texte)
+                            a.grid(row=ligne, column=i)
+                            i+=2
 
-                                ligne += 1
+                            
+                            
+                            a.config(state="disabled")
+                            
+
+                        ligne += 1
 
         ca.create_window(0, 0, window=fr)
         fr.update_idletasks()
