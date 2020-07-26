@@ -133,7 +133,7 @@ class ChoixEcole:
         Label(self.root, text="Anglais").grid(row=10, column=1)
         Entry(self.root, textvariable=self.notes_vars["anglais"]).grid(row=11, column=1)
 
-        Label(self.root, text="  Francais").grid(row=12, column=1)
+        Label(self.root, text="Francais").grid(row=12, column=1)
         Entry(self.root, textvariable=self.notes_vars["francais"]).grid(
             row=13, column=1
         )
@@ -263,7 +263,6 @@ class ChoixEcole:
                 note_float = float(note_var.get())
                 if note_float > 20 or note_float < 0:
                     raise ValueError()
-
                 else:
                     if len(note_var.get()) in (2, 1):
                         pass
@@ -350,8 +349,7 @@ class ChoixEcole:
         # Renvoie les spécialite offerte par l'école en fonction du choix de l'utilisateur
 
         window = Toplevel(self.root)
-        window.resizable(False, False)
-        window.geometry("700x150")
+        window.resizable(True, True)
         vsb = Scrollbar(window, orient="vertical")
         vsb.grid(row=0, column=1, sticky="ns")
         hsb = Scrollbar(window, orient="horizontal")
@@ -383,35 +381,20 @@ class ChoixEcole:
             alternance = [self.choix["alternance"][0]]
 
         ligne = 1
-
         for ecole in self.ecolesselect.values():
-
             if ecole["var"].get() == 1:
+                for i in [value for (key,value) in self.ecolesselect.items() if value['nom']==ecole['nom'] and value["Spe"] in ListeSpe and value["Alternance"] in alternance ]:
+                    j=1
+                    for texte in [i["nom"],i["admission"],i["region"],i["Alternance"],i["Spe"]] :
+                        a = Entry(fr,width=60)
+                        a.insert(0,texte)
+                        a.grid(row=ligne, column=j)
+                        j+=2
 
-                for ecolesinfo in self.ecolesselect.values():
-                    if (
-                            ecole["nom"] 
-                        == ecolesinfo["nom"]
+                        a.config(state="disabled")
+                        
 
-                        and ecolesinfo["Alternance"] in alternance
-
-                        and ecolesinfo["Spe"] in ListeSpe
-
-
-                    ):
-                        i=1
-                        for texte in [ecolesinfo["nom"],ecolesinfo["admission"],ecolesinfo["region"],ecolesinfo["Alternance"],ecolesinfo["Spe"]] :
-                            a = Entry(fr,width=60)
-                            a.insert(0,texte)
-                            a.grid(row=ligne, column=i)
-                            i+=2
-
-                            
-                            
-                            a.config(state="disabled")
-                            
-
-                        ligne += 1
+                    ligne += 1
 
         ca.create_window(0, 0, window=fr)
         fr.update_idletasks()
@@ -419,15 +402,11 @@ class ChoixEcole:
 
     def calculprix(self):
 
-        ecoles = []
-        for ecole in self.ecolesselect.values():
-            if ecole["var"].get() == 1:
-                ecoles.append(ecole["admission"])
-
-        prixboursier = str(model.prix_ecole(ecoles, "Boursier"))
-        prixnonboursier = str(model.prix_ecole(ecoles, "NonBoursier"))
-        Label(self.root, text="Prix Boursier \n" + prixboursier).grid(row=3, column=32)
-        Label(self.root, text="Prix Non Boursier\n" + prixnonboursier).grid(
+        ecoles = [ecole["admission"] for ecole in self.ecolesselect.values() if ecole["var"].get()==1]
+        prixboursier = model.prix_ecole(ecoles, "Boursier")
+        prixnonboursier = model.prix_ecole(ecoles, "NonBoursier")
+        Label(self.root, text=f"Prix Boursier \n {prixboursier}").grid(row=3, column=32)
+        Label(self.root, text=f"Prix Non Boursier\n {prixnonboursier}").grid(
             row=4, column=32
         )
 

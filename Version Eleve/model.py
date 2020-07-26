@@ -6,7 +6,6 @@ Created on Sat Oct 20 19:41:49 2018
 """
 
 import sqlite3
-import openpyxl
 
 
 def connec(txt):
@@ -43,7 +42,7 @@ def prix_ecole(ecoles, filtre):
     for i in list(set(ecoles)):
 
         for resultat in curseur.execute(
-            "SELECT " + filtre + " FROM Coefficient WHERE Groupe=" + "'" + i + "'"
+            f"SELECT  {filtre} FROM Coefficient WHERE Groupe='{i}'"
         ):
             prix += resultat[0]
 
@@ -56,7 +55,7 @@ def renvoie_idspe(choix):
         spe[0]
         for i in tuple(choix)
         for spe in curseur.execute(
-            "SELECT idspecialite FROM Specialite WHERE NomSpe=" + "'" + i + "'"
+            f"SELECT idspecialite FROM Specialite WHERE NomSpe='{i}'"
         )
     )
 
@@ -64,7 +63,7 @@ def renvoie_idspe(choix):
 def creationtuple(liste):
 
     if len(liste) == 1:
-        return "('" + str(liste[0]) + "')"
+        return f"('{liste[0]}')"
    
     return tuple(liste)
 
@@ -88,33 +87,24 @@ def filtre(choix_utilisateur, notes):
         bonif_str = "0"
 
     requete = (
-        """
+        f"""
         SELECT DISTINCT id,Nom,Admission,Commune,Alternance,Acronyme,NomSpe
         FROM EcoleSpe
         JOIN EcoleS on EcoleSpe.IdEcole=EcoleS.id
         JOIN Specialite on EcoleSpe.IdSpe=Specialite.idspecialite
         JOIN Coefficient on Coefficient.Groupe=EcoleS.Groupe
-        WHERE  """
-        + str(notes["maths"])
-        + "*Maths+"
-        + str(notes["physique"])
-        + "*Physique+"
-        + str(notes["si"])
-        + """*SI+"""
-        + str(notes["informatique"])
-        + "*Informatique+"
-        + str(notes["anglais"])
-        + "*Anglais+"
-        + str(notes["francais"])
-        + "*Francais+"
-        + str(notes["modelisation"])
-        + "*Modelisation+"
-        + bonif_str
-        + ">= Points   "
+        WHERE {notes["maths"]}*Maths+
+        {notes["physique"]}*Physique+
+        {notes["si"]}*SI+
+        {notes["informatique"]}*Informatique+
+        {notes["anglais"]}*Anglais+
+        {notes["francais"]}*Francais+
+        {notes["modelisation"]}*Modelisation+
+        {bonif_str} >= Points """
     )
-
+    
     for var in conds:
-        requete += " AND " + var[0] + "  " + var[1] + " " + str(creationtuple(var[2]))
+        requete += f" AND {var[0]} {var[1]}  {creationtuple(var[2])}"
 
- 
+
     return [ecole for ecole in curseur.execute(requete)]
