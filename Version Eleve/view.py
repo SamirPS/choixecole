@@ -274,11 +274,7 @@ class ChoixEcole:
                         raise ValueError
 
                 note_float += (self.scale.get() * note_float) / 100
-
-                if note_float >= 20:
-                    notes[nom_matiere] = 20
-                else:
-                    notes[nom_matiere] = note_float
+                notes[nom_matiere] = min(20,note_float)
 
             notes["modelisation"] = (notes["maths"] + notes["si"]) / 2
 
